@@ -1,11 +1,9 @@
--- phpMyAdmin SQL Dump
--- version 3.5.1
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Jul 11, 2016 at 09:19 AM
--- Server version: 5.5.24-log
--- PHP Version: 5.3.13
+
+ -- Database structure for Web APP Firewall
+ -- This product includes PHP software, freely available from <http://www.php.net/software/>
+ -- Author: Roman Shneer romanshneer@gmail.com
+ -- 21.09.2016
+
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";

@@ -1,4 +1,9 @@
 <?php
+/* 
+ * Settings Managament 
+ * This product includes PHP software, freely available from <http://www.php.net/software/>
+ * Author: Roman Shneer romanshneer@gmail.com
+ */
 session_start();
 
 require_once "libs/db.inc.php";

@@ -1,13 +1,14 @@
 <?php
-
+/* 
+ * Script for redirect filtered HTTP trafic
+ * This product includes PHP software, freely available from <http://www.php.net/software/>
+ * Author: Roman Shneer romanshneer@gmail.com
+ */
 require_once 'libs/db.inc.php';
 require_once 'libs/waf_helper.class.php';
 session_start();
 
 if(isset($_SERVER['HTTP_WAF_KEY2']))die("Guru in loop. Deep meditation...<hr>");	
-#print "<pre>";
-
-#die();
 /* WAF Layer logic */
 Class WAF extends WAFHelper{
     private $step=0;

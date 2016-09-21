@@ -1,12 +1,12 @@
 <?php
+/* 
+ * Class DB MYSQL
+ * This product includes PHP software, freely available from <http://www.php.net/software/>
+ * Author: Roman Shneer romanshneer@gmail.com
+ * 1.02.2012
+ * changed 01.11.2015
+ */
 
-/**
-*Class DB MYSQL - P.W.S.M.
-*db lib for p.w.s.m work
-*Author Roman Shneer romanshneer@gmail.com
-*1.02.2012
-*changed 01.11.2015
-*/
 /*############ database basic interface ####################*/
 Class DB
 {

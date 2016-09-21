@@ -1,25 +1,11 @@
 <?php
-/*Help function for debug with stop*/
-function pre($var)
-{
-    print "<pre>";
-    print_r($var);
-    print "</pre>";
-    die("<hr>");
-}
-/*Help function for debug no stop*/
-function pr($var)
-{
-    print "<pre>";
-    print_r($var);
-    print "</pre>";
-    echo "<hr>";
-}
-
-/*
+/* 
  * Class for W.A.F. Display Reports and control segments map UI
- * 
+ * This product includes PHP software, freely available from <http://www.php.net/software/>
+ * Author: Roman Shneer romanshneer@gmail.com
+ * 21.09.2016
  */
+
 Class WafReport{
 	
 	var $log_per_page=20; //bad request count per page
@@ -30,10 +16,9 @@ Class WafReport{
 	 
 		$config=DB::get_config();
 		$this->config=$config;
-		#global $config;
-		#pre($config);
+	
 		$this->db=new DB($config['db_host'],$config['db_name'],$config['db_user'],$config['db_pass']);
-                #$this->waf_status=$this->get_setting('waf_status','disabled');
+               
     $this->reload_settings();
 		if(!isset($_SESSION['waf_user']))
 		{
@@ -75,13 +60,7 @@ Class WafReport{
 					return $result['value'];
 			}
 	}
-	/*Get First Level Segment --deprivated*/
-	/*public function get_request_map(){
-		$sql="491 WHERE lvl=0 ORDER BY code";
-		return $this->db->LIST_Q($sql);
-		
-	}*/
-        
+	
 	/*
 	 * get reqursive segments tree
 	 * @param int $parent - parent ID - first 0
@@ -186,13 +165,9 @@ Class WafReport{
 	public function get_segments_all(){
 	 	$sql="SELECT s.*"
 			. "FROM waf_segments s "
-			#. " LEFT JOIN waf_requests r ON r.sid=s.id "
-			#. " LEFT JOIN waf_vars v ON v.sid=s.id "
-			#."GROUP BY s.id "
 			. "order by s.id, s.parent";
 		
 		$segments=$this->db->LIST_Q($sql);
-		#pre($segments);
 		return $segments;
 	}
   /*
@@ -257,27 +232,14 @@ Class WafReport{
 			 
 		 $var['code_contains']=$contains;
 		}
-		#if($var['code_size']==0)
-		#{
-		# $var['code_size']=strlen((string)$var['value']);
-		#}
+		
          
 			return $var;
 			}else{
 			return null;
 			}     
 	}
-	/*
-	public function get_next_map($p){
-		
-		$sql="SELECT s.*,count(v.id) as vars_count FROM waf_segments s LEFT JOIN waf_vars v ON v.sid=s.id"
-                        . " WHERE s.parent=".$this->db->Q($p)." GROUP BY s.id ORDER BY s.code";								
-		#echo $sql;
-		$result=$this->db->LIST_Q($sql);
-		return $result;
-		
-	}
-        */
+	
 	/*
 	 * Get Variables per ids
 	 * @param array $ids
@@ -350,23 +312,7 @@ Class WafReport{
 			$this->db->QUERY("TRUNCATE waf_vars");
 			$this->db->QUERY("TRUNCATE waf_segments");
 	}
-        
-  /* Update Variables by one value\code*/
-	/*
-  public function vars_save($ids,$code,$approved,$use)
-	{
-		
-		
-		$sql="UPDATE waf_vars SET ";
-                if($use==1)$sql.="code='".$this->db->Q($code,1)."',";
-                $sql.="approved=".$this->db->Q($approved).", "
-                        . "use_type=".$this->db->Q($use)." "
-                        . "WHERE id IN (".implode(',',$ids).") ";
-		$this->db->QUERY($sql);
-		
-		return array('result'=>true);
-	}
-	*/
+  
 	/* Update Variables by one value\code*/
   public function vars_save($data)
 	{
@@ -378,25 +324,12 @@ Class WafReport{
                 $sql.="approved=".$this->db->Q($data['approved']).", "
                         . "use_type=".$this->db->Q($data['use'])." "
                         . "WHERE id IN (".implode(',',$ids).") ";
-		#echo $sql."<hr>";						
+					
 		$this->db->QUERY($sql);
 		
 		return array('result'=>true);
 	}
-  /* Save one Segment Item */
-/*	private function save_segment($id,$code,$approved,$use)
-	{
-		
-		
-		$sql="UPDATE waf_segments SET ";
-                if($use==1)$sql.="code='".$this->db->Q($code,1)."',";
-                $sql.="approved=".$this->db->Q($approved).", use_type=".$this->db->Q($use)." WHERE id=".$this->db->Q($id);
-               # echo $sql;
-		$this->db->QUERY($sql);
-		#$this->merge_segment_brothers($id,$code);
-		
-		return array('result'=>true);
-	}*/
+
 	private function save_segment($id,$data)
 	{
 		
@@ -412,9 +345,9 @@ Class WafReport{
 									. "bf=".$this->db->Q($data['bf']).", "
 									. "use_type=".$this->db->Q($data['use'])." "
 									. "WHERE id=".$this->db->Q($id);
-             #  echo $sql."<hr>";
+         
 		$this->db->QUERY($sql);
-		#$this->merge_segment_brothers($id,$code);
+	
 		
 		return array('result'=>true);
 	}
@@ -477,7 +410,7 @@ Class WafReport{
 		if(count($nvars))
 		{
 		$sql="DELETE FROM waf_vars WHERE sid=".$this->db->Q($segment_id)." AND id NOT IN (".implode(",",$nvars).") AND approved!=1";
-		#echo $sql."<hr>";
+		
 		$this->db->QUERY($sql);
 		}
 	 }
@@ -531,16 +464,6 @@ Class WafReport{
 		$sql2="DELETE FROM waf_vars WHERE sid=".$this->db->Q($id);
 		$this->db->QUERY($sql2);
 
-		/*	//recursion delete childs
-		$sql3="SELECT * FROM waf_segments WHERE parent=".$this->db->Q($id);
-	
-		$segments=$this->db->LIST_Q($sql2);
-		if($segments)
-			foreach($segments as $seg)
-			{
-				$this->delete_code($seg['id']);
-			}
-			*/
 		return array('result'=>true);
 	}
 	/*
@@ -638,8 +561,6 @@ $this->db->QUERY($sql2);
 
 		$sql.=" ORDER BY created DESC";
 		$sql.=" LIMIT ".$this->log_per_page." OFFSET ".($this->log_per_page*($get['page']-1));
-	#	pre($get);
-		#echo $sql;
 		$logs=$this->db->LIST_Q($sql);
 		return $logs;
 	}
@@ -668,8 +589,6 @@ $this->db->QUERY($sql2);
 
 		$sql.=" ORDER BY created DESC";
 		$sql.=" LIMIT ".$this->log_per_page." OFFSET ".($this->log_per_page*($get['page']-1));
-	#	pre($get);
-		#echo $sql;
 		$logs=$this->db->LIST_Q($sql);
 		return $logs;
 	}
@@ -706,9 +625,6 @@ $this->db->QUERY($sql2);
 		{
 			$sql.=" AND sid=".$this->db->Q($get['sid']);
 		}
-		#$sql.=" ORDER BY created DESC";
-	#	pre($get);
-		#echo $sql;
 		$c=$this->db->ROW_Q($sql);
 
 		return $c['num'];
@@ -805,7 +721,6 @@ $this->db->QUERY($sql2);
 					WHERE DATE_FORMAT(created,'%Y-%m-%d')>'".date('Y-m-d',strtotime($from_date))."' AND DATE_FORMAT(created,'%Y-%m-%d')<'".date('Y-m-d',strtotime($to_date))."'
 					GROUP BY day
 					ORDER BY day";
-		#echo $sql;
 		$logs=$this->db->LIST_Q($sql);
 		$days=Array();
 		foreach($logs as $l)
@@ -828,7 +743,6 @@ $this->db->QUERY($sql2);
 		GROUP BY url
 		ORDER BY num DESC
 		LIMIT 15";
-		#echo $sql;
 		$logs=$this->db->LIST_Q($sql);
 		return $logs;
 	}
@@ -838,12 +752,27 @@ $this->db->QUERY($sql2);
 	}
 	public function get_dashboard_info($from_date,$to_date){
 	 $data=Array();
-	 #$data['segments']=$this->get_segments_statistics($from_date,$to_date);
-	 #$data['vars']=$this->get_vars_statistics($from_date,$to_date);
 	 $data['logs']=$this->get_logs_statistics($from_date,$to_date);
 	 $data['logs_url']=$this->get_log_url_statistics($from_date,$to_date);
 	 return $data;
 	}
 	
 }
+/*Help function for debug with stop*/
+function pre($var)
+{
+    print "<pre>";
+    print_r($var);
+    print "</pre>";
+    die("<hr>");
+}
+/*Help function for debug no stop*/
+function pr($var)
+{
+    print "<pre>";
+    print_r($var);
+    print "</pre>";
+    echo "<hr>";
+}
+
 ?>

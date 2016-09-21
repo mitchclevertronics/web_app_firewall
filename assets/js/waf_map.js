@@ -1,3 +1,9 @@
+/* 
+ * MAP UI - WebAppFirewall
+ * This product includes PHP software, freely available from <http://www.php.net/software/>
+ * Author: Roman Shneer romanshneer@gmail.com
+ * 21.09.2016
+ */
 var WaF={};
 WaF.code1string='s'; 
 WaF.code1number='n'; 

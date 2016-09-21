@@ -1,8 +1,11 @@
 <?php
-
 /* 
- * WAF User managment
+ * Class  WAF User managment
+ * This product includes PHP software, freely available from <http://www.php.net/software/>
+ * Author: Roman Shneer romanshneer@gmail.com
+ * 21.09.2016
  */
+
 Class WafUser{
 	public $error='';
 	public $web_root;

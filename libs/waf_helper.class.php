@@ -1,10 +1,10 @@
 <?php
-/* 
- * Class with Basic function for WAF Layer
- * This product includes PHP software, freely available from <http://www.php.net/software/>
- * Author: Roman Shneer romanshneer@gmail.com
- * 21.09.2016
+/*
+ * script for proxy layer (frontend library)
+ * License: GNU
+ * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
+/* Class with Basic function for WAF Layer*/
 abstract Class WAFHelper{
    
 	static function get_cookie_file($id)

@@ -1,14 +1,15 @@
 <?php
-/* 
- * Script for redirect filtered HTTP trafic
- * This product includes PHP software, freely available from <http://www.php.net/software/>
- * Author: Roman Shneer romanshneer@gmail.com
+/*
+ * script for organization reverce-proxy and control (frontend part)
+ * License: GNU
+ * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
 require_once 'libs/db.inc.php';
 require_once 'libs/waf_helper.class.php';
 session_start();
 
 if(isset($_SERVER['HTTP_WAF_KEY2']))die("Guru in loop. Deep meditation...<hr>");	
+
 /* WAF Layer logic */
 Class WAF extends WAFHelper{
     private $step=0;
@@ -50,7 +51,7 @@ Class WAF extends WAFHelper{
             {
 				$url.="?".http_build_query($vars);
 			}
-			
+			#die($url);
             $ch=curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -211,20 +212,12 @@ Class WAF extends WAFHelper{
             //learn new vars
             if(count($http_request['vars']))$this->learn2vars($http_request);
 						
-            //clearn non approved
-           # $tree=$this->leave_legal_only($tree);
-						
             //compare with known segments and changed request if bad
-						
-						
-            $http_request=$this->guard2segments($http_request,$uaa,$tree);
-				
-           $http_request=$this->guard2bf($http_request,$tree);
+			$http_request=$this->guard2segments($http_request,$uaa,$tree);
+			//BF tests
+			$http_request=$this->guard2bf($http_request,$tree);
            
-           
-            #$this->guard2requests($u[0],$_SERVER['REQUEST_METHOD'],$tree);
-            //compare with known vars and changed request if bad
-				
+            //compare with known vars and changed request if bad		
 			if(count($http_request['vars']))$http_request=$this->guard2vars($http_request,$last_segment_id);
            
 						
@@ -403,7 +396,8 @@ Class WAF extends WAFHelper{
                 $stoped_vars=Array();
                 foreach($http_request['vars'] as $vname=>$vval)
                 {
-                    $var=$this->load_var($segment_id,$http_request['method'],$vname);
+					$var=$this->load_var(0,$http_request['method'],$vname);//load default first
+                    if(!$var)$var=$this->load_var($segment_id,$http_request['method'],$vname); //load regular
 										#echo $vval."|\n";
 										#pr($var);
                     if($var['approved']==1)
@@ -445,30 +439,30 @@ Class WAF extends WAFHelper{
      */
      private function load_segments_from_db($uaa)
      {
-            $max=count($uaa);
-            
-            $seqs=$this->search_segments($uaa,$max);
-					
-            $tree=Array();
-						
-            if($seqs)
-                foreach($seqs as $s)
-                    $tree[$s['lvl']]=$s;
+		$max=count($uaa);
+
+		$seqs=$this->search_segments($uaa,$max);
+
+		$tree=Array();
+
+		if($seqs)
+			foreach($seqs as $s)
+				$tree[$s['lvl']]=$s;
              
-            if(count($tree)<$max)
-            {
-                   
-                    for($k=0;$k<$max;$k++)
-                    {
-                            if(!isset($tree[$k]))
-                            {
-                            $parent=($k==0)?0:isset($tree[$k-1])?$tree[$k-1]['id']:0;
-                            //found autotype via parent
-                            $filter=$this->find_segment_type($parent,$uaa[$k]);
-                                if($filter)$tree[$k]=$filter;
-                            }
-                    }
-            }
+		if(count($tree)<$max)
+		{
+
+			for($k=0;$k<$max;$k++)
+			{
+				if(!isset($tree[$k]))
+				{
+				$parent=($k==0)?0:isset($tree[$k-1])?$tree[$k-1]['id']:0;
+				//found autotype via parent
+				$filter=$this->find_segment_type($parent,$uaa[$k]);
+				if($filter)$tree[$k]=$filter;
+				}
+			}
+		}
             #print_r($tree);
             return $tree;
      }
@@ -519,11 +513,8 @@ Class WAF extends WAFHelper{
      */
     private function insert_segment($code,$parent,$lvl,$value)
     {
-        if(empty($code)&&($parent==0))
-				 $sql1="INSERT INTO waf_segments(parent,updated,lvl,value) VALUES (".$this->db->Q($parent).",NOW(),".$this->db->Q($lvl).",'".$this->db->Q($value,1)."')";
-				 else 
-         $sql1="INSERT INTO waf_segments(parent,updated,lvl,value) VALUES (".$this->db->Q($parent).",NOW(),".$this->db->Q($lvl).",'".$this->db->Q($value,1)."')";
-         #echo $sql1;
+        if(empty($code)&&($parent==0))$sql1="INSERT INTO waf_segments(parent,updated,lvl,value) VALUES (".$this->db->Q($parent).",NOW(),".$this->db->Q($lvl).",'".$this->db->Q($value,1)."')";
+		else $sql1="INSERT INTO waf_segments(parent,updated,lvl,value) VALUES (".$this->db->Q($parent).",NOW(),".$this->db->Q($lvl).",'".$this->db->Q($value,1)."')";
          $segment_id=$this->db->INSERT($sql1);
          return $segment_id;
         
@@ -541,7 +532,7 @@ Class WAF extends WAFHelper{
     {
         //found all parent filters
         $sql="SELECT * FROM waf_segments WHERE approved=1 AND use_type=1 AND parent=".$this->db->Q($parent);
-			#	if($this->waf_guard_status)$sql.=" AND approved=1";
+		
         $segments=$this->db->LIST_Q($sql);
 
         $filters=Array();
@@ -623,7 +614,10 @@ Class WAF extends WAFHelper{
      * @return void
      */
     private function save_var2db($method,$sid,$var_name,$var_val){
-        $v=$this->load_var($sid,$method,$var_name);
+		//load default var
+		$v=$this->load_var(0,$method,$var_name);
+		if(!$v)$v=$this->load_var($sid,$method,$var_name);//after that load regular var
+		
 		$var_length=strlen($var_val);		
         if($v)
         {
@@ -639,6 +633,7 @@ Class WAF extends WAFHelper{
 
 		$this->db->INSERT($sql);
         }
+		
     }
     /*
      * Help func. for save queries from layer (waf.php) part to file
@@ -660,8 +655,7 @@ Class WAF extends WAFHelper{
 		
         if(isset($data['code_before'])&&(!empty($data['code_before'])))
         {
-
-            if(substr($segment,0,strlen($data['code_before']))!=$data['code_before'])
+            if(strtolower(substr($segment,0,strlen($data['code_before'])))!=strtolower($data['code_before']))
                     return false;
             $segment=substr($segment,strlen($data['code_before']));
         }
@@ -669,7 +663,8 @@ Class WAF extends WAFHelper{
 
         if(isset($data['code_after'])&&(!empty($data['code_after'])))
         {
-            if(substr($segment,strlen($segment)-strlen($data['code_after']),strlen($segment))!=$data['code_after'])
+			
+            if(strtolower(substr($segment,strlen($segment)-strlen($data['code_after']),strlen($segment)))!=strtolower($data['code_after']))
                     return false;
             $segment=substr($segment,0,strlen($segment)-strlen($data['code_after']));
         }
@@ -688,28 +683,33 @@ Class WAF extends WAFHelper{
 				return false;
 		}
 		
-		#echo $path_array[$i]."<hr>";
+	
 		$leaved=  preg_replace('/[0-9]/', '', preg_replace('/[a-zA-Z]/', '', $segment));
 		if(!empty($leaved))$leaved=implode("",array_unique(str_split($leaved)));
 		
-		#$containsSpecial = preg_match('/[\W]+/', $segment);
+		
 		$special_conteins=str_replace('l','',str_replace('d','',$data['code_contains']));
 		
 		if(strlen($special_conteins)>0)
 		{
+			$h_persent=false;
+			if(strstr($special_conteins,'%'))
+			{
+				$h_persent=true;
+				$special_conteins=str_replace('%','',$special_conteins);
+				$leaved=str_replace('%','',$special_conteins);
+			}
+			
+			
 			$lv=  preg_replace('/['.$special_conteins.']/', '', $leaved);
 			//stell have not allowed chars
 			if(strlen($lv)>0)return false;
 		}elseif(strlen($leaved)) return false;
 		
-						
-            #if(($containsSpecial)&&(!in_array('s',$rule_contains)))return false;
-        #}
+		
         //check size
         if($data['code_size']>0)
         {
-				#pr($data);
-				#echo strlen($segment)."<hr>";
                 if(strlen($segment)>$data['code_size'])return false;
         }
         return true;
@@ -750,7 +750,6 @@ Class WAF extends WAFHelper{
 ###### SHIVA DANCE ####
 $t=  microtime(true);
 $Waf=new WAF;
-
 if($Waf->web_root==false)
 {
  
@@ -761,7 +760,6 @@ if($Waf->web_root==false)
     $request_data=$Waf->prepare_request();
     $html=$Waf->curl_request($request_data,$_SERVER['REQUEST_METHOD']);
     echo $html;
-	#echo "Execution Time:".(microtime(true)-$t)."<hr>";
 }else{
     die("Guru fly in unknown space");
 }

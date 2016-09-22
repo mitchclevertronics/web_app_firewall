@@ -177,6 +177,7 @@ cursor: default;
      width: 3%;
     padding:5px;
     background:#fff;
+	cursor: default!important;
 }
 .vars_tools{
      display: inline-block;
@@ -305,7 +306,7 @@ font-weight: bold;
   
     padding-bottom: 40px;
     width:100%;
-    
+    min-height:85%;
     position: absolute;
     z-index: 900;
 }
@@ -402,7 +403,12 @@ box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.75);
     position: fixed;
     bottom:0;
     z-index: 1000;
-    
+    cursor: default!important;
+}
+.filter_box form{
+	padding:0;
+	margin:0;
+	float: left;
 }
 .filter_fieldset{
 display:inline-block;  
@@ -414,6 +420,7 @@ margin: 0;
     border-bottom: solid #ccc 1px;
     color:#ccc;
     text-align: center;
+	display: inline-block;
 }
 .description{
     background:#ccc;
@@ -502,4 +509,10 @@ inner {
     font-size: 10px;
     cursor: pointer;
     
+}
+.invisible{
+	opacity: 0.3;
+}
+#filter_help{
+	float:right;
 }

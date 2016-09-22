@@ -1,10 +1,12 @@
 <?php
-/* 
- * Installation init
- * This product includes PHP software, freely available from <http://www.php.net/software/>
- * Author: Roman Shneer romanshneer@gmail.com
+/*
+ * script for install wizard
+ * License: GNU
+ * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
 session_start();
+#require_once "libs/config.inc.php";
+
 require_once "libs/db.inc.php";
 require_once "libs/user.class.php";
 require_once "libs/installer.class.php";

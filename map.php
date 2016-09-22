@@ -1,17 +1,25 @@
 <?php
-/* 
- * MAP of requests(white-list) 
- * This product includes PHP software, freely available from <http://www.php.net/software/>
- * Author: Roman Shneer romanshneer@gmail.com
+/*
+ * script for map access management
+ * License: GNU
+ * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
 session_start();
+#require_once "libs/config.inc.php";
 
 require_once "libs/db.inc.php";
 
 require_once "libs/waf_report.class.php";
 
 $WR=new WafReport;
-$segments=$WR->get_segments_tree(0);
+$get=$_GET;
+if(!isset($get['sid']))$get['sid']='';
+if(!isset($get['approved']))$get['approved']=-1;
+if(!isset($get['bf']))$get['bf']=-1;
+if(!isset($get['use_type']))$get['use_type']=-1;
+if(!isset($get['vars']))$get['vars']=-1;
+if(!isset($get['vars_approved']))$get['vars_approved']=-1;
+$segments=$WR->get_segments_tree2($get,0);
 #$reqs=$segments['childs'];
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -34,45 +42,56 @@ $segments=$WR->get_segments_tree(0);
             <img src="assets/imgs/pencil.png" width="40" id="pencil">
             <img src="assets/imgs/eraser.png" width="40" id="eraser">
             <img src="assets/imgs/edit.png" width="40" id="edit_form" title="Click For Edit Selected">
+			<img src="assets/imgs/vars.png" width="40" title="Click For Edit Global Variables" id="edit_global_vars" >
+			<!--img src="assets/imgs/vars.png" width="40" id="edit_global_vars" title="Click For Edit Global Variables"-->
             <img src='assets/imgs/roger.png' width="40" id="truncate" title="Click Truncate ALL data - Be carefull">  
               
     </div>    
 </div>    
 <?php endif;?>  
-<div class='filter_box'>
+	<div class='filter_box'>
+		<form action="map.php" method="GET">
 		<strong>Show Segments only:</strong>
 		<fieldset class='filter_fieldset'>
-		 <div class='filter_fieldset_header'>Status</div>		
-		 <input type='checkbox' id='filter_approved1' checked='checked'><label for='filter_approved0'>Approved</label>&nbsp;
-		 <input type='checkbox' id='filter_approved0' checked='checked'><label for='filter_approved1'>Unknow</label>&nbsp;
-		</fieldset>		
+			<div class='filter_fieldset_header'>Status</div>
+			<select name="approved">
+				<?php foreach(array(-1=>'all',0=>'new',1=>'approved') as $k=>$v):?>
+				<option value="<?php echo $k;?>" <?php if($get['approved']==$k):?> selected<?php endif;?>><?php echo $v;?></option>
+				<?php endforeach;?>
+			</select>
+		</fieldset>
 		<fieldset class='filter_fieldset'>
 		 <div class='filter_fieldset_header'>BF</div>		
-		 <input type='checkbox' id='filter_bf1' checked='checked'><label for='filter_bf1'>On</label>&nbsp;
-		 <input type='checkbox' id='filter_bf0' checked='checked'><label for='filter_bf0'>Off</label>&nbsp;
+		 <select name="bf">
+			 <?php foreach(array(-1=>'all',0=>'Off',1=>'On') as $k=>$v):?>
+				<option value="<?php echo $k;?>" <?php if($get['bf']==$k):?> selected<?php endif;?>><?php echo $v;?></option>
+			<?php endforeach;?>
+		 </select>
 		</fieldset>
 		<fieldset class='filter_fieldset'>
-		<div class='filter_fieldset_header'>Use Rule:</div>		
-		<input type='checkbox' id='filter_use_type0' checked='checked'>
-		<label for='filter_use_type0' title='Static - checking via entered value'>Static</label>&nbsp;		
-		<input type='checkbox' id='filter_use_type1' checked='checked'>
-				<label for='filter_use_type1' title='AutoType, Code used for filter entering data'>Rule</label>&nbsp;		
-		</fieldset>				
-		<fieldset class='filter_fieldset'>
-		<div class='filter_fieldset_header'>Have Vars:</div>		
-		<input type='checkbox' id='filter_vars0' checked='checked'><label for='filter_vars0'>No</label>&nbsp;				
-		<input type='checkbox' id='filter_vars1' checked='checked'><label for='filter_vars1'>Have</label>&nbsp;				
-		</fieldset>						
-		<fieldset class='filter_fieldset'>
-		<div class='filter_fieldset_header'>Vars Status:</div>		
-		<input type='checkbox' id='filter_vars_approved1' checked='checked'><label for='filter_vars_approved1'>Approved</label>&nbsp;				
-		<input type='checkbox' id='filter_vars_approved0' checked='checked'><label for='filter_vars_approved0'>Unknow</label>&nbsp;				
+		<div class='filter_fieldset_header'>Rule Usage:</div>		
+		<select name="use_type">
+			<?php foreach(array(-1=>'all',0=>'Static',1=>'Rule') as $k=>$v):?>
+				<option value="<?php echo $k;?>" <?php if($get['use_type']==$k):?> selected<?php endif;?>><?php echo $v;?></option>
+			<?php endforeach;?>
+		</select>		
 		</fieldset>
 		<fieldset class='filter_fieldset'>
-				<input type="text" placeholder="Segment ID" id="filter_segment_id" style="width:80px;" value="<?php echo isset($_GET['sid'])?$_GET['sid']:'';?>">		
+		<div class='filter_fieldset_header'>Contains Vars:</div>		
+		<select name="vars">
+			<?php foreach(array(-1=>'all',0=>'Not contains',1=>'Contains Any',10=>'Contains New',11=>'Contains Approved') as $k=>$v):?>
+				<option value="<?php echo $k;?>" <?php if($get['vars']==$k):?> selected<?php endif;?>><?php echo $v;?></option>
+			<?php endforeach;?>
+		</select>
+		</fieldset>	
+		<fieldset class='filter_fieldset'>
+				<input type="text" placeholder="Segment ID" id="filter_segment_id" name="sid" style="width:80px;" value="<?php echo $get['sid'];?>">		
 		</fieldset>
+		<input type="submit" value="Go">
+		</form>
 		<img src='assets/imgs/question.png' width="20" id="filter_help" title="Help">	
-</div>		
+	</div>	
+
 <!--Legends BOF-->    
 <div class='legend_box'>
 		<table width="100%" border="0">
@@ -97,6 +116,9 @@ $segments=$WR->get_segments_tree(0);
 												<tr><td><img  width="20" src="assets/imgs/edit.png"></td>
 														<td>Edit Tool</td>
 														<td>open Segment form for selected elements</td></tr>
+												<tr><td><img  width="20" src="assets/imgs/vars.png"></td>
+														<td>Global Variables</td>
+														<td>open form with Global Variables, global variables have highest priority.</td></tr>		
 										</table>	 
 						</td>
 						<td><h5>Mouse Events:</h5>
@@ -202,6 +224,8 @@ $segments=$WR->get_segments_tree(0);
             <hr>
             <label for="vars_approved">Approved</label>
             <input type='checkbox' name='vars_approved' id='vars_approved' checked="checked">&nbsp;    
+			<label for="vars_global">Make Global</label>
+            <input type='checkbox' name='vars_global' id='vars_global'>&nbsp;	
             <input type="button" value="save" id="vars_save_code">
             <input type="button" value="delete" id="vars_delete_code">
             <input type="button" value="close" id="vars_close_form">    

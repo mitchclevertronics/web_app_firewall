@@ -1,8 +1,8 @@
 <?php
-/* 
- * htaccess injection management
- * This product includes PHP software, freely available from <http://www.php.net/software/>
- * Author: Roman Shneer romanshneer@gmail.com
+/*
+ * script for htaccess injection(backend)
+ * License: GNU
+ * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
 session_start();
 require_once "libs/db.inc.php";
@@ -57,4 +57,4 @@ RewriteRule ^(.*)$ <?php echo $folder;?>/waf.php [N,L]</textarea></div>
 								</form>		
 		</div>
 </body>
-</html>>		
+</html>		

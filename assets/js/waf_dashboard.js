@@ -1,8 +1,7 @@
-/* 
- * Dashboard UI - WebAppFirewall 
- * This product includes PHP software, freely available from <http://www.php.net/software/>
- * Author: Roman Shneer romanshneer@gmail.com
- * 21.09.2016
+/*
+ * script for dashboard UI backend
+ * License: GNU
+ * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
 var WD={};
 WD.init=function (){

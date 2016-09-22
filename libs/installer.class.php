@@ -1,9 +1,8 @@
 <?php
-/* 
- * Class Installer Web APP Firewall
- * This product includes PHP software, freely available from <http://www.php.net/software/>
- * Author: Roman Shneer romanshneer@gmail.com
- * 21.09.2016
+/*
+ * script for installer wisard (backend library)
+ * License: GNU
+ * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
 Class WafInstaller{
  function WafInstaller(){

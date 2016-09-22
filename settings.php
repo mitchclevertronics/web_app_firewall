@@ -1,15 +1,12 @@
 <?php
-/* 
- * Settings Managament 
- * This product includes PHP software, freely available from <http://www.php.net/software/>
- * Author: Roman Shneer romanshneer@gmail.com
+/*
+ * script for settings management
+ * License: GNU
+ * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
 session_start();
-
 require_once "libs/db.inc.php";
-
 require_once "libs/waf_report.class.php";
-
 $WR=new WafReport;
 if(isset($_POST['save_settings'])&&($WR->isEditor()))
 {

@@ -1,10 +1,11 @@
 <?php
-/* 
- * Ajax engine Script
- * This product includes PHP software, freely available from <http://www.php.net/software/>
- * Author: Roman Shneer romanshneer@gmail.com
+/*
+ * script for ajax (backend)
+ * License: GNU
+ * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
 session_start();
+#require_once "libs/config.inc.php";
 
 require_once "libs/db.inc.php";
 
@@ -63,6 +64,7 @@ Class WafAjax{
 			$reqs=$this->WR->vars_save($_POST);
 	$this->draw_json_result($reqs);
  }
+ 
  private function get_segment_info(){
 	$segment=$this->WR->get_segment($_GET['id']);
 		 $reqs='ID:'.$segment['id']."<br>";

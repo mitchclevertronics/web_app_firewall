@@ -1,8 +1,7 @@
-/* 
- * MAP UI - WebAppFirewall
- * This product includes PHP software, freely available from <http://www.php.net/software/>
- * Author: Roman Shneer romanshneer@gmail.com
- * 21.09.2016
+/*
+ * script for WAF report JS UI backend
+ * License: GNU
+ * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
 var WaF={};
 WaF.code1string='s'; 
@@ -18,13 +17,13 @@ WaF.filter_on=false;
 WaF.current_tool='hand';
 WaF.tools=['hand','pencil','eraser'];
 WaF.init=function (){
-	//WaF.init_ul_events();	
+	
         WaF.init_truncate();
         WaF.init_tools();
         WaF.init_li_over();
         WaF.init_tooltip();
         WaF.init_segment_menu();
-       // WaF.init_reset_chkboxes();
+       
         WaF.init_segments_form();
         WaF.init_open_filter_form();
         WaF.init_close_segment_form();
@@ -35,7 +34,9 @@ WaF.init=function (){
         WaF.init_vars_menu_close();
         WaF.init_text_btns();
         WaF.draw_connect_lines();
+		
 };
+
 WaF.draw_connect_lines=function (){
     
     //drag n drop
@@ -206,12 +207,12 @@ WaF.init_segments_form=function (){
 
 WaF.init_open_filter_form=function (){
  
-    $('.filter_fieldset input').change(function (){
+ /*   $('.filter_fieldset input').change(function (){
         WaF.filter_form();
     });
     
     if($('#filter_segment_id').val().length>0)WaF.filter_form();
-    
+    */
     $('#filter_help').click(function (){
         $('.legend_box').show();
     });
@@ -219,6 +220,7 @@ WaF.init_open_filter_form=function (){
         $('.legend_box').hide();
     });
 };
+/*
 WaF.filter_form=function (){
     var filter={'approved0':$('#filter_approved0').prop('checked'),
                 'approved1':$('#filter_approved1').prop('checked'),
@@ -322,7 +324,8 @@ WaF.filter_form=function (){
     WaF.rebuild_tree($('#seg_tree ul'),1);
    WaF.redraw_connect_lines();
 
-};
+};*/
+/*
 WaF.rebuild_tree=function (obj,lvl){
   var have_visible=false;   
   obj.find('li[lvl='+lvl+']').each(function (i,li){
@@ -352,7 +355,7 @@ WaF.rebuild_tree=function (obj,lvl){
    }
   });  
   return have_visible;
-};
+};*/
 WaF.open_vars_form=function (){
     var ids=[];
         $('#requests .selected_var').each(function (elid,el){            
@@ -475,8 +478,9 @@ WaF.switch_tool=function (next_tool){
             $('#pencil_var').removeClass('the_action_var');
         break;
     }
-    $('#seg_tree').removeClass().addClass('body_'+next_tool);
-    $('#vars_menu').removeClass().addClass('body_'+next_tool);
+    //$('#seg_tree').removeClass().addClass('body_'+next_tool);
+    //$('#vars_menu').removeClass().addClass('body_'+next_tool);
+	$('html').removeClass().addClass('body_'+next_tool);
     WaF.current_tool=next_tool;
 };
 /* Truncate Btn Event */
@@ -518,6 +522,10 @@ WaF.init_open_vars_menu=function (){
       
       //WaF.open_var_menu($(event.target).parent());
   });
+  $('#edit_global_vars').click(function (){
+	  $('#edit_global_vars').addClass('the_action');
+	  WaF.open_vars_menu(0);
+  });
 };
 
 WaF.open_vars_menu=function (seg_id){
@@ -541,7 +549,7 @@ WaF.open_vars_menu=function (seg_id){
                             //var var_text=(json.vars[method][v].use_type==0)?json.vars[method][v].name+'='+json.vars[method][v].value:json.vars[method][v].name+'='+json.vars[method][v].code_contains+" "+json.vars[method][v].code_size;
                             var span=$('<span>').html(json.vars[method][v].name)
                                     .addClass('var_li');
-                            var span2=$('<span>').html((json.vars[method][v].use_type==0)?json.vars[method][v].value:json.vars[method][v].code_contains+" "+json.vars[method][v].code_size)
+                            var span2=$('<span>').html((json.vars[method][v].use_type==0)?WaF.escapeHtml(json.vars[method][v].value):json.vars[method][v].code_contains+" "+json.vars[method][v].code_size)
                                     .addClass('var_li_val');
                                                 //.append($('<font>').html((json.vars[method][v].use_type==0)?json.vars[method][v].value:json.vars[method][v].code_contains+" "+json.vars[method][v].code_size))
                                                  //;
@@ -557,10 +565,13 @@ WaF.open_vars_menu=function (seg_id){
                    
                     li.append(ul);
                    
-                    $('#requests').append(li);
+                    $('#requests').append(li).attr('segment_id',seg_id);
 			//requests+=json.requests[j].method+' '+json.requests[j].path+"\n";
 		}
 		WaF.init_li_over_var();
+		if(seg_id==0)$('#vars_global').prop('disabled',true);
+		else $('#vars_global').prop('disabled',false);
+			
 	}
             
             
@@ -568,7 +579,17 @@ WaF.open_vars_menu=function (seg_id){
 	
 		
 };
+WaF.escapeHtml=function (text) {
+  var map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
 
+  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+};
 WaF.vars_code2form=function(contains,size)
 {
    
@@ -693,7 +714,7 @@ WaF.load_vars_form=function (json){
                 .append($('<span>').html(json[j].name))
                .append($('<span>').html('='))
 
-                .append($('<span>').html(json[j].value));
+                .append($('<span>').html(WaF.escapeHtml(json[j].value)));
         $('.vars_value_options').append(sdiv);
         if(json[j].approved)approved=1;
         //$('.segments').append(sdiv);
@@ -796,13 +817,16 @@ WaF.vars_save=function (){
     var data={
         'ids':$('#vars_menu_ids').val(),
         'approved':($('#vars_approved').is(":checked"))?1:0,
+		'global':($('#vars_global').is(":checked"))?1:0,
         'use':1,
         'code_contains':contains,
         'code_size':$('.vars_size').val()
     };
     
 	$.post( "ajax.php?act=vars_save",data, function( json ) {
-            var segment_id=$('.opened_segment').parent().attr('id');
+            //var segment_id=$('.opened_segment').parent().attr('id');
+			var segment_id=$('#requests').attr('segment_id');
+			
            WaF.open_vars_menu(segment_id);
             $('.vars_form').hide();
 			

@@ -1,9 +1,8 @@
 <?php
-/* 
- * html file
- * This product includes PHP software, freely available from <http://www.php.net/software/>
- * Author: Roman Shneer romanshneer@gmail.com
- * 21.09.2016
+/*
+ * script for header.php
+ * License: GNU
+ * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
 $isEditor=(isset($WR)&&($WR->isEditor()))?true:((isset($WU)&&($WU->isEditor()))?true:false);
 ?>

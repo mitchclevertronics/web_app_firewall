@@ -1,12 +1,9 @@
 <?php
-/* 
- * Class DB MYSQL
- * This product includes PHP software, freely available from <http://www.php.net/software/>
- * Author: Roman Shneer romanshneer@gmail.com
- * 1.02.2012
- * changed 01.11.2015
+/*
+ * script for db connection
+ * License: GNU
+ * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
-
 /*############ database basic interface ####################*/
 Class DB
 {
@@ -20,7 +17,7 @@ Class DB
            
         if(!$this->conn = @mysqli_connect($db_host,$db_user,$db_pass,$db_name))
         {
-        die("<div style='color:red'>Imporstable connect to db server ".$db_host." dbname ".$db_name."</div>");
+        die("<center><div style='color:red'>Imporstable connect to db server ".$db_host." dbname ".$db_name.", remove inc/config.inc.php for start installation process again</div></center>");
         exit();
         }
         #die($db_name."<hr>");

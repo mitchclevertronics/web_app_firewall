@@ -62,17 +62,33 @@ Point cursor on segment - you can see list of variables connected to segment.
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map1.jpg?raw=true)
 ####How select segments for edition - Cursor tools menu:
 In right side of screen you can see Map menu, its changing cursor function:
-![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/pencil.png) Pencil make your cursor selectable, so you can choice segments by pointing cursor.
+
+#####Pencil
+
+<img src=https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/pencil.png style="width:10px">
+
+Pencil make your cursor selectable, so you can choice segments by pointing cursor.
 Selected segments change color to lime.
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map2.jpg?raw=true)
-![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/eraser.png) Eraser - give opportunity to disable selection.
 
-Then you finish to select segments with same types -  click the "![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/edit.png)" button or double click on screen for open Segment For for selected elements.
+####Eraser
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/eraser.png) 
+Eraser - give opportunity to disable selection.
+
+####Edit Form
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/edit.png)
+Then you finish to select segments  -  click icon or double click on screen for open Segment Form for selected elements.
+
 Another opportunity to change Cursor tools - make right click on the map screen, its rotate the tool.
+
 Additional in menu:
-![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/vars.png) Opening Global Vars list
+####Opening Global Vars list
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/vars.png) 
+####Remove all
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/roger.png) - Remove map.
+
 You can change position of segments by drag n drop and program record the position.
+
 ####Segments Form
 For fast open Segment Form for selected segments - use double click on map screen or click on icon ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/edit.png?raw=true) in right side.
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map3.jpg?raw=true)

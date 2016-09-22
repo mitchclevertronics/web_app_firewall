@@ -27,10 +27,10 @@ Save Old Data  - New Installation : refresh data in existed database.
 Save Old Data  - Keep old data : - dont refresh data of existed database, just connect program to DB.
 First User - Emal: administration email and username
 Password - administration password
-![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/inst1.jpg?raw=true)
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/inst1.jpg?raw=true)
 
 If all done you see message:
-![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/inst2.jpg?raw=true)
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/inst2.jpg?raw=true)
 
 Installation impossible again from now, if you need run installation wizard again - remove file config.inc.php , in folder inc.
 
@@ -38,3 +38,48 @@ Installation impossible again from now, if you need run installation wizard agai
 Now need make process of htaccess injection, click in menu on HTACCESS tab.
 In top window you see code prepared for injection. In bottom - code of main .htaccess on your web resource. Need copy code from top window to bottom and Save.  If you do new injection on htaccess that contains already WAF injection code - need change it by new code.
 Now traffic of you site going via reverse-proxy of the program.
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/htaccess.jpg?raw=true)
+###Config Settings
+WAF Status Learn: program building map of site only.
+WAF Status Guard: program filter only approved requests with approved variables.
+Security Key and Security Key2: Using for orginise htaccess hook with redirect trafic to WAF and trafic from WAF to site.
+If generated new keys need immidiatly inject them to htaccess
+404 Page URL: address that showed for potencial attacker then request stoped from security reason.
+Brute Force Frequency: - seconds between requests from same IP to segment guarded by BF option.
+Brute Force Attempts: - how many times will be detected BruteForce before IP will be blacklisted.
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/settings1.jpg?raw=true)
+Set W.A.F Status Learn on, and Guard off.
+Now program start collect request-map from every request to site, leave it for one week for view more complete structure of site.
+
+##Support
+###Access Map
+In Access Map you can see recorded structure of site. In {#} - number of variables connected to segment.  If segment red - its new not approved segment, if green - approved.
+Point cursor on segment - you can see list of variables connected to segment.
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map1.jpg?raw=true)
+####How select segments for edition:
+In right side of screen you can see Map menu, its changing cursor function:
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/menu.jpg?raw=true)
+Pencil make your cursor selectable, so you can choice segments, selected segments change color to lime.
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map2.jpg?raw=true)
+Changing the cursor to Eraser - give opportunity to disable selection. Then you finish to select segments with same types -  click the "Edit Form" button.
+Another opportunity to change Cursor tools - make right click on the map screen, its rotate the tool.
+You can change position of segments by drag n drop and program record the position.
+####Segments Form
+For fast open Segment Form for selected segments - use double click on map screen or click on icon ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/edit.png?raw=true) in right side.
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map3.jpg?raw=true)
+If you want using exactly path leave Original Path .(in example static php files not changing  so I can set Original Path)
+If you know that possible make automatic-filter on type - switch to AutoType.
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map4.jpg?raw=true)
+You have to set static part of word before or after you automatic type. Maximum size of value, and in Contains you set that can be approved in your filter, letters, numbers and Special chars - anything that you need additional for approve segment.
+Set Approved - on - its make filter active in Guard Mode, BF - if you want set BruteForce detection in some script.
+####Variables Form
+For open Segment Variables list - double click on segment: 
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map5.jpg?raw=true)
+Same cursor tools interface for select variables. We have select size, and Contains before approve.
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map6.jpg?raw=true)
+Make Global  - special checkbox, its make variable shared for all segments. After saving global variables moving to Global Variables Menu (Click on Icon  ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/vars.png?raw=true) ) 
+Bottom of Access Map page you have form for sorting segments 
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map8.jpg?raw=true)
+###Bad Requests
+Bad Requests: here possible read logs of stopped attacks,  the logs recording only in Guard Mode. Its helpfully for learn structure and attack situations.
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map9.jpg?raw=true)

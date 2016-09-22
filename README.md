@@ -21,13 +21,12 @@ DB Password - MySQL Password
 
 DB Name - MySQL database name
 
-
 Create New Db - set command to create DB Name, dont need for existed database.
-
 Save Old Data  - New Installation : refresh data in existed database.
-
 Save Old Data  - Keep old data : - dont refresh data of existed database, just connect program to DB.
-
 First User - Emal: administration email and username
-
 Password - administration password
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/inst1.jpg?raw=true)
+If all done you see message:
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/inst2.jpg?raw=true)
+Installation impossible again from now, if you need run installation wizard again - remove file config.inc.php , in folder inc.

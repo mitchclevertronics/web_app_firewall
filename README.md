@@ -103,7 +103,8 @@ Same cursor tools interface for select variables. We have select size, and Conta
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map6.jpg?raw=true)
 
 Make Global  - special checkbox, its make variable shared for all segments. After saving global variables moving to Global Variables Menu (Click on Icon  <img src="https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/vars.png?raw=true" width="40"> ) 
-Bottom of Access Map page you have form for sorting segments 
+
+Bottom of Access Map page you have form for sorting segments:
 
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map88.jpg?raw=true)
 

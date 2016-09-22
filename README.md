@@ -47,22 +47,31 @@ If generated new keys need immidiatly inject them to htaccess
 404 Page URL: address that showed for potencial attacker then request stoped from security reason.
 Brute Force Frequency: - seconds between requests from same IP to segment guarded by BF option.
 Brute Force Attempts: - how many times will be detected BruteForce before IP will be blacklisted.
+
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/settings1.jpg?raw=true)
+
 Set W.A.F Status Learn on, and Guard off.
 Now program start collect request-map from every request to site, leave it for one week for view more complete structure of site.
 
 ##Support
 ###Access Map
-In Access Map you can see recorded structure of site. In {#} - number of variables connected to segment.  If segment red - its new not approved segment, if green - approved.
+In Access Map you can see recorded structure of site. In {#} - number of variables connected to segment. Tag BF in {} - used protection againts brute force.
+If segment red - its new not approved segment, if green - approved.
 Point cursor on segment - you can see list of variables connected to segment.
+
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map1.jpg?raw=true)
-####How select segments for edition:
+####How select segments for edition - Cursor tools menu:
 In right side of screen you can see Map menu, its changing cursor function:
-![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/menu.jpg?raw=true)
-Pencil make your cursor selectable, so you can choice segments, selected segments change color to lime.
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/pencil.png) Pencil make your cursor selectable, so you can choice segments by pointing cursor.
+Selected segments change color to lime.
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map2.jpg?raw=true)
-Changing the cursor to Eraser - give opportunity to disable selection. Then you finish to select segments with same types -  click the "Edit Form" button.
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/eraser.png) Eraser - give opportunity to disable selection.
+
+Then you finish to select segments with same types -  click the "![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/edit.png)" button or double click on screen for open Segment For for selected elements.
 Another opportunity to change Cursor tools - make right click on the map screen, its rotate the tool.
+Additional in menu:
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/vars.png) Opening Global Vars list
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/roger.png) - Remove map.
 You can change position of segments by drag n drop and program record the position.
 ####Segments Form
 For fast open Segment Form for selected segments - use double click on map screen or click on icon ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/edit.png?raw=true) in right side.

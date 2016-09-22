@@ -7,6 +7,7 @@ Security protection based on white-list strategy: after starting "Learn Mode" pr
 Program using white-list strategy, it is more absolute protection, but its requires a lot of work on configuration.
 In the program using a new approach for UI	, and give an opportunity regularize most chaotic structure. And as a result of a security setting on your site.  
 ##Getting Started	
+###Installation
 First - upload software to web-server, for example "web_app_firewall" folder.
 
 Open in browser http://yousite /web_app_firewall and install W.A.F.
@@ -30,4 +31,10 @@ Password - administration password
 
 If all done you see message:
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/inst2.jpg?raw=true)
+
 Installation impossible again from now, if you need run installation wizard again - remove file config.inc.php , in folder inc.
+
+###HTACCESS Injection
+Now need make process of htaccess injection, click in menu on HTACCESS tab.
+In top window you see code prepared for injection. In bottom - code of main .htaccess on your web resource. Need copy code from top window to bottom and Save.  If you do new injection on htaccess that contains already WAF injection code - need change it by new code.
+Now traffic of you site going via reverse-proxy of the program.

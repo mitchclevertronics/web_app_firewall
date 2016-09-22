@@ -75,7 +75,9 @@ Selected segments change color to lime.
 Another opportunity to change Cursor tools - make right click on the map screen, its rotate the tool.
 
 Additional in menu:
+
 <img src=https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/vars.png width=40> - Opening Global Vars list 
+
 <img src=https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/roger.png width=40> - Remove map.
 
 You can change position of segments by drag n drop and program record the position.

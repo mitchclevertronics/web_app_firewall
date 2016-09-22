@@ -65,6 +65,7 @@ In right side of screen you can see Map menu, its changing cursor function:
 
 <img src=https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/pencil.png width=40> - Pencil make your cursor selectable, so you can choice segments by pointing cursor.
 Selected segments change color to lime.
+
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map2.jpg?raw=true)
 
 <img src=https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/eraser.png width=40> - Eraser - give opportunity to disable selection.

@@ -63,29 +63,19 @@ Point cursor on segment - you can see list of variables connected to segment.
 ####How select segments for edition - Cursor tools menu:
 In right side of screen you can see Map menu, its changing cursor function:
 
-#####Pencil
-
-<img src=https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/pencil.png style="width:10px">
-
-Pencil make your cursor selectable, so you can choice segments by pointing cursor.
+<img src=https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/pencil.png width=40> - Pencil make your cursor selectable, so you can choice segments by pointing cursor.
 Selected segments change color to lime.
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map2.jpg?raw=true)
 
-####Eraser
-![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/eraser.png) 
-Eraser - give opportunity to disable selection.
+<img src=https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/eraser.png width=40> - Eraser - give opportunity to disable selection.
 
-####Edit Form
-![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/edit.png)
-Then you finish to select segments  -  click icon or double click on screen for open Segment Form for selected elements.
+<img src=https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/edit.png width=40> - Then you finish to select segments  -  click Edit Form icon or double click on screen for open Segment Form for selected elements.
 
 Another opportunity to change Cursor tools - make right click on the map screen, its rotate the tool.
 
 Additional in menu:
-####Opening Global Vars list
-![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/vars.png) 
-####Remove all
-![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/roger.png) - Remove map.
+<img src=https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/vars.png width=40> - Opening Global Vars list 
+<img src=https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/roger.png width=40> - Remove map.
 
 You can change position of segments by drag n drop and program record the position.
 

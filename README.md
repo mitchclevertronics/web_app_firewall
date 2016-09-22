@@ -83,11 +83,15 @@ Additional in menu:
 You can change position of segments by drag n drop and program record the position.
 
 ####Segments Form
-For fast open Segment Form for selected segments - use double click on map screen or click on icon ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/edit.png?raw=true) in right side.
+For fast open Segment Form for selected segments - use double click on map screen or click on icon <img src="https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/edit.png?raw=true" width="40"> in right side.
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map3.jpg?raw=true)
-If you want using exactly path leave Original Path .(in example static php files not changing  so I can set Original Path)
+
+If you want using exactly path leave Original Path (in example static php files not changing  so I can set Original Path).
+
 If you know that possible make automatic-filter on type - switch to AutoType.
+
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map4.jpg?raw=true)
+
 You have to set static part of word before or after you automatic type. Maximum size of value, and in Contains you set that can be approved in your filter, letters, numbers and Special chars - anything that you need additional for approve segment.
 Set Approved - on - its make filter active in Guard Mode, BF - if you want set BruteForce detection in some script.
 ####Variables Form

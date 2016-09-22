@@ -96,12 +96,18 @@ You have to set static part of word before or after you automatic type. Maximum 
 Set Approved - on - its make filter active in Guard Mode, BF - if you want set BruteForce detection in some script.
 ####Variables Form
 For open Segment Variables list - double click on segment: 
+
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map5.jpg?raw=true)
+
 Same cursor tools interface for select variables. We have select size, and Contains before approve.
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map6.jpg?raw=true)
-Make Global  - special checkbox, its make variable shared for all segments. After saving global variables moving to Global Variables Menu (Click on Icon  ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/vars.png?raw=true) ) 
+
+Make Global  - special checkbox, its make variable shared for all segments. After saving global variables moving to Global Variables Menu (Click on Icon  <img src="https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/vars.png?raw=true" width="40"> ) 
 Bottom of Access Map page you have form for sorting segments 
+
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map8.jpg?raw=true)
+
 ###Bad Requests
 Bad Requests: here possible read logs of stopped attacks,  the logs recording only in Guard Mode. Its helpfully for learn structure and attack situations.
+
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map9.jpg?raw=true)

@@ -29,17 +29,17 @@ Installation is very simple:
 <b>DB User</b>     - MySQL Username<br>
 <b>DB Password</b> - MySQL Password<br>
 <b>DB Name</b>     - MySQL database name<br><br>
-Create New Db - set command to create DB Name, dont need for existed database.<br>
-Save Old Data  - New Installation : refresh data in existed database.<br>
-Save Old Data  - Keep old data : - dont refresh data of existed database, just connect program to DB.<br>
-First User - Emal: administration email and username<br>
-Password - administration password<br>
+<b>Create New Db</b> - set command to create DB Name, dont need for existed database.<br>
+<b>Save Old Data</b>  - New Installation : refresh data in existed database.<br>
+<b>Save Old Data</b>  - Keep old data : - dont refresh data of existed database, just connect program to DB.<br>
+<b>First User - Emal</b> - administration email and username<br>
+<b> Password </b>- administration password<br>
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/inst1.jpg?raw=true)
 
 If all done you see message:
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/inst2.jpg?raw=true)
 
-Installation impossible again from now, if you need run installation wizard again - remove file config.inc.php , in folder inc.
+Installation impossible again from now, if you need run installation wizard again - remove file <b>config.inc.php</b> , in folder inc.
 
 ###HTACCESS Injection
 Now need make process of htaccess injection, click in menu on HTACCESS tab.
@@ -47,13 +47,13 @@ In top window you see code prepared for injection. In bottom - code of main .hta
 Now traffic of you site going via reverse-proxy of the program.
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/htaccess1.jpg?raw=true)
 ###Config Settings
-WAF Status Learn: program building map of site only.
-WAF Status Guard: program filter only approved requests with approved variables.
-Security Key and Security Key2: Using for orginise htaccess hook with redirect trafic to WAF and trafic from WAF to site.
+<b>WAF Status Learn</b> - program building map of site only.
+<b>WAF Status Guard</b> - program filter only approved requests with approved variables.
+<b>Security Key</b> and <b>Security Key2</b> - using for orginise htaccess hook with redirect trafic to WAF and trafic from WAF to site.
 If generated new keys need immidiatly inject them to htaccess
-404 Page URL: address that showed for potencial attacker then request stoped from security reason.
-Brute Force Frequency: - seconds between requests from same IP to segment guarded by BF option.
-Brute Force Attempts: - how many times will be detected BruteForce before IP will be blacklisted.
+<b>404 Page URL</b> - address that showed for potencial attacker then request stoped from security reason.
+<b>Brute Force Frequency</b> - seconds between requests from same IP to segment guarded by BF option.
+<b>Brute Force Attempts</b> - how many times will be detected BruteForce before IP will be blacklisted.
 
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/settings1.jpg?raw=true)
 

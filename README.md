@@ -1,14 +1,16 @@
 #Web App Firewall
 ##Introduction
-Goal of the software is protect sites against hackers and virus attacks. 
-Web App Firewall its PHP application that implement principle of reverse-proxy , control of types variables accepted by server , and comfortable management interface.
-![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map0.jpg?raw=true)
+WAFs goal is protect sites against hackers and virus attacks. 
+Web App Firewall its PHP application that implement principle of reverse-proxy , control of types variables accepted by server , and comfortable management interface.<br>
+![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map0.jpg?raw=true)<br>
 W.A.F. supported to work under LAMP servers with .htaccess files support.
-Security protection based on white-list strategy: after starting "Learn Mode" program collect map of requests, and user have to configure map of requests by setting variable type and size. After starting "Guard Mode" - program accept only known requests via formula of var-type or exactly value.
+Security protection based on white-list strategy: after starting "Learn" mode program collect map of requests, and user have to approve requests. After starting "Guard" mode - program accept only known requests.
 
 Program using white-list strategy, it is more absolute protection, but its requires a lot of work on configuration.
-In the program using a new approach for UI	, and give an opportunity regularize most chaotic structure.
+In the program using Intellectual grafical UI	, its give an opportunity regularize most chaotic structure.
 
+##Dependense
+Require Linux server, Apache , PHP installed with MySQL and CURL support 
 ##How its working?
 Web App Firewall organize reverse-proxy by injection to .htaccess file, and writing Rewrite Rules with security key 1.
 

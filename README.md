@@ -62,13 +62,13 @@ If generated new keys need immidiatly inject them to htaccess<br>
 Set W.A.F Status Learn on, and Guard off.
 Now program start collect request-map from every request to site, leave it for one week for view more complete structure of site.
 
-##Support
 ###Access Map
 In Access Map you can see recorded structure of site. In {#} - number of variables connected to segment. Tag BF in {} - used protection againts brute force.
 If segment red - its new not approved segment, if green - approved.
 Point cursor on segment - you can see list of variables connected to segment.
 
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map1.jpg?raw=true)
+
 ####How select segments for edition - Cursor tools menu:
 In right side of screen you can see Map menu, its changing cursor function:
 
@@ -121,3 +121,6 @@ Bottom of Access Map page you have form for sorting segments:
 Logs of stopped attacks,  the logs recording only in <b>Guard Mode</b>. Its helpfully for learn structure and attack situations.
 
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map9.jpg?raw=true)
+
+## Support 
+Write me for help romanshneer@gmail.com

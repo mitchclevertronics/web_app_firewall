@@ -44,7 +44,7 @@ Installation impossible again from now, if you need run installation wizard agai
 ###HTACCESS Injection
 Now need make process of htaccess injection, click in menu on HTACCESS tab.
 In top window you see code prepared for injection. In bottom - code of main .htaccess on your web resource. Need copy code from top window to bottom and Save.  If you do new injection on htaccess that contains already WAF injection code - need change it by new code.
-Now traffic of you site going via reverse-proxy of the program.
+Now traffic of you site going via reverse-proxy of the program.<br>
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/htaccess1.jpg?raw=true)
 ###Config Settings
 <b>WAF Status Learn</b> - program building map of site only.

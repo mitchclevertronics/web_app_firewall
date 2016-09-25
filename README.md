@@ -25,10 +25,10 @@ Open in browser http://yousite /web_app_firewall and install W.A.F.
 
 Installation is very simple:
 
-DB Host     - MySQL host or ip<br>
-DB User     - MySQL Username<br>
-DB Password - MySQL Password<br>
-DB Name     - MySQL database name<br><br>
+<b>DB Host</b>     - MySQL host or ip<br>
+<b>DB User</b>     - MySQL Username<br>
+<b>DB Password</b> - MySQL Password<br>
+<b>DB Name</b>     - MySQL database name<br><br>
 Create New Db - set command to create DB Name, dont need for existed database.<br>
 Save Old Data  - New Installation : refresh data in existed database.<br>
 Save Old Data  - Keep old data : - dont refresh data of existed database, just connect program to DB.<br>

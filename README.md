@@ -17,37 +17,16 @@ Google Charts https://developers.google.com/chart/<br>
 #### Requires:<br>
 Linux OS, Apache webserver with support htaccess and mod_rewrite,PHP5 with support CURL and MySQL<br>
 
-##How its working?
-Web App Firewall organize reverse-proxy by injection to .htaccess file, and writing Rewrite Rules with security key 1.
+##[How its working?](https://github.com/shaman33/web_app_firewall/wiki/How-its-working%3F)
 
-Script get redirected request and parse path and parameters sent from user. Detect created rules for specified situation and block or accept request via prepared politics.
-
-If request approved, WAF script sending request  back to server via CURL with added security key 2 (.htaccess rule miss request if detect key2).
-If request blocked, WAF save logs and show 404 page.
-<img src="https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/reverse_proxy.png?raw=true">
 ##Getting Started	
-###Installation
-Please visit [Wiki](https://github.com/shaman33/web_app_firewall/wiki/Installation-WebAppFirewall)
-###HTACCESS Injection
-Now need make process of htaccess injection, click in menu on HTACCESS tab.
-In top window you see code prepared for injection. In bottom - code of main .htaccess on your web resource. Need copy code from top window to bottom and Save.  If you do new injection on htaccess that contains already WAF injection code - need change it by new code.
-Now traffic of you site going via reverse-proxy of the program.<br>
-![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/htaccess1.jpg?raw=true)
-###Config Settings
-<b>WAF Status Learn</b> - program building map of site only.<br>
-<b>WAF Status Guard</b> - program filter only approved requests with approved variables.<br>
-<b>Security Key</b> and <b>Security Key2</b> - using for orginise htaccess hook with redirect trafic to WAF and trafic from WAF to site.<br>
-If generated new keys need immidiatly inject them to htaccess<br>
-<b>404 Page URL</b> - address that showed for potencial attacker then request stoped from security reason.<br>
-<b>Brute Force Frequency</b> - seconds between requests from same IP to segment guarded by BF option.<br>
-<b>Brute Force Attempts</b> - how many times will be detected BruteForce before IP will be blacklisted.<br>
-
-![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/settings1.jpg?raw=true)
-
+###[Installation](https://github.com/shaman33/web_app_firewall/wiki/Installation-WebAppFirewall)
+###[HTACCESS Injection](https://github.com/shaman33/web_app_firewall/wiki/HTACCESS-injection-via-WebAppFirewall)
+###[Configuration Settings](https://github.com/shaman33/web_app_firewall/wiki/Configuration-Settings)
 Set W.A.F Status Learn on, and Guard off.
 Now program start collect request-map from every request to site, leave it for one week for view more complete structure of site.
 
-###Access Map
+###[Access Map - configuration permissions](https://github.com/shaman33/web_app_firewall/wiki/Configuration-Access-Map)
 In Access Map you can see recorded structure of site. In {#} - number of variables connected to segment. Tag BF in {} - used protection againts brute force.
 If segment red - its new not approved segment, if green - approved.
 Point cursor on segment - you can see list of variables connected to segment.

@@ -12,7 +12,7 @@ In the program using a new approach for UI	, and give an opportunity regularize 
 ##How its working?
 Web App Firewall organize reverse-proxy by injection to .htaccess file, and writing Rewrite Rules with security key 1.
 
-WAF script get redirected request and parse path and parameters sent from user. Detect created rules for specified situation and block or accept request via prepared politics.
+Script get redirected request and parse path and parameters sent from user. Detect created rules for specified situation and block or accept request via prepared politics.
 
 If request approved, WAF script sending request  back to server via CURL with added security key 2 (.htaccess rule miss request if detect key2).
 If request blocked, WAF save logs and show 404 page.
@@ -25,8 +25,7 @@ Open in browser http://yousite /web_app_firewall and install W.A.F.
 
 Installation is very simple:
 
-DB Host - MySQL host or ip
-
+DB Host - MySQL host or ip<br>
 DB User - MySQL Username
 
 DB Password - MySQL Password

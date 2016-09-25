@@ -27,7 +27,7 @@ $segments=$WR->get_segments_tree2($get,0);
 <html xmlns="http://www.w3.org/1999/xhtml"  xml:lang="en" lang="en">
 <head>
 <?php require_once "include/head.php"; ?>
-<script src="assets/js/jquery.connections.js"></script>		
+<script src="assets/js/musclesoft-jquery-connections/jquery.connections.js"></script>		
 <script src="assets/js/waf_map.js"></script>
 </head>
 <body>

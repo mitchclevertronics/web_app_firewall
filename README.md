@@ -123,4 +123,4 @@ Logs of stopped attacks,  the logs recording only in <b>Guard Mode</b>. Its help
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map9.jpg?raw=true)
 
 ## Support 
-Write me for help romanshneer@gmail.com
+Write me for help RomanShneer@gmail.com

@@ -47,13 +47,13 @@ In top window you see code prepared for injection. In bottom - code of main .hta
 Now traffic of you site going via reverse-proxy of the program.<br>
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/htaccess1.jpg?raw=true)
 ###Config Settings
-<b>WAF Status Learn</b> - program building map of site only.
-<b>WAF Status Guard</b> - program filter only approved requests with approved variables.
-<b>Security Key</b> and <b>Security Key2</b> - using for orginise htaccess hook with redirect trafic to WAF and trafic from WAF to site.
-If generated new keys need immidiatly inject them to htaccess
-<b>404 Page URL</b> - address that showed for potencial attacker then request stoped from security reason.
-<b>Brute Force Frequency</b> - seconds between requests from same IP to segment guarded by BF option.
-<b>Brute Force Attempts</b> - how many times will be detected BruteForce before IP will be blacklisted.
+<b>WAF Status Learn</b> - program building map of site only.<br>
+<b>WAF Status Guard</b> - program filter only approved requests with approved variables.<br>
+<b>Security Key</b> and <b>Security Key2</b> - using for orginise htaccess hook with redirect trafic to WAF and trafic from WAF to site.<br>
+If generated new keys need immidiatly inject them to htaccess<br>
+<b>404 Page URL</b> - address that showed for potencial attacker then request stoped from security reason.<br>
+<b>Brute Force Frequency</b> - seconds between requests from same IP to segment guarded by BF option.<br>
+<b>Brute Force Attempts</b> - how many times will be detected BruteForce before IP will be blacklisted.<br>
 
 ![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/settings1.jpg?raw=true)
 

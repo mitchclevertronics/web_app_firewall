@@ -9,8 +9,14 @@ Security protection based on white-list strategy: after starting "Learn" mode pr
 Program using white-list strategy, it is more absolute protection, but its requires a lot of work on configuration.
 In the program using Intellectual grafical UI	, its give an opportunity regularize most chaotic structure.
 
-##Dependense
-Require Linux server, Apache , PHP installed with MySQL and CURL support 
+#### Contains libraries:<br>
+Jquery-connections https://github.com/musclesoft/jquery-connections<br>
+jQuery-1.11.3 https://jquery.com<br>
+Google Charts https://developers.google.com/chart/<br>
+
+#### Requires:<br>
+Linux OS, Apache webserver with support htaccess and mod_rewrite,PHP5 with support CURL and MySQL<br>
+
 ##How its working?
 Web App Firewall organize reverse-proxy by injection to .htaccess file, and writing Rewrite Rules with security key 1.
 

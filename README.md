@@ -25,13 +25,7 @@ Linux OS, Apache webserver with support htaccess and mod_rewrite,PHP5 with suppo
 ###[Configuration Settings](https://github.com/shaman33/web_app_firewall/wiki/Configuration-Settings)
 Set W.A.F Status Learn on, and Guard off.
 Now program start collect request-map from every request to site, leave it for one week for view more complete structure of site.
-
 ###[Access Map - configuration permissions](https://github.com/shaman33/web_app_firewall/wiki/Configuration-Access-Map)
-
-###Bad Requests
-Logs of stopped attacks,  the logs recording only in <b>Guard Mode</b>. Its helpfully for learn structure and attack situations.
-
-![alt tag](https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map9.jpg?raw=true)
-
+###[Bad Requests log](https://github.com/shaman33/web_app_firewall/wiki/Bad-Requests)
 ## Support 
 Write me for help RomanShneer@gmail.com

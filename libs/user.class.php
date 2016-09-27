@@ -16,8 +16,14 @@ Class WafUser{
 		$config=DB::get_config();
 		$this->web_root=$config['web_root'];
 		$this->db=new DB($config['db_host'],$config['db_name'],$config['db_user'],$config['db_pass']);
-    $this->waf_bf=$this->get_setting('waf_bf','0.3');
+		$this->waf_bf=$this->get_setting('waf_bf','0.3');
 	}
+	/*
+	 * Get setting record by $key, save and return $default if not contains
+	 * @param string $key   - setting name
+	 * @param string $default - setting default value
+	 * @return string $value
+	 */
 	private function get_setting($key,$default)
 	{
 			$sql="SELECT value FROM waf_settings WHERE name='".$this->db->Q($key,1)."'";
@@ -50,24 +56,19 @@ Class WafUser{
 			if($diff<$this->waf_bf)
 			{
 			
-			 $this->error='Wrong User or Password!';
-			 return null;
+				$this->error='Wrong User or Password!';
+				return null;
 			}elseif($user['pass']!=md5(trim($pass))){
 			 
-			 $this->error='Wrong User or Password!';
-			 return null;
+				$this->error='Wrong User or Password!';
+				return null;
 			}else{
 			 
-			 $_SESSION['waf_user']=$user;
-			header("Location:".$this->web_root);
-			exit();
-			}
-		 #$sql="UPDATE waf_users SET bf=".$t." WHERE email='".$this->db->Q($email)."'"; 
-		 
-			
-		}else{
-			$this->error='Wrong User or Password!';
-		}
+				$_SESSION['waf_user']=$user;
+				header("Location:".$this->web_root);
+				exit();
+			}	
+		}else $this->error='Wrong User or Password!';
 		
 	}
 	
@@ -103,7 +104,7 @@ Class WafUser{
 	public function change_password($id,$pass)
 	{
 		$sql="UPDATE waf_users SET pass='".md5($pass)."' WHERE id=".$this->db->Q($id);
-    $this->db->QUERY($sql);
+		$this->db->QUERY($sql);
 	}
 	/*
 	 * Run Change Password Interface
@@ -138,7 +139,7 @@ Class WafUser{
 	public function get_users()
 	{
 		$sql="SELECT * FROM waf_users WHERE 1=1";
-    $result=$this->db->LIST_Q($sql);
+		$result=$this->db->LIST_Q($sql);
 		return $result;
 	}
 	
@@ -151,8 +152,8 @@ Class WafUser{
 	{
 		if($id>0)
 		{	
-		$sql="SELECT * FROM waf_users WHERE id=".$this->db->Q($id);
-    $result=$this->db->ROW_Q($sql);
+			$sql="SELECT * FROM waf_users WHERE id=".$this->db->Q($id);
+			$result=$this->db->ROW_Q($sql);
 		}else{
 			$result=Array('id'=>0,'email'=>'','editor'=>0,'status'=>1);
 		}
@@ -169,24 +170,33 @@ Class WafUser{
 	
 		if($u['id'])
 		{
-			$sql="UPDATE waf_users SET email='".$this->db->Q($u['email'],1)."', ";
-															if(!empty($u['pass']))$sql.="pass='".md5($u['pass'])."', ";
-															$sql.= "editor=".(isset($u['editor'])?1:0).", "
-															. "status=".(isset($u['status'])?1:0)." "
-															. "WHERE id=".$this->db->Q($u['id']);
+			$sql="UPDATE waf_users SET email='".$this->db->Q($u['email'],1)."', "
+			.((!empty($u['pass']))?"pass='".md5($u['pass'])."', ":"")
+			."editor=".(isset($u['editor'])?1:0).", "
+			. "status=".(isset($u['status'])?1:0)." "
+			. "WHERE id=".$this->db->Q($u['id']);
 		}else{
 			$sql="INSERT INTO waf_users (email,pass,editor,status) VALUES ('".$this->db->Q($u['email'],1)."','".md5($u['pass'])."',".(isset($u['editor'])?1:0).",".(isset($u['status'])?1:0).")";
 		}
 		$this->db->QUERY($sql);
 	}
+	/* 
+	 * Check user permission if editor
+	 * return boolean $isEditor
+	 */
 	public function isEditor(){
-	 if($_SESSION['waf_user']['editor']==1)return true;
-	 else return false;
+		if($_SESSION['waf_user']['editor']==1)return true;
+		else return false;
 	}
-	
+	/*
+	 * Send email with confirmation link for reset password
+	 * save confirm key to user_table
+	 * @param string $email - User Email
+	 * @return string\null
+	 */
 	public function remind_password($email){
-	 $sql="SELECT * FROM waf_users WHERE email='".$this->db->Q($email,1)."'";
-    $result=$this->db->ROW_Q($sql);
+		 $sql="SELECT * FROM waf_users WHERE email='".$this->db->Q($email,1)."'";
+		$result=$this->db->ROW_Q($sql);
 		if($result)
 		{
 		 $mdkey=md5(rand(10000,time()));
@@ -200,13 +210,19 @@ Class WafUser{
 					."If you forget password "
 					."<a href='".$link."'>click link</a>"
 					."W.A.F. System";
-		# die($msg);
+		
 		 mail($result['email'],$subject,$msg);
 		 header("Location:?sended=1");
 		}else{
 		 return 'Guru you never know';
 		}
 	}
+	
+	/*
+	 * Get user by confirmation $key
+	 * @param string $key
+	 * return array $user
+	 */
 	public function auth_user_by_rmn_pass($key)
 	{
 	 $sql="SELECT * FROM waf_users WHERE rmn_pass='".$this->db->Q($key,1)."'";
@@ -214,6 +230,12 @@ Class WafUser{
 		return $result;
 		
 	}
+	
+	/*
+	 * change user password 
+	 * @param $user
+	 * @return null
+	 */
 	public function run_chg_pass_if4reset($user)
 	{
 		$msg='';
@@ -222,15 +244,11 @@ Class WafUser{
 		{
 			$msg='Passwords not equal! Try again.';
 		}else{
-		$this->change_password($user['id'],$_POST['pass']);
-		
-		$this->db->QUERY("UPDATE waf_users SET rmn_pass='' WHERE id=".$this->db->Q($user['id']));
-		header("Location:?pass_changed=true");
-		exit();
-		#$msg='Password successfully changed';
+			$this->change_password($user['id'],$_POST['pass']);
+			$this->db->QUERY("UPDATE waf_users SET rmn_pass='' WHERE id=".$this->db->Q($user['id']));
+			header("Location:?pass_changed=true");
+			exit();
 		}
-				
-		
 		$this->error=$msg;
 	}
 }

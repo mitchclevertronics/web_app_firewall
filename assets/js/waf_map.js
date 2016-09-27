@@ -39,12 +39,13 @@ WaF.init=function (){
 
 WaF.draw_connect_lines=function (){
     
-    //drag n drop
-    $('.segment:visible').draggable({drag: function( event, ui ) {
+//drag n drop
+  $('.segment:visible').draggable({drag: function( event, ui ) {
         WaF.redraw_connect_lines();
      
   }, cursor: "grabbing",
   stop:function( event, ui ) {
+	  /*
       if(WaF.filter_on==false)
       {
       $(event.target).attr('orig_left',$(event.target).css('left'));
@@ -57,6 +58,7 @@ WaF.draw_connect_lines=function (){
         $('body').css('cursor','');        
         $.post( "ajax.php?act=save_segment_position",data, function( json ) {});
       }
+	  */
   }
   });
   
@@ -71,8 +73,6 @@ WaF.draw_connect_lines=function (){
       }
      
   });
-  
- 
 };
 WaF.redraw_connect_lines=function (){
  $('connection').connections('update');

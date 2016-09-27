@@ -1,6 +1,6 @@
 <?php
 /*
- * script for installer wisard (backend library)
+ * script for instal WebAppFirewall (backend library)
  * License: GNU
  * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */

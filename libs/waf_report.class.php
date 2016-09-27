@@ -172,49 +172,44 @@ Class WafReport{
 	 */
 	public function draw_segments_tree($segments,$lvl)
 	{
-	
-	 #$reqs=$segments['childs'];
 				
-			 $html='<ul>';
+		$html='<ul>';
+
+		 $row=0;
+		foreach($segments as $r)
+		{
+
+		$html.='<li id="'.$r['id'].'"  lvl='.$lvl.'>';
+
+		$vars_count=($r['vars_approved0']+$r['vars_approved1']);
+		if($r['use_type'])$item_name=$r['code_before']." (".$r['code_contains'].") [".$r['code_size']."] ".$r['code_after'];
+		else{
+		 $item_name=((!empty($r['value']))?$r['value']:'##root##');
+		}
+		if(($vars_count)||($r['bf']))
+		{
+		 $addl=array();
+		 if($vars_count)$addl[]=$vars_count;
+		 if($r['bf'])$addl[]='BF';
+
+		 $item_name.="{".implode(", ",$addl)."}";
+		}
 		
-			 $row=0;
-			foreach($segments as $r)
-			{
-			
-			$html.='<li id="'.$r['id'].'"  lvl='.$lvl.'>';
+		$css_classes="approved".$r['approved'].' use_type'.$r['use_type'].' '.'bf'.(($r['bf']>0)?1:0)
+			.(($r['vars_approved0'])?' vars_approved0 ':'')
+			.(($r['vars_approved1'])?' vars_approved1 ':'')
+			.(($vars_count)?' have_vars':' no_vars')
+			.' segment segment'.$r['id'];
 
-			$vars_count=($r['vars_approved0']+$r['vars_approved1']);
-			if($r['use_type'])$item_name=$r['code_before']." (".$r['code_contains'].") [".$r['code_size']."] ".$r['code_after'];
-			else{
-			 $item_name=((!empty($r['value']))?$r['value']:'##root##');
-			}
-			if(($vars_count)||($r['bf']))
-			{
-			 $addl=array();
-			 if($vars_count)$addl[]=$vars_count;
-			 if($r['bf'])$addl[]='BF';
+		if(isset($r['invisible']))$css_classes.=' invisible';
+		$html.='<span class="'.$css_classes.'" segment_id="'.$r['id'].'" segment_parent="'.$r['parent'].'" title="Segment ID:'.$r['id'].'">'.$item_name.'</span>';
 
-			 $item_name.="{".implode(", ",$addl)."}";
-			}
-			$style="";
-			if(!empty($r['segment_x']))$style.='left:'.$r['segment_x'].";right: auto;";
-			if(!empty($r['segment_y']))$style.='top:'.$r['segment_y'].";bottom: auto;";
-
-			$css_classes="approved".$r['approved'].' use_type'.$r['use_type'].' '.'bf'.(($r['bf']>0)?1:0)
-				.(($r['vars_approved0'])?' vars_approved0 ':'')
-				.(($r['vars_approved1'])?' vars_approved1 ':'')
-				.(($vars_count)?' have_vars':' no_vars')
-				.' segment segment'.$r['id'];
-
-			if(isset($r['invisible']))$css_classes.=' invisible';
-			$html.='<span class="'.$css_classes.'" segment_id="'.$r['id'].'" segment_parent="'.$r['parent'].'" title="Segment ID:'.$r['id'].'">'.$item_name.'</span>';
-
-			if($r['childs'])$html.=$this->draw_segments_tree($r['childs'],($lvl+1));
-			$html.='</li>';
-			$row++;
-			}
-			$html.='</ul>';
-			return $html;
+		if($r['childs'])$html.=$this->draw_segments_tree($r['childs'],($lvl+1));
+		$html.='</li>';
+		$row++;
+		}
+		$html.='</ul>';
+		return $html;
 	}
   
 	private function get_vars4segment($id)
@@ -454,12 +449,12 @@ Class WafReport{
 	 * Save segment position after dragging
 	 * @param array $data['x','y',id]: x,y=left,top (200px), id - segment_id
 	 * @return void
-	 */
+	 
 	public function save_segment_position($data){
 	 $sql="UPDATE waf_segments SET segment_x='".$this->db->Q($data['x'])."',segment_y='".$this->db->Q($data['y'])."' "
 								 . " WHERE id=".$this->db->Q($data['id']);
 		$this->db->QUERY($sql);						 
-	}
+	}*/
 	
 	/* Multy Save Segments for one type and options
 	 * @param array $ids - SegmentId

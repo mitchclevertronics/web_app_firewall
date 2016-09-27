@@ -43,15 +43,17 @@ Class WAF extends WAFHelper{
     public function curl_request($request_data,$method){
 		 
            $url=$request_data['url'];
-		   $u=parse_url($url);
-		   if($u['host']!=$_SERVER['SERVER_NAME'])$url=$_SERVER['SERVER_NAME'].$url;
 		   
+		   $u=parse_url($url);
+		   if(!isset($u['host']))$u['host']='http://localhost/';
+		   if($u['host']!=$_SERVER['SERVER_NAME'])
+			   $url=$_SERVER['SERVER_NAME'].$url;
+		 
 			$vars=$request_data['vars'];
 			if(($request_data['method']=='GET')&&count($vars))
-            {
 				$url.="?".http_build_query($vars);
-			}
-			#die($url);
+			
+			
             $ch=curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

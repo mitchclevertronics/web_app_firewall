@@ -79,8 +79,6 @@ CREATE TABLE IF NOT EXISTS `waf_segments` (
   `code_size` int(11) NOT NULL,
   `code_before` varchar(20) NOT NULL,
   `code_after` varchar(20) NOT NULL,
-  `segment_x` varchar(20) NOT NULL,
-  `segment_y` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=53 ;
 

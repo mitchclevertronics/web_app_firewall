@@ -33,6 +33,7 @@ Set W.A.F Status Learn on, and Guard off.
 Now program start collect request-map from every request to site, leave it for one week for view more complete structure of site.
 ###[Access Map - configuration permissions](https://github.com/shaman33/web_app_firewall/wiki/Configuration-Access-Map)
 ###[Bad Requests log](https://github.com/shaman33/web_app_firewall/wiki/Bad-Requests)
+###[Blacklist IP](https://github.com/shaman33/web_app_firewall/wiki/Blacklist)
 ## Support 
 Write me for help RomanShneer@gmail.com<br>
 Please donate:

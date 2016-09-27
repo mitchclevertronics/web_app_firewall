@@ -18,7 +18,13 @@ Google Charts https://developers.google.com/chart/<br>
 Linux OS, Apache webserver with support htaccess and mod_rewrite,PHP5 with support CURL and MySQL<br>
 
 ##[How its working?](https://github.com/shaman33/web_app_firewall/wiki/How-its-working%3F)
+Web App Firewall organize reverse-proxy by injection to .htaccess file, and writing Rewrite Rules with security key 1.
 
+WAF script get redirected request and parse path and parameters sent from user. Detect created rules for specified situation and block or accept request via prepared politics.
+
+If request approved, WAF script sending request  back to server via CURL with added security key 2 (.htaccess rule miss request if detect key2).
+If request blocked, WAF save logs and show 404 page.
+<img src="https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/reverse_proxy.png?raw=true">
 ##Getting Started	
 ###[Installation](https://github.com/shaman33/web_app_firewall/wiki/Installation-WebAppFirewall)
 ###[HTACCESS Injection](https://github.com/shaman33/web_app_firewall/wiki/HTACCESS-injection-via-WebAppFirewall)

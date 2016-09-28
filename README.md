@@ -27,7 +27,7 @@ If request blocked, WAF save logs and show 404 page.
 <img src="https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/reverse_proxy.png?raw=true">
 ##Getting Started	
 ###[Installation](https://github.com/shaman33/web_app_firewall/wiki/Installation-WebAppFirewall)
-###[HTACCESS Injection](https://github.com/shaman33/web_app_firewall/wiki/HTACCESS-injection-via-WebAppFirewall)
+###[HTACCESS Injection](https://github.com/shaman33/web_app_firewall/wiki/Injection-to-.htaccess)
 ###[Configuration Settings](https://github.com/shaman33/web_app_firewall/wiki/Configuration-Settings)
 Set W.A.F Status Learn on, and Guard off.
 Now program start collect request-map from every request to site, leave it for one week for view more complete structure of site.

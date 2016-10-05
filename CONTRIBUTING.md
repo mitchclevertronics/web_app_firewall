@@ -29,5 +29,5 @@ Whether you are a programmer or not, you can contribute to Web App Firewall. Bel
 If you want to really get involved, then check out our full documentation for contributors: http://inside.gratipay.com/
 
 ##License
-Gratipay is [licensed under CC0](https://github.com/gratipay/gratipay.com/tree/master/COPYING).
+Web App Firewall is [licensed under CC0](https://github.com/shaman33/web_app_firewall/blob/master/COPYING).
 

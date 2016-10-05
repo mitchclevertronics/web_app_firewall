@@ -81,7 +81,7 @@ WaF.init_vars_menu_close=function (){
         $('.opened_segment').removeClass('opened_segment');
         $('.vars_form').hide();
         $('#vars_menu').hide();
-        
+        $('#edit_global_vars').removeClass('the_action');
     });
 };
 
@@ -528,13 +528,12 @@ WaF.open_vars_menu=function (seg_id){
                     
                         for(v in json.vars[method])
                         {
-                            //var var_text=(json.vars[method][v].use_type==0)?json.vars[method][v].name+'='+json.vars[method][v].value:json.vars[method][v].name+'='+json.vars[method][v].code_contains+" "+json.vars[method][v].code_size;
+                           
                             var span=$('<span>').html(json.vars[method][v].name)
                                     .addClass('var_li');
                             var span2=$('<span>').html((json.vars[method][v].use_type==0)?WaF.escapeHtml(json.vars[method][v].value):json.vars[method][v].code_contains+" "+json.vars[method][v].code_size)
                                     .addClass('var_li_val');
-                                                //.append($('<font>').html((json.vars[method][v].use_type==0)?json.vars[method][v].value:json.vars[method][v].code_contains+" "+json.vars[method][v].code_size))
-                                                 //;
+                           
                             var var_li=$('<li>').append(span).append(span2)
                                                 .addClass('approved'+json.vars[method][v].approved)
                                                 .attr('rel',json.vars[method][v].id);
@@ -548,7 +547,7 @@ WaF.open_vars_menu=function (seg_id){
                     li.append(ul);
                    
                     $('#requests').append(li).attr('segment_id',seg_id);
-			//requests+=json.requests[j].method+' '+json.requests[j].path+"\n";
+		
 		}
 		WaF.init_li_over_var();
 		if(seg_id==0)$('#vars_global').prop('disabled',true);

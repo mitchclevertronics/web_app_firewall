@@ -43,23 +43,7 @@ WaF.draw_connect_lines=function (){
   $('.segment:visible').draggable({drag: function( event, ui ) {
         WaF.redraw_connect_lines();
      
-  }, cursor: "grabbing",
-  stop:function( event, ui ) {
-	  /*
-      if(WaF.filter_on==false)
-      {
-      $(event.target).attr('orig_left',$(event.target).css('left'));
-      $(event.target).attr('orig_top',$(event.target).css('top'));
-      
-      var data={'x':$(event.target).css('left'),
-                'y':$(event.target).css('top'),
-                'id':$(event.target).attr('segment_id')
-                };
-        $('body').css('cursor','');        
-        $.post( "ajax.php?act=save_segment_position",data, function( json ) {});
-      }
-	  */
-  }
+  }, cursor: "grabbing"
   });
   
   //line connection
@@ -478,8 +462,6 @@ WaF.switch_tool=function (next_tool){
             $('#pencil_var').removeClass('the_action_var');
         break;
     }
-    //$('#seg_tree').removeClass().addClass('body_'+next_tool);
-    //$('#vars_menu').removeClass().addClass('body_'+next_tool);
 	$('html').removeClass().addClass('body_'+next_tool);
     WaF.current_tool=next_tool;
 };

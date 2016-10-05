@@ -24,7 +24,7 @@ if(isset($_POST['email'])&&isset($_POST['pass']))
 </head>
 <body>
 		<div class='header'></div> 
-		<h1 class='title'>Wellcome to W.A.F.</h1>
+		<h1 class='title'>Wellcome to Web App	 Firewall</h1>
 		
 				<div class='box'>	
 						<center>	

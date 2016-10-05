@@ -15,8 +15,8 @@ Whether you are a programmer or not, you can contribute to Web App Firewall. Bel
 2. Follow the [Gratipay blog](https://medium.com/gratipay-blog)
 3. Diagnose a bug by creating an issue
 3. Suggest an improvement by creating an issue
-4. Close resolved issues ([here's the big list](https://github.com/issues?q=is%3Aopen+user%3Agratipay+sort%3Aupdated-desc))
-5. [Test the code](https://github.com/gratipay/gratipay.com/blob/master/README.md)
+4. Close resolved issues ([here's the big list](https://github.com/shaman33/web_app_firewall/issues))
+5. [Test the code](https://github.com/shaman33/web_app_firewall/blob/master/README.md)
 6. Fix a bug/resolve an issue
 7. Write a test
 8. Add a comment to the code

@@ -1,4 +1,4 @@
-#Contributing to Gratipay
+#Contributing to Web App Firewall
 
 ##What is "open work"?
 At http://gratipay.com/about, we have a definition:
@@ -9,7 +9,7 @@ Do work first, ask permission later. Fun, isn't it? If you are opening a new iss
 
 
 ##How you can contribute
-Whether you are a programmer or not, you can contribute to Gratipay. Below are some ideas we've modified from [this great blog post](http://blog.smartbear.com/programming/14-ways-to-contribute-to-open-source-without-being-a-programming-genius-or-a-rock-star/) (more details at the link). You can check out a similar list [here](http://24pullrequests.com/contributing). If you see anything below that doesn't make sense, _relax_--find something you understand and start from there.
+Whether you are a programmer or not, you can contribute to Web App Firewall. Below are some ideas we've modified from [this great blog post](http://blog.smartbear.com/programming/14-ways-to-contribute-to-open-source-without-being-a-programming-genius-or-a-rock-star/) (more details at the link). You can check out a similar list [here](http://24pullrequests.com/contributing). If you see anything below that doesn't make sense, _relax_--find something you understand and start from there.
 
 1. Follow along on GitHub. Looks like you're in the right place already! See all project repositories at http://github.com/gratipay.
 2. Follow the [Gratipay blog](https://medium.com/gratipay-blog)

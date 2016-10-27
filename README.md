@@ -7,7 +7,7 @@ W.A.F. supported to work under LAMP servers with .htaccess files support.
 Security protection based on white-list strategy: after starting "Learn" mode program collect map of requests, and user have to approve requests. After starting "Guard" mode - program accept only known requests.
 
 Program using white-list strategy, it is more absolute protection, but its requires a lot of work on configuration.
-In the program using Intellectual grafical UI	, its give an opportunity regularize most chaotic structure.
+In the program using Intellectual graphical UI	, its give an opportunity regularize most chaotic structure.
 
 #### Contains libraries:<br>
 Jquery-connections https://github.com/musclesoft/jquery-connections<br>

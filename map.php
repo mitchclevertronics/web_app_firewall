@@ -128,7 +128,7 @@ $segments=$WR->get_segments_tree2($get,0);
 								RightClick switch tools circulary.<br>
 								DoubleClick on empty space - open Segments Form with selected items.
 										</td>
-						<td><input type="button" value="Close" id="close_legends" class="add_user"></td>
+						<td><img src="assets/imgs/x.png" class="x" id="close_legends"></td>
 				</tr>
 		</table>
     
@@ -137,6 +137,7 @@ $segments=$WR->get_segments_tree2($get,0);
     
 <!--SEGMENT MULTY MENU BOF--> 
 <div id="segment_menu">
+	<img src="assets/imgs/x.png" id="close_segment_form" class="x" style="float:right;">
     <input type="hidden" id="segment_menu_ids"> 
     <div class="value_options"></div>
     <div >
@@ -146,13 +147,13 @@ $segments=$WR->get_segments_tree2($get,0);
         <label for="use1">Auto Type</label>
         <input type="radio" name="use" value="1" id="use1" class="use">
     </div>
-		<div class="type_options">
-				<hr>
-				<input type="text"  id="static_part_before" placeholder="No static part Before">
-				<input type="text"  id="static_part_after" placeholder="No static part After">
-				<label>Size:</label>
-				<input type="text" name="size" class="size" placeholder="unlimited">		
-		</div>
+	<div class="type_options">
+			<hr>
+			<input type="text"  id="static_part_before" placeholder="No static part Before">
+			<input type="text"  id="static_part_after" placeholder="No static part After">
+			<label>Size:</label>
+			<input type="text" name="size" class="size" placeholder="unlimited">		
+	</div>
     <div class='type_options'>
 		 <label>Contains:</label>
 		 <input type="checkbox" name="l" class="contains" id="contains_l"><label for="contains_l">Letters</label>
@@ -169,8 +170,8 @@ $segments=$WR->get_segments_tree2($get,0);
 		&nbsp;
 		&nbsp;
 		<input type="button" value="save" id="save_codes">
-		<input type="button" value="close" id="close_segment_form">
-    <input type="button" value="delete" id="delete_segments">
+		
+		<input type="button" value="delete" id="delete_segments">
 	</div>
 </div>
 <!--SEGMENT MULTY MENU EOF--> 
@@ -178,26 +179,25 @@ $segments=$WR->get_segments_tree2($get,0);
 <!--VARS SINGLE MENU BOF-->    
 <div id="vars_menu"> 
     <div style="text-align: right;">
-    <img src="assets/imgs/question.png" width="20" title="Point cursor on Tools in right part of the window:
-            Pensil Tool - allows select variables by mouseover
-            Eraser Tool - allows unselect variables by mouseover
-            Edit Tool - open Variable form for selected variables
-            " class="tooltip">
+	<img src="assets/imgs/x.png" id="vars_menu_close" class="x">	
+    
     </div>
-    <div class="var_request_box">
-    <ul id="requests">
-    </ul>
-    </div>    
+    <div class="var_request_box"><ul id="requests"></ul></div>    
     <div class="vars_tools">
         <img src="assets/imgs/pencil.png" width="25" id="pencil_var">
         <img src="assets/imgs/eraser.png" width="25" id="eraser_var">
         <img src="assets/imgs/edit.png" width="25" id="edit_form_var" title="Click For Edit Selected">
-        <span style="margin:2px;" id="vars_menu_close">close</span>    
+        <img src="assets/imgs/question.png" width="20" title="Point cursor on Tools in right part of the window:
+            Pensil Tool - allows select variables by mouseover
+            Eraser Tool - allows unselect variables by mouseover
+            Edit Tool - open Variable form for selected variables
+            " class="tooltip">   
     </div>
      
     <div class="vars_form">
+		<div style="text-align: right"><img id="vars_close_form" src="assets/imgs/x.png" class="x"></div>
         <input type="hidden" id="vars_menu_ids">
-				<div class="vars_value_options"></div>		
+		<div class="vars_value_options"></div>		
        
         
     <div class='vars_type_options'>
@@ -214,8 +214,6 @@ $segments=$WR->get_segments_tree2($get,0);
 		<input type="checkbox" name="vars_d" class="vars_contains" id="vars_contains_d">
                     <label for="vars_contains_d">Digital</label>
                 <input type="text" name="vars_s" class="vars_contains" id="vars_contains_s" placeholder="Input special chars">      
-		<!--input type="checkbox" name="vars_s" class="vars_contains" id="vars_contains_s">
-                    <label for="vars_contains_s">Special</label-->
 	</div>
 
     </div>
@@ -228,8 +226,8 @@ $segments=$WR->get_segments_tree2($get,0);
             <input type='checkbox' name='vars_global' id='vars_global'>&nbsp;	
             <input type="button" value="save" id="vars_save_code">
             <input type="button" value="delete" id="vars_delete_code">
-            <input type="button" value="close" id="vars_close_form">    
-	</div>
+           
+		</div>
      </div>
     </div>
 </div>  

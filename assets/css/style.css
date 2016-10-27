@@ -201,16 +201,16 @@ cursor: default;
     text-decoration:underline;
 }
 .vars_form{
-   background: #fff none repeat scroll 0 0;
-    box-shadow: 3px 3px 3px 3px dimgray;
-   border-radius: 3px;
-    left: 5%;
-    position: absolute;
-    top: 5%;
-    display:none;
-     width: 471px;
-      height: 300px;
-      overflow: auto;
+ background: #fff none repeat scroll 0 0;
+ box-shadow: 3px 3px 3px 3px dimgray;
+ border-radius: 3px;
+ left: 5%;
+ position: absolute;
+ top: 5%;
+ display:none;
+ width: 471px;
+ height: 330px;
+ overflow: auto;
 }
 .opened_segment{
 	color:lime!important;
@@ -515,4 +515,9 @@ inner {
 }
 #filter_help{
 	float:right;
+}
+.x{
+	box-shadow: -1px 1px 2px gray;
+	margin:0 1px 2px 0;
+	cursor: pointer!important;
 }

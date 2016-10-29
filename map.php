@@ -14,7 +14,7 @@ require_once "libs/waf_report.class.php";
 $WR=new WafReport;
 $get=$_GET;
 if(!isset($get['sid']))$get['sid']='';
-if(!isset($get['approved']))$get['approved']=-1;
+if(!isset($get['approved']))$get['approved']=0;
 if(!isset($get['bf']))$get['bf']=-1;
 if(!isset($get['use_type']))$get['use_type']=-1;
 if(!isset($get['vars']))$get['vars']=-1;
@@ -87,7 +87,7 @@ $segments=$WR->get_segments_tree2($get,0);
 		<fieldset class='filter_fieldset'>
 				<input type="text" placeholder="Segment ID" id="filter_segment_id" name="sid" style="width:80px;" value="<?php echo $get['sid'];?>">		
 		</fieldset>
-		<input type="submit" value="Go">
+		<input type="submit" value="Go" class="green_btn">
 		</form>
 		<img src='assets/imgs/question.png' width="20" id="filter_help" title="Help">	
 	</div>	
@@ -100,8 +100,19 @@ $segments=$WR->get_segments_tree2($get,0);
 								<h5>Legends:</h5>
 								<font color="dimgray">Item Approved</font><br>
 								<font color="red">Item Uknown</font><br>
-								<font color="lime">Selected Item for Edit</font><br>		
-								Number nea segments - show count of variables
+								<font color="lime">Selected Item for Edit</font><br>
+								<h5>Segments view:</h5>	
+									static_segment{<font color="lime">5</font>,<font color="red">BF</font>}
+								-
+								{<font color="lime">Number nea segments</font>} - show count of variables connected to the segment.
+								&nbsp;<font color="red">BF</font> - BruteForce mode enabled
+								<br>Auto Rule: (<font color="lime">l</font><font color="red">d</font><font color="blue">-_</font>)[<font color="maroon">20</font>]<font color="lightblue">.php</font>	
+									(<font color="lime">l</font> - is contains letters "a-z",
+									<font color="red">d</font>  - contains numbers "0-9",
+									<font color="blue">-_</font> - contains characters that not numbers and not letters
+									)
+									<br>[<font color="maroon">20</font>] - size of "contains" part
+									<br><font color="lightblue">.php</font> - static part after rule
 						</td>
 						<td>
 								<h5>Usage:</h5>
@@ -123,7 +134,7 @@ $segments=$WR->get_segments_tree2($get,0);
 						</td>
 						<td><h5>Mouse Events:</h5>
 								Mouseover - show segment info<br>
-                DoubleClick on segment - Open Variables List<br>
+                DoubleClick on segment - if contains variables  - Open Variables List, another open Segments Menu<br>
 								Drag'n'Drop segment - possible change position of element<br>		
 								RightClick switch tools circulary.<br>
 								DoubleClick on empty space - open Segments Form with selected items.
@@ -137,29 +148,30 @@ $segments=$WR->get_segments_tree2($get,0);
     
 <!--SEGMENT MULTY MENU BOF--> 
 <div id="segment_menu">
-	<img src="assets/imgs/x.png" id="close_segment_form" class="x" style="float:right;">
-    <input type="hidden" id="segment_menu_ids"> 
-    <div class="value_options"></div>
-    <div >
-        <b>Use:</b>&nbsp;
+	<h5>Edit rule for selected segments<img src="assets/imgs/x.png" id="close_segment_form" class="x" style="float:right;"></h5>
+	<div>
+        <label class="ccc">Use:</label>&nbsp;
         <label for="use0">Original Path</label>
         <input type="radio" name="use" value="0" id="use0" class="use">&nbsp;&nbsp;
         <label for="use1">Auto Type</label>
         <input type="radio" name="use" value="1" id="use1" class="use">
     </div>
-	<div class="type_options">
-			<hr>
-			<input type="text"  id="static_part_before" placeholder="No static part Before">
-			<input type="text"  id="static_part_after" placeholder="No static part After">
-			<label>Size:</label>
-			<input type="text" name="size" class="size" placeholder="unlimited">		
-	</div>
+    <input type="hidden" id="segment_menu_ids"><hr> 
+    <div class="value_options"></div>
     <div class='type_options'>
-		 <label>Contains:</label>
+		 <label class="ccc">Size:</label>
+		 <input type="text" name="size" class="size" placeholder="unlimited" size="3">&nbsp;
+		 <label class="ccc">Contains:</label>
 		 <input type="checkbox" name="l" class="contains" id="contains_l"><label for="contains_l">Letters</label>
 		 <input type="checkbox" name="d" class="contains" id="contains_d"><label for="contains_d">Digital</label>
-		 <input type="text" name="s" class="contains" id="contains_s" placeholder="Input special chars">  
-    </div>    
+		 <input type="text" name="s" class="contains" id="contains_s" placeholder="Input special chars" size="17">  
+    </div>  
+	<div class="type_options">
+			<label class="ccc">Have Static part:</label>
+			<input type="text"  id="static_part_before" placeholder="Before">
+			<input type="text"  id="static_part_after" placeholder="After">
+					
+	</div>
     <hr>
 	<div>
 		<input type='checkbox' name='approved' id='approved' checked="checked">	
@@ -169,19 +181,16 @@ $segments=$WR->get_segments_tree2($get,0);
 		<label for="bf">BF</label>
 		&nbsp;
 		&nbsp;
-		<input type="button" value="save" id="save_codes">
+		<input type="button" value="save" id="save_codes" class="green_btn">
 		
-		<input type="button" value="delete" id="delete_segments">
+		<input type="button" value="delete" id="delete_segments" class="red_btn">
 	</div>
 </div>
 <!--SEGMENT MULTY MENU EOF--> 
    
 <!--VARS SINGLE MENU BOF-->    
 <div id="vars_menu"> 
-    <div style="text-align: right;">
-	<img src="assets/imgs/x.png" id="vars_menu_close" class="x">	
-    
-    </div>
+	<h5>Select variable for edit rule<img src="assets/imgs/x.png" id="vars_menu_close" class="x" style="float:right;"></h5>
     <div class="var_request_box"><ul id="requests"></ul></div>    
     <div class="vars_tools">
         <img src="assets/imgs/pencil.png" width="25" id="pencil_var">
@@ -195,25 +204,23 @@ $segments=$WR->get_segments_tree2($get,0);
     </div>
      
     <div class="vars_form">
-		<div style="text-align: right"><img id="vars_close_form" src="assets/imgs/x.png" class="x"></div>
+		<h5>Edit rule for selected variables<img id="vars_close_form" src="assets/imgs/x.png" class="x" style="float:right"></h5>
         <input type="hidden" id="vars_menu_ids">
 		<div class="vars_value_options"></div>		
        
         
     <div class='vars_type_options'>
      <hr>   
-       
-	<div class="vars_row2">
-		<label>Size:</label>
-		<input type="text" name="vars_size" class="vars_size" placeholder="unlimited">
-	</div>
+    
 	<div class="vars_row3">
-		<label>Contains:</label>
+		<label class="ccc">Size:</label>
+		<input type="text" name="vars_size" class="vars_size" placeholder="unlimited" size="3">&nbsp;
+		<label class="ccc">Contains:</label>
 		<input type="checkbox" name="vars_l" class="vars_contains" id="vars_contains_l">
                     <label for="vars_contains_l">Letters</label>
 		<input type="checkbox" name="vars_d" class="vars_contains" id="vars_contains_d">
                     <label for="vars_contains_d">Digital</label>
-                <input type="text" name="vars_s" class="vars_contains" id="vars_contains_s" placeholder="Input special chars">      
+                <input type="text" name="vars_s" class="vars_contains" id="vars_contains_s" placeholder="Input special chars" size="17">      
 	</div>
 
     </div>
@@ -224,8 +231,8 @@ $segments=$WR->get_segments_tree2($get,0);
             <input type='checkbox' name='vars_approved' id='vars_approved' checked="checked">&nbsp;    
 			<label for="vars_global">Make Global</label>
             <input type='checkbox' name='vars_global' id='vars_global'>&nbsp;	
-            <input type="button" value="save" id="vars_save_code">
-            <input type="button" value="delete" id="vars_delete_code">
+            <input type="button" value="save" id="vars_save_code" class="green_btn">
+            <input type="button" value="delete" id="vars_delete_code" class="red_btn">
            
 		</div>
      </div>

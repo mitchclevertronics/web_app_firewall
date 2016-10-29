@@ -53,7 +53,7 @@ RewriteCond %{REQUEST_URI} !<?php echo $folder;?>
 RewriteRule ^(.*)$ <?php echo $folder;?>/waf.php [N,L]</textarea></div>
 								<form action="" method="POST">
 									<textarea name='content' rows='40' class="inset textarea"><?php echo file_exists($filename)?file_get_contents($filename):"";?></textarea>
-						<input type="submit" name="op" value="Save" class="add_user">
+						<input type="submit" name="op" value="Save" class="green_btn">
 								</form>		
 		</div>
 </body>

@@ -70,7 +70,7 @@ if(!isset($_GET['page']))$_GET['page']=1;
 				<td><?php echo $bl['sid']?>: <?php if(!empty($bl['sid'])):?>&nbsp;<a href="map.php?sid=<?php echo $bl['sid']?>">map</a><?php endif;?><?php if(!empty($bl['sid'])):?>&nbsp;<a href="logs.php?sid=<?php echo $bl['sid']?>">logs</a><?php endif;?></td>
 				<td><?php echo date('H:i d/m/Y',strtotime($bl['created']));?></td>
 				<td><?php echo $bl['ip'];?></td>
-				<td><a href="?act=remove&id=<?php echo $bl['id']?>">remove</a></td>
+				<td><a href="?act=remove&id=<?php echo $bl['id']?>" class="red_btn">remove</a></td>
 		</tr>
 		<?php endforeach;?>
 		<?php endif;?>

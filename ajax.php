@@ -41,24 +41,14 @@ Class WafAjax{
 	$reqs=$this->get_next_map($_GET['p']);
 	$this->draw_json_result($reqs);
  }
- /*
- private function get_save_segments(){
-	 if($this->WR->isEditor())
-	 $reqs=$this->WR->save_segments(explode(',',$_GET['ids']),$_GET['code'],$_GET['approved'],$_GET['use']);
-	 $this->draw_json_result($reqs);
- }*/
+ 
  private function get_save_segments(){
 	
 	 if($this->WR->isEditor())
 	 $reqs=$this->WR->save_segments($_POST);
 	 $this->draw_json_result($reqs);
  }
- /*
- private function get_vars_save(){
-	if($this->WR->isEditor())
-			$reqs=$this->WR->vars_save(explode(',',$_GET['ids']),$_GET['code'],$_GET['approved'],$_GET['use']);
-	$this->draw_json_result($reqs);
- }*/
+
  private function get_vars_save(){
 	if($this->WR->isEditor())
 			$reqs=$this->WR->vars_save($_POST);

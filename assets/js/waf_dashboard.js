@@ -18,7 +18,7 @@ WD.load_data=function (){
         
          WD.load_logs(json.logs);  
          WD.load_logs_url(json.logs_url);
-	   
+		 WD.load_logs_type(json.logs_type);
   },'json');  
 };
 
@@ -57,4 +57,19 @@ WD.load_logs_url=function (logs){
    
     var chart = new google.visualization.PieChart(document.getElementById('logs_url_pie'));
     chart.draw(data, {title: 'Top 15 attacked scripts in last 30 days'});
+};
+
+WD.load_logs_type=function (logs){
+    //load logs_url_pie
+    var dlogs=[['', '']];
+    for(l in logs)
+    {
+     
+         dlogs.push([logs[l].type,parseInt(logs[l].num)]);
+    }
+   
+    var data = google.visualization.arrayToDataTable(dlogs);
+   
+    var chart = new google.visualization.PieChart(document.getElementById('logs_type_pie'));
+    chart.draw(data, {title: 'Attacks by type',pieSliceText: 'label'});
 };

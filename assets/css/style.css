@@ -390,12 +390,12 @@ border-radius: 3px;
     box-shadow: 1px 1px 2px dimgray;
     text-decoration: none;
 }
-#segments, #vars, #logs, #logs_url, #logs_url_pie{
+#segments, #vars, #logs, #logs_url, #logs_url_pie,#logs_type_pie{
  background: #fff;   
  text-align: center;
  box-shadow: 0 4px 4px 3px #ccc;
 }
-#logs_url_pie{
+#logs_url_pie,#logs_type_pie{
     height:300px;
 }
 .filter_box{

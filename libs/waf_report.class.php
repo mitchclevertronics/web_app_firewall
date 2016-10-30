@@ -29,6 +29,12 @@ Class WafReport{
 	
 	var $log_per_page=20; //bad request count per page
 	var $config_file="libs/config.inc.php";
+		//types of logs
+	var $types_logs=array('segment'=>'Unknow segment',
+				  'var'=>'Unknow variable',
+	              'BF'=>'BruteForce Detected',
+	              'blacklist'=>'IP in BlackList',
+	              'sec_key'=>'Wrong Security Key');
 	
 	function __construct(){
 		//require_once "libs/config.inc.php";
@@ -857,16 +863,29 @@ $this->db->QUERY($sql2);
 		$logs=$this->db->LIST_Q($sql);
 		return $logs;
 	}
+	public function get_log_type_statistics($from_date,$to_date){
+		$sql="SELECT type, count( id ) AS num
+		FROM `waf_logs`
+		WHERE DATE_FORMAT( created, '%Y-%m-%d' ) > '".date('Y-m-d',strtotime($from_date))."'
+		GROUP BY type
+		ORDER BY num DESC";
+		#echo $sql;
+		$logs=$this->db->LIST_Q($sql);
+		for($i=0;$i<count($logs);$i++)
+		{
+			$logs[$i]['type']=$this->types_logs[$logs[$i]['type']];
+		}
+		return $logs;
+	}
 	public function isEditor(){
 	 if($_SESSION['waf_user']['editor']==1)return true;
 	 else return false;
 	}
 	public function get_dashboard_info($from_date,$to_date){
 	 $data=Array();
-	 #$data['segments']=$this->get_segments_statistics($from_date,$to_date);
-	 #$data['vars']=$this->get_vars_statistics($from_date,$to_date);
 	 $data['logs']=$this->get_logs_statistics($from_date,$to_date);
 	 $data['logs_url']=$this->get_log_url_statistics($from_date,$to_date);
+	 $data['logs_type']=$this->get_log_type_statistics($from_date,$to_date);
 	 return $data;
 	}
 	

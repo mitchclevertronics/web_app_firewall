@@ -33,7 +33,7 @@ function drawChart() {
 		['Unknown',      <?php echo $segments[0];?>]
 	]);
 	var chart = new google.visualization.PieChart(document.getElementById('segments'));
-	chart.draw(data, {title: '<?php echo array_sum($segments);?> Segments recorded for all time:'});
+	chart.draw(data, {title: '<?php echo array_sum($segments);?> Segments recorded for all time:',pieSliceText: 'label'});
 	//load vars
 	var data = google.visualization.arrayToDataTable([
 		['', ''],
@@ -41,7 +41,7 @@ function drawChart() {
 		['Unknown',      <?php echo $vars[0];?>]
 	]);
 	var chart = new google.visualization.PieChart(document.getElementById('vars'));
-	chart.draw(data, {title: '<?php echo array_sum($vars);?> Variables recorded for all time:'});
+	chart.draw(data, {title: '<?php echo array_sum($vars);?> Variables recorded for all time:',pieSliceText: 'label'});
 	
 }
 </script>
@@ -68,6 +68,11 @@ function drawChart() {
 				<td colspan="2">
 					<div id="logs" style="width: 850px; height: 200px;"></div>
 				</td>
+		</tr>
+	    <tr>
+				<td colspan="2">
+						<div id="logs_type_pie"></div>
+				</td>		
 		</tr>
 		<tr>
 				<td colspan="2">

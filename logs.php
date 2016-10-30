@@ -7,13 +7,9 @@
 session_start();
 require_once "libs/db.inc.php";
 require_once "libs/waf_report.class.php";
-$types_logs=array('segment'=>'Unknow segment',
-				  'var'=>'Unknow variable',
-	              'BF'=>'BruteForce Detected',
-	              'blacklist'=>'IP in BlackList',
-	              'sec_key'=>'Wrong Security Key');
 
 $WR=new WafReport;
+
 if(($WR->isEditor())&&(isset($_GET['reset'])))
 {
  $WR->truncate_logs();
@@ -44,7 +40,7 @@ if(!isset($_GET['page']))$_GET['page']=1;
 					SegmentID: <input type="text" name="sid" size="3" class="inset" value="<?php echo isset($_GET['sid'])?$_GET['sid']:'';?>">
 					Type: <select name="type" class="inset" >
 						<option value="0">All</option>
-						 <?php foreach($types_logs as $opt=>$optval):?>
+						 <?php foreach($WR->types_logs as $opt=>$optval):?>
 						<option value="<?php echo $opt;?>" <?php if(isset($_GET['type'])&&($_GET['type']==$opt)):?> selected<?php endif;?>><?php echo $optval;?></option>
 						 <?php endforeach;?>
 						  </select> 	
@@ -79,7 +75,7 @@ if(!isset($_GET['page']))$_GET['page']=1;
 			$content= json_decode(base64_decode($log['content']));?>  
 		<tr>
 				<td><?php if(!empty($log['sid'])):?><a href="map.php?approved=-1&bf=-1&use_type=-1&vars=-1&sid=<?php echo $log['sid']?>"><?php echo $log['sid']?></a><?php endif;?></td>
-				<td nowrap><small><?php echo $types_logs[$log['type']];?></small></td>
+				<td nowrap><small><?php echo $WR->types_logs[$log['type']];?></small></td>
 				<td><?php echo date('H:i d/m/Y',strtotime($log['created']));?></td>
 				<td class="tooltip" title="<?php echo isset($content->request)?  str_replace('"','``',print_r($content->request,1)):'';?>"><?php echo htmlspecialchars($log['url']);?></td>
 				<td class="tooltip" title="<?php echo str_replace('"','``',print_r($content->server,1));?>"><?php echo $log['ip'];?></td>

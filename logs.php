@@ -5,11 +5,13 @@
  * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
 session_start();
-#require_once "libs/config.inc.php";
-
 require_once "libs/db.inc.php";
-
 require_once "libs/waf_report.class.php";
+$types_logs=array('segment'=>'Unknow segment',
+				  'var'=>'Unknow variable',
+	              'BF'=>'BruteForce Detected',
+	              'blacklist'=>'IP in BlackList',
+	              'sec_key'=>'Wrong Security Key');
 
 $WR=new WafReport;
 if(($WR->isEditor())&&(isset($_GET['reset'])))
@@ -39,11 +41,18 @@ if(!isset($_GET['page']))$_GET['page']=1;
 <?php include_once 'include/header.php';?>    
 		<div class="logs_search_form" style="text-align: center;background:#fff;">
 				<form action="" method="GET">	
-						SegmentID <input type="text" name="sid" size="3" class="inset" value="<?php echo isset($_GET['sid'])?$_GET['sid']:'';?>">
-						From Date: <input type="text" id="from_date" size="8"  name="from_date" size="10" class="inset" value="<?php echo isset($_GET['from_date'])?$_GET['from_date']:'';?>" readonly>
-						To Date: <input type="text" id="to_date"  size="8" name="to_date" size="10" class="inset" value="<?php echo isset($_GET['to_date'])?$_GET['to_date']:'';?>" readonly>
+					SegmentID: <input type="text" name="sid" size="3" class="inset" value="<?php echo isset($_GET['sid'])?$_GET['sid']:'';?>">
+					Type: <select name="type" class="inset" >
+						<option value="0">All</option>
+						 <?php foreach($types_logs as $opt=>$optval):?>
+						<option value="<?php echo $opt;?>" <?php if(isset($_GET['type'])&&($_GET['type']==$opt)):?> selected<?php endif;?>><?php echo $optval;?></option>
+						 <?php endforeach;?>
+						  </select> 	
+					
+					From Date: <input type="text" id="from_date" size="8"  name="from_date" size="10" class="inset" value="<?php echo isset($_GET['from_date'])?$_GET['from_date']:'';?>" readonly>
+					To Date: <input type="text" id="to_date"  size="8" name="to_date" size="10" class="inset" value="<?php echo isset($_GET['to_date'])?$_GET['to_date']:'';?>" readonly>
 					 IP:		<input type="text" name="ip" size="10" class="inset" value="<?php echo isset($_GET['ip'])?$_GET['ip']:'';?>">
-					URL: <input type="text" name="url" size="45"  class="inset" value="<?php echo isset($_GET['url'])?$_GET['url']:"";?>">		
+					URL: <input type="text" name="url" size="37"  class="inset" value="<?php echo isset($_GET['url'])?$_GET['url']:"";?>">		
 					<input type="hidden" name="page" value="1" class="inset">
 					<input type="submit"	id="search_logs" value="Search">	
 					<a href="logs.php" class="add_user">Renew</a>		
@@ -58,22 +67,20 @@ if(!isset($_GET['page']))$_GET['page']=1;
 		<table class="logs_report" cellpadding="0" cellspacing="0">
 				<caption>Found <?php echo $WR->logs_count;?> event</caption>
 				<tr>
-						<th>SegmentID</th>
+						<th>Seg.ID</th>
+						<th>Type</th>
 						<th>Time</th>
-						<th>Method</th>
 						<th>URL</th>
 						<th>IP</th>
 						<th>Reason</th>
 				</tr>		
 		<?php if($logs):?>		
     <?php foreach($logs as $log):
-			$content= json_decode(base64_decode($log['content']));
-	#	pre($content);
-			?>  
+			$content= json_decode(base64_decode($log['content']));?>  
 		<tr>
-				<td><?php if(!empty($log['sid'])):?><a href="map.php?sid=<?php echo $log['sid']?>"><?php echo $log['sid']?></a><?php endif;?></td>
+				<td><?php if(!empty($log['sid'])):?><a href="map.php?approved=-1&bf=-1&use_type=-1&vars=-1&sid=<?php echo $log['sid']?>"><?php echo $log['sid']?></a><?php endif;?></td>
+				<td nowrap><small><?php echo $types_logs[$log['type']];?></small></td>
 				<td><?php echo date('H:i d/m/Y',strtotime($log['created']));?></td>
-				<td class="tooltip"><?php echo $log['type'];?></td>
 				<td class="tooltip" title="<?php echo isset($content->request)?  str_replace('"','``',print_r($content->request,1)):'';?>"><?php echo htmlspecialchars($log['url']);?></td>
 				<td class="tooltip" title="<?php echo str_replace('"','``',print_r($content->server,1));?>"><?php echo $log['ip'];?></td>
 				<td class="tooltip" title="<?php echo $log['reason'];?>"><?php echo substr($log['reason'],0,150);?></td>

@@ -19,7 +19,7 @@ if(isset($_POST['save_settings'])&&($WR->isEditor()))
  $WR->save_settings('waf_security_key2',$_POST['waf_security_key2']);
  $WR->save_settings('waf_bf',$_POST['bf']);
  $WR->save_settings('waf_bf_attempt',$_POST['bf_attempt']);
- 
+ $WR->save_settings('waf_bf_bantime',$_POST['bf_bantime']);
  $WR->reload_settings();
 }
 
@@ -65,6 +65,10 @@ if(isset($_POST['save_settings'])&&($WR->isEditor()))
 						<tr>
 								<td><label>Brute Force Attempts</label></td>
 								<td><input type="text" name="bf_attempt" id="bf_attempt" value="<?php echo $WR->waf_bf_attempt;?>" class="inset"></td>
+						</tr>
+						<tr>
+								<td>Brute Force Ban Time:</td>
+								<td><input type='text' name="bf_bantime" id="bf_bantime" value="<?php echo $WR->waf_bf_bantime;?>" size="4" class="inset"> days</td>
 						</tr>
 						<tr>
 								<td colspan="2"><input type="submit" value="Save" id="save_settings" name="save_settings"></td>

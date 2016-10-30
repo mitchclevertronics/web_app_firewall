@@ -55,7 +55,7 @@ Class WafReport{
 	 $this->waf_security_key2=$this->get_setting('waf_security_key2',$this->generateSecurityKey());
 	 $this->waf_bf=$this->get_setting('waf_bf','0.3');
 	 $this->waf_bf_attempt=$this->get_setting('waf_bf_attempt','3');
-	 
+	 $this->waf_bf_bantime=$this->get_setting('waf_bf_bantime','30');
 	}      
 	public function generateSecurityKey(){
 	 $key=md5(base64_encode(print_r($_SERVER,1).rand(1000,time())));
@@ -626,9 +626,13 @@ $this->db->QUERY($sql2);
 	{
 		$this->logs_count=$this->get_logs_count($get);
 		$this->total_pages=ceil($this->logs_count/$this->log_per_page);
-		#echo $this->total_pages."<hr>";
+		
 
 		$sql="SELECT * FROM waf_logs  WHERE 1=1";
+		if(!empty($get['type'])&&($get['type']))
+		{
+			$sql.=" AND type='".$this->db->Q($get['type'],1)."'";
+		}	
 		if(!empty($get['from_date']))
 		{
 			$sql.=" AND created>='".date('Y-m-d 00:00:00',strtotime($get['from_date']))."'";
@@ -655,8 +659,7 @@ $this->db->QUERY($sql2);
 
 		$sql.=" ORDER BY created DESC";
 		$sql.=" LIMIT ".$this->log_per_page." OFFSET ".($this->log_per_page*($get['page']-1));
-	#	pre($get);
-		#echo $sql;
+	
 		$logs=$this->db->LIST_Q($sql);
 		return $logs;
 	}
@@ -703,6 +706,10 @@ $this->db->QUERY($sql2);
 	public function get_logs_count($get)
 	{
 		$sql="SELECT count(*) as num FROM waf_logs  WHERE 1=1";
+		if(!empty($get['type'])&&($get['type']))
+		{
+			$sql.=" AND type='".$this->db->Q($get['type'],1)."'";
+		}	
 		if(!empty($get['from_date']))
 		{
 			$sql.=" AND created>='".date('Y-m-d 00:00:00',strtotime($get['from_date']))."'";

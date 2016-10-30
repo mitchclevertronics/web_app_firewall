@@ -4,6 +4,7 @@
  * License: GNU
  * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
+
 require_once 'libs/db.inc.php';
 require_once 'libs/waf_helper.class.php';
 session_start();
@@ -29,6 +30,7 @@ Class WAF extends WAFHelper{
 				$this->waf_security_key2=$this->get_setting('waf_security_key2',0);
 				$this->waf_bf=$this->get_setting('waf_bf','0.3');
 				$this->waf_bf_attempt=$this->get_setting('waf_bf_attempt','3');
+				$this->waf_bf_bantime=$this->get_setting('waf_bf_bantime','30');
 				$this->error_url=$this->get_setting('url404','');
 			}else{
 			 $this->web_root==false;
@@ -133,7 +135,7 @@ Class WAF extends WAFHelper{
 	}
 	
 	private function check_ip_blacklist($ip){
-		$bl=$this->db->ROW_Q("SELECT * FROM waf_blacklist WHERE ip='".$this->db->Q($ip,1)."' AND created>'".date('Y-m-d H:i:s',strtotime("-1 month"))."'");
+		$bl=$this->db->ROW_Q("SELECT * FROM waf_blacklist WHERE ip='".$this->db->Q($ip,1)."' AND created>'".date('Y-m-d H:i:s',strtotime("-".$this->waf_bf_bantime." days"))."'");
 		return $bl;
 	}
 
@@ -427,7 +429,7 @@ Class WAF extends WAFHelper{
             if($trust==false)
             {
 						 $text='Segment ID: '.$segment_id."; Vars not accepted: ".print_r($stoped_vars,1);
-							 $http_request=$this->log_bad_request($http_request,$http_request['method'],$text,$segment_id);
+							 $http_request=$this->log_bad_request($http_request,'var',$text,$segment_id);
             }
             }
 
@@ -760,6 +762,7 @@ if($Waf->web_root==false)
 {
     ## code start run here
     $request_data=$Waf->prepare_request();
+	
     $html=$Waf->curl_request($request_data,$_SERVER['REQUEST_METHOD']);
     echo $html;
 }else{

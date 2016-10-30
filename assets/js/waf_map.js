@@ -12,7 +12,6 @@ WaF.code2float='f';
 
 WaF.code2letter='l';
 WaF.code2digital='d';
-WaF.code2special='s';
 WaF.filter_on=false;
 WaF.current_tool='hand';
 WaF.tools=['hand','pencil','eraser'];
@@ -175,28 +174,25 @@ WaF.open_segments_form=function(){
         $('.selected').each(function (elid,el){            
             ids.push($(el).parent().attr('id'));
         });
-        $.get( "ajax.php?act=show_segments&ids="+ids.join(','), function( json ) {
-            
-         WaF.load_segments_form(json);
-		
-	},'json');
+   if(ids.length)$.get( "ajax.php?act=show_segments&ids="+ids.join(','), function( json ) {WaF.load_segments_form(json);},'json');
 };
+
 /* Init SegmentForm Opening */
 WaF.init_segments_form=function (){
     $('#edit_form').click(WaF.open_segments_form);
-    $('#seg_tree').dblclick(WaF.open_segments_form);
+
+	$('.tree_house').dblclick(WaF.open_segments_form);
+	$('.tree_house').click(function (){
+		if($('#segment_menu').is(":visible"))
+		{
+			$('#segment_menu').hide();
+		}
+	});
 };
 
 
 
 WaF.init_open_filter_form=function (){
- 
- /*   $('.filter_fieldset input').change(function (){
-        WaF.filter_form();
-    });
-    
-    if($('#filter_segment_id').val().length>0)WaF.filter_form();
-    */
     $('#filter_help').click(function (){
         $('.legend_box').show();
     });
@@ -204,142 +200,7 @@ WaF.init_open_filter_form=function (){
         $('.legend_box').hide();
     });
 };
-/*
-WaF.filter_form=function (){
-    var filter={'approved0':$('#filter_approved0').prop('checked'),
-                'approved1':$('#filter_approved1').prop('checked'),
-                'bf0':$('#filter_bf0').prop('checked'),
-                'bf1':$('#filter_bf1').prop('checked'),
-                'use_type0':$('#filter_use_type0').prop('checked'),
-                'use_type1':$('#filter_use_type1').prop('checked'),
-                'vars0':$('#filter_vars0').prop('checked'),
-                'vars1':$('#filter_vars1').prop('checked'),
-                'vars_approved0':$('#filter_vars_approved0').prop('checked'),
-                'vars_approved1':$('#filter_vars_approved1').prop('checked'),
-                'segment_id':$('#filter_segment_id').val()
-            };
-     var fl=false;
-     for(f in filter)
-     {
-         if((f=='segment_id')&&(filter[f].length))fl=true;
-         else if(filter[f]==false)fl=true;
-     }
-     if(fl)WaF.filter_on=true;
-     else WaF.filter_on=false;
-     
-     
-     console.log(WaF.filter_on);
-    $('.segment').each(function (s,segment){
-        var visible=true;
-      
-        if($(segment).hasClass('approved1'))
-        {
-            if(filter.approved1==false)
-                visible=false;
-        }else{
-            if(filter.approved0==false)
-                visible=false;
-        }
-        if($(segment).hasClass('bf1'))
-        {
-            if(filter.bf1==false)
-                visible=false;
-        }else{
-            if(filter.bf0==false)
-                visible=false;
-        }
-        if($(segment).hasClass('use_type1'))
-        {
-            if(filter.use_type1==false)
-                visible=false;
-        }else{
-            if(filter.use_type0==false)
-                visible=false;
-        }
-        if($(segment).hasClass('have_vars'))
-        {
-            if(filter.vars1==false)
-                visible=false;
-        }else{
-           if(filter.vars0==false)
-                visible=false; 
-        }
-        if(($(segment).hasClass('vars_approved1'))||($(segment).hasClass('vars_approved0')))
-        {
-        if(($(segment).hasClass('vars_approved1'))&&(!filter.vars_approved1))
-            visible=false;
-        
-        if(($(segment).hasClass('vars_approved0'))&&(!filter.vars_approved0))
-            visible=false;
-        
-        }else{
-            if((!filter.vars_approved1)||(!filter.vars_approved0))
-                visible=false;
-        }        
-        if((filter.segment_id.length>0)&&($(segment).attr('segment_id')!=filter.segment_id))
-        {    
-            visible=false;
-        }
-        if(WaF.filter_on==true)
-        {
-            if($(segment).attr('orig_left')==null)
-                $(segment).attr('orig_left',$(segment).css('left'));
-            $(segment).css('left',0);
-            if($(segment).attr('orig_top')==null)
-                $(segment).attr('orig_top',$(segment).css('top'));
-            $(segment).css('top',0);
-        }else{
-            $(segment).css('left',$(segment).attr('orig_left'));
-            $(segment).css('top',$(segment).attr('orig_top'));
-        }
-        //$(segment).css('left','0');
-        //$(segment).css('top','0');
-        if(visible){
-            $(segment).css('opacity',1);
-            $(segment).parent().removeClass('hidden');
-        }else{ 
-            $(segment).css('opacity',0.3);
-            $(segment).parent().addClass('hidden');
-        }
-          
-    });
-    
-    //algoritm rebuilding
-    WaF.rebuild_tree($('#seg_tree ul'),1);
-   WaF.redraw_connect_lines();
 
-};*/
-/*
-WaF.rebuild_tree=function (obj,lvl){
-  var have_visible=false;   
-  obj.find('li[lvl='+lvl+']').each(function (i,li){
-    
-   if($(li).find('ul').html()==null)
-   {
-       if($(li).hasClass('hidden'))
-        {
-            //$(li).css('background','pink');    
-            $(li).hide();
-        }else{
-            $(li).show(); 
-            have_visible=true;
-        }
-       
-   }else{
-       var hv=WaF.rebuild_tree($(li).find('ul'),(lvl+1));
-       if(hv==false)
-       {
-            if($(li).hasClass('hidden')) 
-                $(li).hide();
-            else $(li).show();
-       }else{
-           $(li).show();
-           have_visible=true;
-       }
-   }
-  });  
-  return have_visible;
-};*/
 WaF.open_vars_form=function (){
     var ids=[];
         $('#requests .selected_var').each(function (elid,el){            
@@ -355,6 +216,7 @@ WaF.open_vars_form=function (){
 WaF.init_open_vars_form=function (){
     $('#edit_form_var').click(WaF.open_vars_form);
     $('#vars_menu').dblclick(WaF.open_vars_form);
+	$('.var_request_box').click(function (){if($('.vars_form').is(':visible'))$('.vars_form').hide();});
 };
 
 /* Reg event select\unselect Segment via Selected before Tool */
@@ -479,16 +341,13 @@ WaF.init_truncate=function (){
 
 /*Event for changes on Segment form */
 WaF.init_segment_menu=function (){
-        $('#segment_menu .use').change(function (event){WaF.change_use_type(event);});
-        
-	//$('#segment_menu .data_type').change(function (event){WaF.change_data_type(event);WaF.update_codes();});
-	$('#segment_menu .size').change(function (event){WaF.update_codes();});
+    $('#segment_menu .use').change(function (event){WaF.change_use_type(event);});
+    $('#segment_menu .size').change(function (event){WaF.update_codes();});
 	$('#segment_menu .contains').change(function (event){WaF.update_codes();});
 	$('#segment_menu .number_type').change(function (event){WaF.update_codes();});
 	$('#segment_menu #save_codes').click(function (){WaF.save_segments();});
-	//$('#delete_code').click(function (){WaF.delete_code();});
-        $('#segment_menu #static_part_before').change(function (event){WaF.update_codes();});
-        $('#segment_menu #static_part_after').change(function (event){WaF.update_codes();});
+	$('#segment_menu #static_part_before').change(function (event){WaF.update_codes();});
+	$('#segment_menu #static_part_after').change(function (event){WaF.update_codes();});
        
 };
 /*Event for dblclick on segment - open Variables Menu */
@@ -497,17 +356,14 @@ WaF.init_open_vars_menu=function (){
       //unset other opened_li
       $('.opened_segment').removeClass('opened_segment');
       $(event.target).addClass('opened_segment');
-	var seg_id=$(event.target).parent().attr('id');
-	WaF.open_vars_menu(seg_id);
-        //WaF.analize4form();
-	return false;
-      
-      //WaF.open_var_menu($(event.target).parent());
-  });
-  $('#edit_global_vars').click(function (){
-	  $('#edit_global_vars').addClass('the_action');
-	  WaF.open_vars_menu(0);
-  });
+		var seg_id=$(event.target).parent().attr('id');
+		WaF.open_vars_menu(seg_id);
+		return false;
+	  });
+	  $('#edit_global_vars').click(function (){
+		  $('#edit_global_vars').addClass('the_action');
+		  WaF.open_vars_menu(0);
+	  });
 };
 
 WaF.open_vars_menu=function (seg_id){
@@ -593,7 +449,6 @@ WaF.init_vars_menu=function (){
 WaF.code_parse=function (code)
 {
  var item={};
-// console.log(code);
  var before=code.substr(0,code.indexOf("[")-1);
  
 if(before.length>0)item.part_before=before;
@@ -625,50 +480,7 @@ else item.part_before=false;
  
  return item;
 };
-/*
-WaF.merge_codes=function(codes){
-    var COT={'part_before':false,
-            'part_after':false,
-            'data_type':'number',
-            'number_type':'int',
-             size:0,
-            'contains':{'l':false,'s':'','d':false}};
-    var max_string_size=0;
-    for(c in codes) 
-    {
-        var CO=WaF.code_parse(codes[c]);
-        if(CO.data_type=='string')
-        {
-            COT.data_type='string';
-         
-            if(CO.size)max_string_size=Math.max(max_string_size,parseInt(CO.size));
-            if(CO.contains.l==true)COT.contains.l=true;
-            if(CO.contains.d==true)COT.contains.d=true;
-            
-            if(CO.contains.s.length>0)COT.contains.s+=CO.contains.s;
-        }else{
-            COT.size=Math.max(COT.size,CO.size);
-            COT.contains.d=true;
-            if(CO.number_type!='int')COT.number_type=CO.number_type;
-        }
-        
-       
-    }
-  
-    if(COT.data_type=='string'){
-       
-        COT.size=max_string_size;
-       if(COT.contains.s.length>0)
-       {
-           COT.contains.s=WaF.arrayUnique(COT.contains.s.split("")).join("");
-           console.log(COT.contains.s);
-       }
-        delete COT.number_type;
-    }
-   
-    return COT;
-};
-*/
+
 WaF.arrayUnique = function(a) {
     return a.reduce(function(p, c) {
         if (p.indexOf(c) < 0) p.push(c);
@@ -689,8 +501,6 @@ WaF.load_vars_form=function (json){
         ids.push(json[j].id);
         contains.push(json[j].code_contains);
         max_size=Math.max(max_size,json[j].code_size);
-		console.log(json[j].code_size);
-
         var sdiv=$('<div>').addClass('var').attr('rel',json[j].id)
                 .append($('<span>').html(json[j].name))
                .append($('<span>').html('='))
@@ -698,14 +508,11 @@ WaF.load_vars_form=function (json){
                 .append($('<span>').html(WaF.escapeHtml(json[j].value)));
         $('.vars_value_options').append(sdiv);
         if(json[j].approved)approved=1;
-        //$('.segments').append(sdiv);
+      
     }
-     var contains_str=WaF.arrayUnique(contains.join('').split('')).join('');
+    var contains_str=WaF.arrayUnique(contains.join('').split('')).join('');
     WaF.vars_code2form(contains_str,max_size);
-    //var code=WaF.CodeObj2CodeString(CodeObj);
-    // $('#var_code').val(code);
-     
-     
+    
   $('#vars_menu_ids').val(ids.join(','));
   
   $('#vars_approved').prop('checked',(approved==1)?true:false);  
@@ -837,20 +644,6 @@ WaF.save_segments=function (){
 	
 };
 
-/*
-WaF.delete_code=function (){
-
-var id=$('#rightclk_menu').attr('rel');
-	$.get( "ajax.php?act=delete_code&id="+id, function( json ) {
-		
-		$('.opened_li').remove();
-		//$('.opened_li').removeClass('opened_li');
-		$("#rightclk_menu").hide();	
-	});
-	
-};
-*/
-
 /* Action for change VariableForm field DataType */
 WaF.change_vars_data_type=function (event){
     if($(event.target).attr('id')=='vars_data_type_string')
@@ -865,23 +658,7 @@ WaF.change_vars_data_type=function (event){
     $('.vars_row5').show();
     }
 };
-/* Action for change SegmentForm field DataType */
-/*
-WaF.change_data_type=function(event){
-	
-    if($(event.target).attr('id')=='data_type_string')
-    {
-    //menu for string
-    $('#segment_menu .row3').show();
-    $('#segment_menu .row5').hide();								
-    }else{
-    //menu for int	
-    $('#number_type_i').prop('checked',true);
-    $('#segment_menu .row3').hide();
-    $('#segment_menu .row5').show();
-    }
-};
-*/
+
 /* Action for change Autotype\Static field on Segment Form*/
 WaF.change_use_type=function (event){
     
@@ -917,7 +694,6 @@ WaF.vars_update_code=function(){
     {
         contains+=$('#vars_contains_s').val().replace(':','p');
     }
-    //if($('#vars_contains_s').prop('checked')==true)attr.push(WaF.code2special);	
     code+=':'+contains;	
     }
 
@@ -950,13 +726,11 @@ WaF.update_codes=function (){
     {
        contains+=$('#segment_menu #contains_s').val().replace(':','p');
     }
-    //if($('#segment_menu #contains_s').prop('checked')==true)attr.push(WaF.code2special);	
     code+=':'+contains;	
     }
 
     code+=':'+$('.size').val();
     code='['+code+']';
-   // console.log(code);
     if($('#segment_menu #static_part_before').val().length>0)code=$('#segment_menu #static_part_before').val()+code;
     if($('#segment_menu #static_part_after').val().length>0)code=code+$('#segment_menu #static_part_after').val();
     $('#segment_menu #code').val(code);

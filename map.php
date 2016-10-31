@@ -43,7 +43,6 @@ $segments=$WR->get_segments_tree2($get,0);
             <img src="assets/imgs/eraser.png" width="40" id="eraser">
             <img src="assets/imgs/edit.png" width="40" id="edit_form" title="Click For Edit Selected">
 			<img src="assets/imgs/vars.png" width="40" title="Click For Edit Global Variables" id="edit_global_vars" >
-			<!--img src="assets/imgs/vars.png" width="40" id="edit_global_vars" title="Click For Edit Global Variables"-->
             <img src='assets/imgs/roger.png' width="40" id="truncate" title="Click Truncate ALL data - Be carefull">  
               
     </div>    

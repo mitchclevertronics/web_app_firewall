@@ -15,6 +15,7 @@ WaF.code2digital='d';
 WaF.filter_on=false;
 WaF.current_tool='hand';
 WaF.tools=['hand','pencil','eraser'];
+WaF.opened_segment=0;
 WaF.init=function (){
 	
         WaF.init_truncate();
@@ -59,6 +60,7 @@ WaF.draw_connect_lines=function (){
 };
 WaF.redraw_connect_lines=function (){
  $('connection').connections('update');
+ $('#popup').remove();
 };
 
 /* Event for show\hide help text buttons */
@@ -87,41 +89,62 @@ WaF.init_vars_menu_close=function (){
 /* Event for mouseover action on segment - show segment info*/
 WaF.init_tooltip=function()
 {
-  $(document).tooltip({
-    items:'.have_vars',
-    tooltipClass:'preview-tip',
-    position: { my: "left+15 top", at: "right center" },
-    'delay':0,
-    show:null,
-    open:function (event,ui){
-       if (typeof(event.originalEvent) === 'undefined')
-        {
-            return false;
-        }
-
-        var $id = $(ui.tooltip).attr('id');
-        $('div.ui-tooltip').not('#' + $id).remove();
-     
-    },
-    hide:null,
-    content:function(callback) {
-      
-       if($(this).attr('popup')==null)
-       {
-        
-       var id=$(this).attr('segment_id');
+$('html').mousemove(function (e){
+	WaF.clientX=e.clientX;
+	WaF.clientY=e.clientY;
+});
+$('.have_vars').mousemove(function(e){
+	
+	if($(e.target).attr('segment_id'))
+	{
+		//console.log($(e.target).attr('segment_id'));
+		var id=$(e.target).attr('segment_id');
+		if((id!=WaF.opened_segment)&&(WaF.opened_segment==0))
+		{	
+		WaF.opened_segment=id;	
+		$(e.target).append($('<a>').html('logs').addClass('log_link').attr('href','logs.php?sid='+id));
         $.get('ajax.php?act=segment_info&id='+id, {
             //id:id
         }, function(data) {
-            $('.segment'+id).attr('popup',data);
-            callback(data); //**call the callback function to return the value**
+		var popup=$('<div>');
+			popup.html(data).attr('id','popup');	
+			
+			var rect=$(e.target)[0].getBoundingClientRect();
+			popup.css('top',(rect.top+(window.scrollY||document.documentElement.scrollTop)));
+			popup.css('left',(rect.right+(window.scrollX||document.documentElement.scrollLeft)+5));
+			$('body').append(popup);
+			WaF.autoClose($(e.target));
+			
         });
-        }else{
-           callback($(this).attr('popup')); 
-        }
-    },
-}); 
+		}
+	}
+});	
+	
+};
+WaF.autoClose=function (element){
+	if(element!=null)
+	{
+	var rect=element[0].getBoundingClientRect();
+	var result=WaF.cursor_on_item(element[0].getBoundingClientRect());
+	
+	
+		if(result==false)
+		{
 
+			$('#popup').remove();
+			WaF.opened_segment=0;
+			element.find('.log_link').remove(); 
+		}else{
+			setTimeout(function (){WaF.autoClose(element);},100);
+		}
+	}
+};
+//return true if mouse coordinates in given rect
+WaF.cursor_on_item=function (rect){
+	//console.log(WaF.clientY+':'+rect.top+':'+rect.bottom);
+	//console.log(WaF.clientX+':'+rect.left+':'+rect.right);
+	var result=(((WaF.clientY>=rect.top)&&(WaF.clientY<=rect.bottom))&&((WaF.clientX>=rect.left)&&(WaF.clientX<=rect.right)))?true:false;
+	return result;
 };
 
 /* Event for Tools button delete selected segments */
@@ -232,11 +255,9 @@ WaF.init_li_over=function (){
             $(event.target).removeClass('selected');    
             break;
         }
-        $(event.target).append($('<a>').html('logs').addClass('log_link').attr('href','logs.php?sid='+$(event.target).attr('segment_id')));
+       
     });
-    $('#seg_tree .segment').mouseleave(function (event){
-       $(event.target).find('.log_link').remove(); 
-    });
+    
 };
 /* Reg event select\unselect Segment via variable before VarTool */
 WaF.init_li_over_var=function (){

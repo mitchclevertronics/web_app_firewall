@@ -398,32 +398,32 @@ WaF.open_vars_menu=function (seg_id){
 		for(method in json.vars)
 		{
                    
-                    //draw request     
-                    var li=$('<li>').html($('<span>').html(method)).attr('rel',method);
-                    //draw variables
-                    var ul=$('<ul>').addClass('vars_of_'+method);
-                    
-                        for(v in json.vars[method])
-                        {
-                           
-                            var span=$('<span>').html(json.vars[method][v].name)
-                                    .addClass('var_li');
-                            var span2=$('<span>').html((json.vars[method][v].use_type==0)?WaF.escapeHtml(json.vars[method][v].value):json.vars[method][v].code_contains+" "+json.vars[method][v].code_size)
-                                    .addClass('var_li_val');
-                           
-                            var var_li=$('<li>').append(span).append(span2)
-                                                .addClass('approved'+json.vars[method][v].approved)
-                                                .attr('rel',json.vars[method][v].id);
-                            ul.append(var_li);
-                            
-                        }
-                        
-                        
-                    
-                   
-                    li.append(ul);
-                   
-                    $('#requests').append(li).attr('segment_id',seg_id);
+			//draw request     
+			var li=$('<li>').html($('<span>').html(method)).attr('rel',method);
+			//draw variables
+			var ul=$('<ul>').addClass('vars_of_'+method);
+
+				for(v in json.vars[method])
+				{
+
+					var span=$('<span>').html(json.vars[method][v].name)
+							.addClass('var_li');
+					var span2=$('<span>').html((json.vars[method][v].use_type==0)?WaF.escapeHtml(json.vars[method][v].value):json.vars[method][v].code_contains+" "+json.vars[method][v].code_size)
+							.addClass('var_li_val');
+
+					var var_li=$('<li>').append(span).append(span2)
+										.addClass('approved'+json.vars[method][v].approved)
+										.attr('rel',json.vars[method][v].id);
+					ul.append(var_li);
+
+				}
+
+
+
+
+			li.append(ul);
+
+			$('#requests').append(li).attr('segment_id',seg_id);
 		
 		}
 		WaF.init_li_over_var();
@@ -450,19 +450,36 @@ WaF.escapeHtml=function (text) {
 };
 WaF.vars_code2form=function(contains,size)
 {
-   
-
-        $('#vars_contains_l').prop('checked',(contains.indexOf("l")>-1)?true:false);
-        
+	if(contains=='e') //exception
+	{
+		$('#exception').prop('checked',true);
+		$('#vars_contains_l').prop('checked',false);
+        $('#vars_contains_d').prop('checked',false);
+        $('#vars_contains_s').val('');
+		$('.var_contains_box').hide();
+		$('.vars_size').val(0);
+	}else{
+		$('#exception').prop('checked',false);
+		$('#vars_contains_l').prop('checked',(contains.indexOf("l")>-1)?true:false);
         $('#vars_contains_d').prop('checked',(contains.indexOf("d")>-1)?true:false);
         contains=contains.replace('l','').replace('d','');
         $('#vars_contains_s').val(contains);
-    
-     $('.vars_size').val(size);
+		$('.var_contains_box').show();
+		$('.vars_size').val(size);
+	}	
+        
 };
 
 /* Event for changes on Variable Form */
 WaF.init_vars_menu=function (){ 
+	$('#exception').change(function (){
+		if($('#exception').is(':checked'))
+		{
+			$('.var_contains_box').hide();
+		}else{
+			$('.var_contains_box').show();
+		}
+	});
 	$('#vars_save_code').click(function (){WaF.vars_save();});    
 };
 
@@ -525,7 +542,6 @@ WaF.load_vars_form=function (json){
         var sdiv=$('<div>').addClass('var').attr('rel',json[j].id)
                 .append($('<span>').html(json[j].name))
                .append($('<span>').html('='))
-
                 .append($('<span>').html(WaF.escapeHtml(json[j].value)));
         $('.vars_value_options').append(sdiv);
         if(json[j].approved)approved=1;
@@ -619,17 +635,24 @@ WaF.load_segments_form=function (json){
 
 /* Event for Save Variable Form */
 WaF.vars_save=function (){
-    var contains='';
-    if($('#vars_contains_l').is(':checked'))contains+='l';
-    if($('#vars_contains_d').is(':checked'))contains+='d';
-    contains+=$('#vars_contains_s').val();
+    var code_contains='';
+	var code_size=0;
+	if($('#exception').is(":checked"))
+	{
+		code_contains='e';
+	}else{
+		if($('#vars_contains_l').is(':checked'))code_contains+='l';
+		if($('#vars_contains_d').is(':checked'))code_contains+='d';
+		code_contains+=$('#vars_contains_s').val();
+		code_size=$('.vars_size').val();
+	}
     var data={
         'ids':$('#vars_menu_ids').val(),
         'approved':($('#vars_approved').is(":checked"))?1:0,
 		'global':($('#vars_global').is(":checked"))?1:0,
         'use':1,
-        'code_contains':contains,
-        'code_size':$('.vars_size').val()
+        'code_contains':code_contains,
+        'code_size':code_size
     };
     
 	$.post( "ajax.php?act=vars_save",data, function( json ) {

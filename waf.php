@@ -175,21 +175,13 @@ Class WAF extends WAFHelper{
     private function leave_legal_only($tree){
         if(count($tree)==0)return $tree;
         $max=max(array_keys($tree));
-			#	pre($tree);
+			
         for($m=0;$m<=$max;$m++)
         {
-				# echo $m."<hr>";
             if(isset($tree[$m]))
-            {
-						 #pr($tree[$m]);
-                if($tree[$m]['approved']==0)
-                {
-							#	 pr($tree[$m]);
-                    unset($tree[$m]);
-                }
-            }
+				if($tree[$m]['approved']==0)unset($tree[$m]);
+          
         }
-       # die("<hr>");
         return $tree;
     }
     
@@ -393,23 +385,19 @@ Class WAF extends WAFHelper{
         if($this->waf_guard_status)
             { 
             $trust=true;
-           # $r=$this->load_request4vars($http_request);
-            
-            #if($r)
-           # {
+          
                 $stoped_vars=Array();
                 foreach($http_request['vars'] as $vname=>$vval)
                 {
 					$var=$this->load_var(0,$http_request['method'],$vname);//load default first
                     if(!$var)$var=$this->load_var($segment_id,$http_request['method'],$vname); //load regular
-										#echo $vval."|\n";
-										#pr($var);
+									
                     if($var['approved']==1)
                     {
 									
                         if(($var['use_type']==0)&&($var['value']!=$vval))
                         {
-														$stoped_vars[$vname]=' static value not equal';
+							$stoped_vars[$vname]=' static value not equal';
                             $trust=false;
                         }elseif($var['use_type']==1){
                            
@@ -420,16 +408,15 @@ Class WAF extends WAFHelper{
                             }
                         }
                     }else{
-										 $stoped_vars[$vname]=' value not approved'; 
+						$stoped_vars[$vname]=' value not approved'; 
                         $trust=false;
                     }
                 }
-            #}
-            //reset
+           
             if($trust==false)
             {
-						 $text='Segment ID: '.$segment_id."; Vars not accepted: ".print_r($stoped_vars,1);
-							 $http_request=$this->log_bad_request($http_request,'var',$text,$segment_id);
+			 $text='Segment ID: '.$segment_id."; Vars not accepted: ".print_r($stoped_vars,1);
+			 $http_request=$this->log_bad_request($http_request,'var',$text,$segment_id);
             }
             }
 
@@ -656,6 +643,7 @@ Class WAF extends WAFHelper{
      */
     private function compare($segment,$data)
     {
+		if($data['code_contains']=='e')return true; //exception rule
 		
         if(isset($data['code_before'])&&(!empty($data['code_before'])))
         {

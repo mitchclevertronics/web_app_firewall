@@ -209,7 +209,7 @@ font-weight:bold;
  position: absolute;
  top: 10%;
  display:none;
- width: 471px;
+ width: 500px;
  height: auto;
  overflow: auto;
  padding:3px;
@@ -577,4 +577,7 @@ inner {
 	z-index: 10000000;
 	padding:5px;
 	box-shadow: 0 3px 3px 3px #ccc;
+}
+.vars_row3{
+	min-height: 25px;
 }

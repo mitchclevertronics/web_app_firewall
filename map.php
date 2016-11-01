@@ -212,14 +212,20 @@ $segments=$WR->get_segments_tree2($get,0);
      <hr>   
     
 	<div class="vars_row3">
-		<label class="ccc">Size:</label>
-		<input type="text" name="vars_size" class="vars_size" placeholder="unlimited" size="3">&nbsp;
-		<label class="ccc">Contains:</label>
-		<input type="checkbox" name="vars_l" class="vars_contains" id="vars_contains_l">
-                    <label for="vars_contains_l">Letters</label>
-		<input type="checkbox" name="vars_d" class="vars_contains" id="vars_contains_d">
-                    <label for="vars_contains_d">Digital</label>
-                <input type="text" name="vars_s" class="vars_contains" id="vars_contains_s" placeholder="Input special chars" size="17">      
+		<span class="var_contains_box">
+			<label class="ccc">Size:</label>
+			<input type="text" name="vars_size" class="vars_size" placeholder="unlimited" size="3">&nbsp;
+			<label class="ccc">Contains:</label>
+			<input type="checkbox" name="vars_l" class="vars_contains" id="vars_contains_l">
+			<label for="vars_contains_l">Letters</label>
+			<input type="checkbox" name="vars_d" class="vars_contains" id="vars_contains_d">
+			<label for="vars_contains_d">Digital</label>
+			<input type="text" name="vars_s" class="vars_contains" id="vars_contains_s" placeholder="Input special chars" size="10">
+		</span>	
+		<span style="float:right;">
+			<label class="ccc" for="exception">Exception</label>
+			<input type="checkbox" name="exception" id="exception">
+		</span>		
 	</div>
 
     </div>

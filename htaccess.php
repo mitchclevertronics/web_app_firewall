@@ -53,7 +53,7 @@ $opts=array('file_e'=>file_exists($filename)?true:false,
 						<td><?php echo ($opts['mod_rewrite'])?'<font style="color:green;">Yes</font>':'<font style="color:red;font-weight:bold;">No</font>';?></td>
 					</tr>
 				</table>
-				<?php if(($opts['file_e'])&&($opts['file_w'])&&($opts['mod_rewrite'])):?>
+				<?php if(($opts['file_w'])&&($opts['mod_rewrite'])):?>
 						<div class='description'>	
 								<ol>
 										<li>Backup origin .htaccess file</li>

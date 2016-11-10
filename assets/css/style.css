@@ -5,15 +5,6 @@ body{
     
    
 }
-.body_pencil{
-    cursor: url(../../assets/imgs/pencil_cursor.png), cell;
-}
-.body_eraser{
-    cursor: url(../../assets/imgs/eraser_cursor.png), crosshair;
-}
-.body_hand{
-    cursor:pointer;
-}
 #seg_tree{
     display: inline-block;
     vertical-align: top;

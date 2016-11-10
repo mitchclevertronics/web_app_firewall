@@ -40,11 +40,10 @@ WaF.init=function (){
 WaF.draw_connect_lines=function (){
     
 //drag n drop
-  $('.segment:visible').draggable({drag: function( event, ui ) {
-        WaF.redraw_connect_lines();
-     
-  }, cursor: "grabbing"
-  });
+  $('.segment:visible').draggable({drag: function( event, ui ) {WaF.redraw_connect_lines();},
+								   stop:function( event, ui ) {$('body').css("cursor","");}, 
+								   cursor: "grabbing"
+								  });
   
   //line connection
   $('.segment').each(function (s,segment){
@@ -58,6 +57,7 @@ WaF.draw_connect_lines=function (){
      
   });
 };
+
 WaF.redraw_connect_lines=function (){
  $('connection').connections('update');
  $('#popup').remove();

@@ -20,7 +20,6 @@ if(!isset($get['use_type']))$get['use_type']=-1;
 if(!isset($get['vars']))$get['vars']=-1;
 if(!isset($get['vars_approved']))$get['vars_approved']=-1;
 $segments=$WR->get_segments_tree2($get,0);
-#$reqs=$segments['childs'];
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -29,6 +28,17 @@ $segments=$WR->get_segments_tree2($get,0);
 <?php require_once "include/head.php"; ?>
 <script src="assets/js/musclesoft-jquery-connections/jquery.connections.js"></script>		
 <script src="assets/js/waf_map.js"></script>
+<style>
+.body_pencil{
+    cursor: url("assets/imgs/pencil_cursor.png"), cell;
+}
+.body_eraser{
+    cursor: url("assets/imgs/eraser_cursor.png"), crosshair;
+}
+.body_hand{
+    cursor:pointer;
+}
+</style>
 </head>
 <body>
 <?php include_once 'include/header.php';?>           

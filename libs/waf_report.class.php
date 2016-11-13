@@ -338,6 +338,8 @@ Class WafReport{
 				 if(!empty($id))
 				 {
 					$var=$this->get_var($id);
+					$var['value']=base64_encode($var['value']);
+					$var['code_contains']=base64_encode($var['code_contains']);
 					if($var)$vars[]=$var;
 				 }
 			}

@@ -537,12 +537,12 @@ WaF.load_vars_form=function (json){
     for(j in json)  
     {
         ids.push(json[j].id);
-        contains.push(json[j].code_contains);
+        contains.push(atob(json[j].code_contains));
         max_size=Math.max(max_size,json[j].code_size);
         var sdiv=$('<div>').addClass('var').attr('rel',json[j].id)
                 .append($('<span>').html(json[j].name))
                .append($('<span>').html('='))
-                .append($('<span>').html(WaF.escapeHtml(json[j].value)));
+                .append($('<span>').html(WaF.escapeHtml(atob(json[j].value))));
         $('.vars_value_options').append(sdiv);
         if(json[j].approved)approved=1;
       
@@ -658,7 +658,7 @@ WaF.vars_save=function (){
 	$.post( "ajax.php?act=vars_save",data, function( json ) {
             //var segment_id=$('.opened_segment').parent().attr('id');
 			var segment_id=$('#requests').attr('segment_id');
-			
+			$('#vars_global').prop("checked",false);
            WaF.open_vars_menu(segment_id);
             $('.vars_form').hide();
 			

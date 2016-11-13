@@ -537,6 +537,7 @@ WaF.load_vars_form=function (json){
     for(j in json)  
     {
         ids.push(json[j].id);
+		
         contains.push(atob(json[j].code_contains));
         max_size=Math.max(max_size,json[j].code_size);
         var sdiv=$('<div>').addClass('var').attr('rel',json[j].id)
@@ -548,6 +549,7 @@ WaF.load_vars_form=function (json){
       
     }
     var contains_str=WaF.arrayUnique(contains.join('').split('')).join('');
+	if(contains_str.indexOf('e')>-1)contains_str='e';//if one from elements - exeption - all group is exeption
     WaF.vars_code2form(contains_str,max_size);
     
   $('#vars_menu_ids').val(ids.join(','));

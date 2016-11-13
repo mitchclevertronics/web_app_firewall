@@ -767,9 +767,17 @@ $this->db->QUERY($sql2);
 
 		return $c['num'];
 	}
+	
+	//remove IP from blacklist
 	public function delete_blacklist($id)
 	{
 		$this->db->QUERY("DELETE FROM waf_blacklist WHERE id=".$this->db->Q($id));
+	}
+	
+	//add IP to blacklist
+	public function add_ip2blacklist($ip)
+	{
+		$this->db->QUERY("INSERT INTO waf_blacklist (ip,sid) VALUES ('".$this->db->Q($ip,1)."',0)");
 	}
 	/*
 	 *Experimental transfer request to words array for using GoogleGraphs WordTree	

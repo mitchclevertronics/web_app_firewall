@@ -14,12 +14,13 @@ require_once "libs/waf_report.class.php";
 $WR=new WafReport;
 $get=$_GET;
 if(!isset($get['sid']))$get['sid']='';
-if(!isset($get['approved']))$get['approved']=0;
+if(!isset($get['approved']))$get['approved']=-1;
 if(!isset($get['bf']))$get['bf']=-1;
 if(!isset($get['use_type']))$get['use_type']=-1;
 if(!isset($get['vars']))$get['vars']=-1;
 if(!isset($get['vars_approved']))$get['vars_approved']=-1;
-$segments=$WR->get_segments_tree2($get,0);
+
+$segments=$WR->get_segments_tree2($get);
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

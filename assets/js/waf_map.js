@@ -89,37 +89,38 @@ WaF.init_vars_menu_close=function (){
 /* Event for mouseover action on segment - show segment info*/
 WaF.init_tooltip=function()
 {
-$('html').mousemove(function (e){
-	WaF.clientX=e.clientX;
-	WaF.clientY=e.clientY;
-});
-$('.have_vars').mousemove(function(e){
-	
-	if($(e.target).attr('segment_id'))
-	{
-		//console.log($(e.target).attr('segment_id'));
-		var id=$(e.target).attr('segment_id');
-		if((id!=WaF.opened_segment)&&(WaF.opened_segment==0))
-		{	
-		WaF.opened_segment=id;	
-		$(e.target).append($('<a>').html('logs').addClass('log_link').attr('href','logs.php?sid='+id));
-        $.get('ajax.php?act=segment_info&id='+id, {
-            //id:id
-        }, function(data) {
-		var popup=$('<div>');
-			popup.html(data).attr('id','popup');	
+	$('html').mousemove(function (e){
+		WaF.clientX=e.clientX;
+		WaF.clientY=e.clientY;
+	});
+	//segment with vars
+	$('.segment').mousemove(function(e){
+		
+		if($(e.target).attr('segment_id'))
+		{
 			
-			var rect=$(e.target)[0].getBoundingClientRect();
-			popup.css('top',(rect.top+(window.scrollY||document.documentElement.scrollTop)));
-			popup.css('left',(rect.right+(window.scrollX||document.documentElement.scrollLeft)+5));
-			$('body').append(popup);
-			WaF.autoClose($(e.target));
-			
-        });
+			var id=$(e.target).attr('segment_id');
+			if((id!=WaF.opened_segment)&&(WaF.opened_segment==0))
+			{	
+			WaF.opened_segment=id;	
+			$(e.target).append($('<a>').html('logs').addClass('log_link').attr('href','logs.php?sid='+id));
+			$.get('ajax.php?act=segment_info&id='+id, {
+				//id:id
+			}, function(data) {
+			var popup=$('<div>');
+				popup.html(data).attr('id','popup');	
+				
+				var rect=$(e.target)[0].getBoundingClientRect();
+				popup.css('top',(rect.top+(window.scrollY||document.documentElement.scrollTop)));
+				popup.css('left',(rect.right+(window.scrollX||document.documentElement.scrollLeft)+5));
+				$('body').append(popup);
+				WaF.autoClose($(e.target));
+				
+			});
+			}
 		}
-	}
-});	
-	
+	});	
+		
 };
 WaF.autoClose=function (element){
 	if(element!=null)

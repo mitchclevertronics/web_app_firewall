@@ -59,8 +59,8 @@ Class WafAjax{
 	$segment=$this->WR->get_segment($_GET['id']);
 		 $reqs='ID:'.$segment['id']."<br>";
 			$reqs.='Updated :'.$segment['updated']."<br>";
-			
-			if(isset($segment['vars']))
+		
+			if(isset($segment['vars'])&&!empty($segment['vars']))
 			{
 			 foreach($segment['vars'] as $method=>$variables)
 			 {

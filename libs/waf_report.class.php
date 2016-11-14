@@ -67,6 +67,8 @@ Class WafReport{
 	 $key=md5(base64_encode(print_r($_SERVER,1).rand(1000,time())));
 	 return $key;
 	}
+	
+	
 	/*
 	 * Get Setting, if doesnt exists save default value and return default
 	 * @param string $key - key of settings
@@ -87,8 +89,11 @@ Class WafReport{
 			}
 	}
 	
-	public function get_segments_tree2($get,$parent){
-		
+	/* get & build segments tree
+	@param array $get - form fields (access map)
+	return array $segments
+	*/
+	public function get_segments_tree2($get){
 		$sql="SELECT s.*,count(v1.id) as vars_approved1,count(v2.id) as vars_approved0  FROM waf_segments s "
 		  ." LEFT JOIN waf_vars v1 ON v1.sid=s.id AND v1.approved=1"
 		  ." LEFT JOIN waf_vars v2 ON v2.sid=s.id AND v2.approved=0 "
@@ -118,47 +123,81 @@ Class WafReport{
 		}
 			
 		$sql.="ORDER BY s.id";
-		#echo $sql;
+		
 		$segments=$this->db->LIST_Q($sql);
-
+		
 		$segments=$this->rebuild_tree($segments,0);
 
 		return $segments;
 	}
 	
+	/*
+	Resorting tree as hierarchy
+	@param array $segments - prepared data from db
+	@return array $tree
+	*/
+	private function rebuild_tree($segments){
+	
+		$tree=Array();
+		if($segments)foreach($segments as $s)$tree[$s['id']]=$s;
+		
+		$tree=$this->tashlim_parents($tree);
+		
+		$tree=$this->recs($tree,0);
+		return $tree;
+	}
+	
+	/*
+	  Load segment with variables
+	  @param int $id
+      return array $segment	  
+	 */
 	private function load_segment_by_id($id){
 		$sql="SELECT s.*,count(v1.id) as vars_approved1,count(v2.id) as vars_approved0  FROM waf_segments s "
 			  ." LEFT JOIN waf_vars v1 ON v1.sid=s.id AND v1.approved=1"
 			  ." LEFT JOIN waf_vars v2 ON v2.sid=s.id AND v2.approved=0 "
 			  . "WHERE s.id=".$this->db->Q($id);
-		return $this->db->ROW_Q($sql);
+			
+		$seg=$this->db->ROW_Q($sql);
+		
+		return ($seg['id'])?$seg:false;
 	}
+	
+	/*
+	 Searching segments parent (if not loaded with query)
+	 @param array $tree;
+	 @return array $tree;
+	 */
 	private function tashlim_parents($tree)
 	{
 	$changed=false;	
 	foreach($tree as $s)
-			{
+		{
 			if(!isset($tree[$s['parent']])&&($s['parent']!=0))
 			{
-				$tree[$s['parent']]=$this->load_segment_by_id($s['parent']);
+				$parent=$this->load_segment_by_id($s['parent']);
+				if($parent)
+				{
+				$tree[$s['parent']]=$parent;
 				$tree[$s['parent']]['invisible']=true;
 				$changed=true;
+				}else{
+					//lose parent
+					$this->delete_segment($s['id']); //kill segment
+					$this->delete_segment_vars($s['id']);//kill segment vars
+					unset($tree[$s['id']]); //kill segment in tree
+				}
 			}
 
 
-			}
+		}
+	
 	if($changed)return $this->tashlim_parents($tree);		
 	else return $tree;			
 	}
 	
-	private function rebuild_tree($segments,$parent){
-		$tree=Array();
-		if($segments)foreach($segments as $s)$tree[$s['id']]=$s;
-		$tree=$this->tashlim_parents($tree);
-		$tree=$this->recs($tree,0);
-		return $tree;
-	}
 	
+	/* Recursion func for sorting via hiearchy*/
 	private function recs($tree,$parent_id){
 		$result=Array();
 		foreach($tree as $t)
@@ -171,6 +210,7 @@ Class WafReport{
 		}
 		return $result;
 	}
+	
 	/*
 	 * reqursive draw segments tree
 	 * @param array $segments
@@ -385,9 +425,8 @@ Class WafReport{
 			
 			$sql3="UPDATE waf_vars SET sid=".$this->db->Q($id)." WHERE sid=".$s['id'];
 			$this->db->QUERY($sql3);
+			$this->delete_segment($s['id']);
 			
-			$sql4="DELETE FROM waf_segments WHERE id=".$this->db->Q($s['id']);
-			$this->db->QUERY($sql4);
 			}
 			}
 		}
@@ -413,7 +452,7 @@ Class WafReport{
                 $sql.="approved=".$this->db->Q($data['approved']).", "
                         . "use_type=".$this->db->Q($data['use'])." "
                         . "WHERE id IN (".implode(',',$ids).") ";
-		#echo $sql."<hr>";						
+						
 		$this->db->QUERY($sql);
 		//if global clear named variables
 		if($data['global'])
@@ -422,7 +461,7 @@ Class WafReport{
 			foreach($vars as $v)
 			{
 				$dsql="DELETE FROM waf_vars WHERE sid>0 AND name='".$this->db->Q($v['name'])."'";
-				#echo $dsql;
+				
 				$this->db->QUERY($dsql);
 			}
 			
@@ -446,7 +485,7 @@ Class WafReport{
 									. "bf=".$this->db->Q($data['bf']).", "
 									. "use_type=".$this->db->Q($data['use'])." "
 									. "WHERE id=".$this->db->Q($id);
-             #  echo $sql."<hr>";
+           
 		$this->db->QUERY($sql);
 		#$this->merge_segment_brothers($id,$code);
 		
@@ -543,14 +582,23 @@ Class WafReport{
 		 $sql2="UPDATE waf_segments SET parent=".$this->db->Q($fid)." WHERE parent=".$s['id'];
 		 $this->db->QUERY($sql2);
 		 //delete old segment
-		 $sql3="DELETE FROM waf_segments WHERE id=".$this->db->Q($s['id']);
-		 $this->db->QUERY($sql3);
+		 $this->delete_segment($s['id']);
 		 
 	 }
 	 
 	}
 	
+	/* Delete segment records */
+	public function delete_segment($id){
+		$sql="DELETE FROM waf_segments WHERE id=".$this->db->Q($id);
+		$this->db->QUERY($sql);
+	}
 	
+	/* Delete segment vars records */
+	public function delete_segment_vars($id){
+		$sql2="DELETE FROM waf_vars WHERE sid=".$this->db->Q($id);
+		$this->db->QUERY($sql2);
+	}
 	
 	/*
 	 * Remove all data of segment 
@@ -558,14 +606,8 @@ Class WafReport{
 	 */
 	public function delete_code($id)
 	{
-		$sql="DELETE FROM waf_segments WHERE id=".$this->db->Q($id);
-		$this->db->QUERY($sql);
-
-	
-		$sql2="DELETE FROM waf_vars WHERE sid=".$this->db->Q($id);
-		$this->db->QUERY($sql2);
-
-	
+		$this->delete_segment($id);
+		$this->delete_segment_vars($id);
 		return array('result'=>true);
 	}
 	/*
@@ -609,8 +651,8 @@ Class WafReport{
 	 * @return void
 	 */
 	private function delete_var($id){
-			$sql2="DELETE FROM waf_vars WHERE id=".$this->db->Q($id);
-$this->db->QUERY($sql2);
+		$sql2="DELETE FROM waf_vars WHERE id=".$this->db->Q($id);
+		$this->db->QUERY($sql2);
 	}
 	
 	/*
@@ -671,6 +713,7 @@ $this->db->QUERY($sql2);
 		$logs=$this->db->LIST_Q($sql);
 		return $logs;
 	}
+	
 	public function get_blacklist($get){
 		$this->logs_count=$this->get_blacklist_count($get);
 		$this->total_pages=ceil($this->logs_count/$this->log_per_page);

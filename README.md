@@ -34,6 +34,7 @@ Now program start collect request-map from every request to site, leave it for o
 ###[Access Map - configuration permissions](https://github.com/shaman33/web_app_firewall/wiki/Configuration-Access-Map)
 ###[Bad Requests log](https://github.com/shaman33/web_app_firewall/wiki/Bad-Requests)
 ###[Blacklist IP](https://github.com/shaman33/web_app_firewall/wiki/Blacklist)
+###[Analizing Attacks](https://github.com/shaman33/web_app_firewall/wiki/Analizing--attacks)
 ## Support 
 [Project Facebook](https://www.facebook.com/PHP-Web-Security-Monitor-253026111501313/)<br>
 Write me for help RomanShneer@gmail.com<br>

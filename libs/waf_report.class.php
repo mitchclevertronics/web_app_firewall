@@ -703,12 +703,12 @@ Class WafReport{
 		{
 			$sql.=" AND sid=".$this->db->Q($get['sid']);
 		}
-		if(!isset($get['page']))
-			$get['page']=1;
+		if(!isset($get['wafpage']))
+			$get['wafpage']=1;
 
 
 		$sql.=" ORDER BY created DESC";
-		$sql.=" LIMIT ".$this->log_per_page." OFFSET ".($this->log_per_page*($get['page']-1));
+		$sql.=" LIMIT ".$this->log_per_page." OFFSET ".($this->log_per_page*($get['wafpage']-1));
 	
 		$logs=$this->db->LIST_Q($sql);
 		return $logs;

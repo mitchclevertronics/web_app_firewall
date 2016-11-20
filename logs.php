@@ -19,14 +19,14 @@ if(($WR->isEditor())&&(isset($_GET['reset'])))
 $logs=$WR->get_logs($_GET);
 function get_page_link($page,$get)
 {
-	$get['page']=$page;
+	$get['wafpage']=$page;
 	$link='';
 	$parts=Array();
 	foreach($get as $gn=>$gv)
 		$parts[]=$gn.'='.$gv;
 	return implode('&',$parts);
 }
-if(!isset($_GET['page']))$_GET['page']=1;
+if(!isset($_GET['wafpage']))$_GET['wafpage']=1;
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"  xml:lang="en" lang="en">
@@ -87,18 +87,18 @@ if(!isset($_GET['page']))$_GET['page']=1;
 		</table>
 		<div class="pagging">
 		<?php 
-		$min=$_GET['page']-3;
+		$min=$_GET['wafpage']-3;
 		if($min<1)$min=1;
-		$max=$_GET['page']+3;
+		$max=$_GET['wafpage']+3;
 		if($max>$WR->total_pages)$max=$WR->total_pages;
 		?>		
-		<?php if($_GET['page']!=1):?><a href="logs.php?<?php echo get_page_link(1,$_GET);?>">&laquo;</a><?php endif;?>		
+		<?php if($_GET['wafpage']!=1):?><a href="logs.php?<?php echo get_page_link(1,$_GET);?>">&laquo;</a><?php endif;?>		
 		<?php for($p=$min;$p<=$max;$p++):?>
-		<?php if($p!=$_GET['page']):?><a href="logs.php?<?php echo get_page_link($p,$_GET);?>"><?php endif;?>
+		<?php if($p!=$_GET['wafpage']):?><a href="logs.php?<?php echo get_page_link($p,$_GET);?>"><?php endif;?>
 			<?php echo $p;?>
-		<?php if($p!=$_GET['page']):?></a><?php endif;?>
+		<?php if($p!=$_GET['wafpage']):?></a><?php endif;?>
 		<?php endfor;?>
-		<?php if($_GET['page']!=$WR->total_pages):?><a href="logs.php?<?php echo get_page_link($WR->total_pages,$_GET);?>">&raquo;</a><?php endif;?>		
+		<?php if($_GET['wafpage']!=$WR->total_pages):?><a href="logs.php?<?php echo get_page_link($WR->total_pages,$_GET);?>">&raquo;</a><?php endif;?>		
 		</div>		
 </div>    
 <script>

@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Web app firewall by shaman33</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Web app firewall</h1>
+        <p>Web App Firewall - its full service PHP software for stop attacks against application code by using whitelist politics. Protect agains all servers attacks: brute force, SQL Injections, XSS and more...</p>
+
+        <p class="view"><a href="https://github.com/shaman33/web_app_firewall">View the Project on GitHub <small>shaman33/web_app_firewall</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/shaman33/web_app_firewall/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/shaman33/web_app_firewall/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/shaman33/web_app_firewall">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="web-app-firewall" class="anchor" href="#web-app-firewall" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Web App Firewall</h1>
+
+<h2>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Introduction</h2>
+
+<p>WAFs goal is protect sites against hackers and virus attacks. 
+Web App Firewall its PHP application that implement principle of reverse-proxy , control of types variables accepted by server , and comfortable management interface.<br>
+<img src="https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/map0.jpg?raw=true" alt="alt tag"><br>
+W.A.F. supported to work under LAMP servers with .htaccess files support.
+Security protection based on white-list strategy: after starting "Learn" mode program collect map of requests, and user have to approve requests. After starting "Guard" mode - program accept only known requests.</p>
+
+<p>Program using white-list strategy, it is more absolute protection, but its requires a lot of work on configuration.
+In the program using Intellectual graphical UI  , its give an opportunity regularize most chaotic structure.</p>
+
+<h4>
+<a id="contains-libraries" class="anchor" href="#contains-libraries" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contains libraries:<br>
+</h4>
+
+<p>Jquery-connections <a href="https://github.com/musclesoft/jquery-connections">https://github.com/musclesoft/jquery-connections</a><br>
+jQuery-1.11.3 <a href="https://jquery.com">https://jquery.com</a><br>
+Google Charts <a href="https://developers.google.com/chart/">https://developers.google.com/chart/</a><br></p>
+
+<h4>
+<a id="requires" class="anchor" href="#requires" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Requires:<br>
+</h4>
+
+<p>Linux OS, Apache webserver with support htaccess and mod_rewrite,PHP5 with support CURL and MySQL<br></p>
+
+<h2>
+<a id="how-its-working" class="anchor" href="#how-its-working" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/shaman33/web_app_firewall/wiki/How-its-working%3F">How its working?</a>
+</h2>
+
+<p>Web App Firewall organize reverse-proxy by injection to .htaccess file, and writing Rewrite Rules with security key 1.</p>
+
+<p>WAF script get redirected request and parse path and parameters sent from user. Detect created rules for specified situation and block or accept request via prepared politics.</p>
+
+<p>If request approved, WAF script sending request  back to server via CURL with added security key 2 (.htaccess rule miss request if detect key2).
+If request blocked, WAF save logs and show 404 page.
+<img src="https://github.com/shaman33/web_app_firewall/blob/master/assets/imgs/scratch/reverse_proxy.png?raw=true"></p>
+
+<h2>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Started</h2>
+
+<h3>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/shaman33/web_app_firewall/wiki/Installation-WebAppFirewall">Installation</a>
+</h3>
+
+<h3>
+<a id="htaccess-injection" class="anchor" href="#htaccess-injection" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/shaman33/web_app_firewall/wiki/Injection-to-.htaccess">HTACCESS Injection</a>
+</h3>
+
+<h3>
+<a id="configuration-settings" class="anchor" href="#configuration-settings" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/shaman33/web_app_firewall/wiki/Configuration-Settings">Configuration Settings</a>
+</h3>
+
+<p>Set W.A.F Status Learn on, and Guard off.
+Now program start collect request-map from every request to site, leave it for one week for view more complete structure of site.</p>
+
+<h3>
+<a id="access-map---configuration-permissions" class="anchor" href="#access-map---configuration-permissions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/shaman33/web_app_firewall/wiki/Configuration-Access-Map">Access Map - configuration permissions</a>
+</h3>
+
+<h3>
+<a id="bad-requests-log" class="anchor" href="#bad-requests-log" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/shaman33/web_app_firewall/wiki/Bad-Requests">Bad Requests log</a>
+</h3>
+
+<h3>
+<a id="blacklist-ip" class="anchor" href="#blacklist-ip" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/shaman33/web_app_firewall/wiki/Blacklist">Blacklist IP</a>
+</h3>
+
+<h3>
+<a id="analizing-attacks" class="anchor" href="#analizing-attacks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/shaman33/web_app_firewall/wiki/Analizing--attacks">Analizing Attacks</a>
+</h3>
+
+<h2>
+<a id="support" class="anchor" href="#support" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support</h2>
+
+<p><a href="https://www.facebook.com/PHP-Web-Security-Monitor-253026111501313/">Project Facebook</a><br>
+Write me for help <a href="mailto:RomanShneer@gmail.com">RomanShneer@gmail.com</a><br><br>
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=ECZBTKBD7T6A8">Please donate</a></p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/shaman33">shaman33</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>

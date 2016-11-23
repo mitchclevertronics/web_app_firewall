@@ -141,8 +141,8 @@ font-weight:bold;
 .var_request_box ul li{
     white-space: nowrap;
     margin-bottom: 5px;
-    display:block;
-    height:30px;
+    display:list-item;
+    
 }
 .var_li{
     float:left
@@ -571,4 +571,44 @@ inner {
 }
 .vars_row3{
 	min-height: 25px;
+}
+.segment_tools{
+	text-align:right;
+	height:10px;
+	line-height:7px;
+//	display:none;
+//	position: absolute;
+}
+.segment_tools a{
+	font-size:12px;
+	text-decoration: none;
+}
+.segment_tools a:hover{
+	font-weight: bold;
+}
+.segment_tools a:first-child{
+	color:dimgray;
+}
+.segment_tools a:last-child{
+	color:gray;
+}
+.bottom_tools{
+	text-align:right;
+	width:300px;
+	height:20px;
+	float:right;
+	margin:0 10px;
+	
+}
+#loader{
+	position:fixed;
+	top:30%;
+	left:40%;
+	width:200px;
+	height:200px;	
+	text-align: center;
+	display:none;
+}
+#loader img{
+	margin:40px auto;
 }

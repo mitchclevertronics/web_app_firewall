@@ -34,7 +34,81 @@ WaF.init=function (){
         WaF.init_vars_menu_close();
         WaF.init_text_btns();
         WaF.draw_connect_lines();
-		
+		WaF.init_export_btn();
+};
+
+WaF.init_export_btn=function(){
+$('#export').click(function (){
+	
+	if(confirm("Export filtered by form"))
+	{
+	var params=location.href.split("?");
+	$('#loader').show();
+	$.get('ajax.php?act=export_map&'+((typeof params[1]!='undefined')?params[1]:''), {}, function(data) {
+			var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+			var dlAnchorElem = $('#export_helper');
+			dlAnchorElem.attr("href",dataStr);
+			var d = new Date();
+			var month=(d.getMonth()+1);
+			if(month==13)month=1;
+			dlAnchorElem.attr("download", "waf_access_map."+d.getFullYear()+month+d.getDate()+".json");
+			$('#loader').hide();
+			dlAnchorElem[0].click();
+
+			});
+	}
+	});	
+$('#import').click(function (){
+	$('#import-file').click();
+	$('#import-file').change(function (event){
+		if(event.target.files.length>0)
+		{
+			$('#loader').show();
+			var files=event.target.files;
+			var reader = new FileReader();
+				reader.readAsText(files[0], "UTF-8");
+				reader.onload = function (evt) {
+					
+					$.ajax({
+						url: 'ajax.php?act=import_map',
+						type: 'POST',
+						data: evt.target.result,
+						cache: false,
+						dataType: 'json',
+						processData: false, // Don't process the files
+						contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+						success: function(data, textStatus, jqXHR)
+						{
+							if(typeof data.error === 'undefined')
+							{
+								// Success so call function to process the form
+								$('#loader').hide();
+								alert('Imported '+data.count+' items');
+								location.reload();
+							}
+							else
+							{
+								$('#loader').hide();
+								alert('ERRORS: ' + data.error);
+							}
+						},
+						error: function(jqXHR, textStatus, errorThrown)
+						{
+							$('#loader').hide();
+							alert('ERRORS: ' + textStatus);
+						}
+					});
+					
+				}
+			
+				
+		}
+	});
+});	
+};
+
+WaF.prepareUpload=function (event){
+	  var files = event.target.files;
 };
 
 WaF.draw_connect_lines=function (){
@@ -103,10 +177,10 @@ WaF.init_tooltip=function()
 			if((id!=WaF.opened_segment)&&(WaF.opened_segment==0))
 			{	
 			WaF.opened_segment=id;	
-			$(e.target).append($('<a>').html('logs').addClass('log_link').attr('href','logs.php?sid='+id));
-			$.get('ajax.php?act=segment_info&id='+id, {
-				//id:id
-			}, function(data) {
+			//$(e.target).append($('<a>').html('logs').addClass('log_link').attr('href','logs.php?sid='+id));
+			//$(e.target).find('.segment_tools').show();
+			//WaF.redraw_connect_lines();
+			$.get('ajax.php?act=segment_info&id='+id, {}, function(data) {
 			var popup=$('<div>');
 				popup.html(data).attr('id','popup');	
 				
@@ -134,7 +208,9 @@ WaF.autoClose=function (element){
 
 			$('#popup').remove();
 			WaF.opened_segment=0;
-			element.find('.log_link').remove(); 
+			//element.find('.segment_tools').hide();
+			//WaF.redraw_connect_lines();
+			//element.find('.log_link').remove(); 
 		}else{
 			setTimeout(function (){WaF.autoClose(element);},100);
 		}
@@ -352,9 +428,13 @@ WaF.switch_tool=function (next_tool){
 /* Truncate Btn Event */
 WaF.init_truncate=function (){
     $('#truncate').click(function (){
-     if(confirm("Are you sure Want DELETE ALL?"))   
+     if(confirm("DELETE Segments and their variables via search filters?"))   
      {
-        $.get( "ajax.php?act=truncate", function( json ) {
+		 var p=location.href.split("?");
+		 $('#loader').show();
+        $.get( "ajax.php?act=truncate&"+((typeof p[1]=='undefined')?'':p[1]), function( json ) {
+			$('#loader').hide();
+			alert("Deleted "+json.count+" segments and their variables");
             window.location.reload();
         });
     }   

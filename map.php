@@ -54,7 +54,7 @@ $segments=$WR->get_segments_tree2($get);
             <img src="assets/imgs/eraser.png" width="40" id="eraser">
             <img src="assets/imgs/edit.png" width="40" id="edit_form" title="Click For Edit Selected">
 			<img src="assets/imgs/vars.png" width="40" title="Click For Edit Global Variables" id="edit_global_vars" >
-            <img src='assets/imgs/roger.png' width="40" id="truncate" title="Click Truncate ALL data - Be carefull">  
+			  
               
     </div>    
 </div>    
@@ -99,7 +99,17 @@ $segments=$WR->get_segments_tree2($get);
 		</fieldset>
 		<input type="submit" value="Go" class="green_btn">
 		</form>
-		<img src='assets/imgs/question.png' width="20" id="filter_help" title="Help">	
+		<img src='assets/imgs/question.png' width="20" id="filter_help" title="Help">
+		<div class="bottom_tools">
+			<a href="javascript://" id="export" class="green_btn">Export Map</a><a id="export_helper"></a>&nbsp;	
+			<a href="javascript://" id="import" class="green_btn">Import Map</a>
+			<!--form enctype="multipart/form-data" action="ajax.php?act=import_map" method="post" id="import_form" style="display:none"-->
+			<input id="import-file" type="file"  style="display:none"/>
+			<!--/form-->&nbsp;
+			<a href="javascript://" id="truncate" title="Click Truncate ALL segment and variables - Be carefull" class="red_btn">Erase Map</a>
+            
+		</div>
+			
 	</div>	
 
 <!--Legends BOF-->    
@@ -254,6 +264,7 @@ $segments=$WR->get_segments_tree2($get);
      </div>
     </div>
 </div>  
+<div id="loader"><img src="assets/imgs/loader.gif"></div>
 <!--VARS SINGLE MENU EOF-->   
 <script>
 $(document).ready(function (){

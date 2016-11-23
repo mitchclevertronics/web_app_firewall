@@ -65,7 +65,7 @@ $opts=array('file_e'=>file_exists($filename)?true:false,
 RewriteEngine On
 SetEnvIf WAF_KEY "(.*)" HTTP_WAF_KEY=<?php echo $WR->waf_security_key;?>
 
-RewriteCond $1 !\.(gif|GIF|jpg|JPG|jpeg|JPEG|png|PNG|ico|ICO|css|CSS|js|JS|swf|SWF|wav|WAV|mp3|MP3|less|LESS|cur|CUR|ttf|TTF)
+RewriteCond $1 !\.(gif|GIF|jpg|JPG|jpeg|JPEG|png|PNG|ico|ICO|css|CSS|js|JS|swf|SWF|wav|WAV|mp3|MP3|less|LESS|cur|CUR|ttf|TTF|pdf|PDF)
 RewriteCond %{HTTP:WAF_KEY2} !<?php echo $WR->waf_security_key2;?>
 
 RewriteCond %{REQUEST_URI} !<?php echo $folder;?>

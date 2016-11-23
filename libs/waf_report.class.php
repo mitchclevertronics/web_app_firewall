@@ -89,11 +89,13 @@ Class WafReport{
 			}
 	}
 	
-	/* get & build segments tree
+	
+	/* get & build segments, not tree 
 	@param array $get - form fields (access map)
 	return array $segments
 	*/
-	public function get_segments_tree2($get){
+    public function get_segments_tree($get)	
+	{
 		$sql="SELECT s.*,count(v1.id) as vars_approved1,count(v2.id) as vars_approved0  FROM waf_segments s "
 		  ." LEFT JOIN waf_vars v1 ON v1.sid=s.id AND v1.approved=1"
 		  ." LEFT JOIN waf_vars v2 ON v2.sid=s.id AND v2.approved=0 "
@@ -125,7 +127,16 @@ Class WafReport{
 		$sql.="ORDER BY s.id";
 		
 		$segments=$this->db->LIST_Q($sql);
+		return $segments;
+	}
+	
+	/* get & build segments tree
+	@param array $get - form fields (access map)
+	return array $segments
+	*/
+	public function get_segments_tree2($get){
 		
+		$segments=$this->get_segments_tree($get);
 		$segments=$this->rebuild_tree($segments,0);
 
 		return $segments;
@@ -216,9 +227,9 @@ Class WafReport{
 	 * @param array $segments
 	 * @return string $html
 	 */
-	public function draw_segments_tree($segments,$lvl)
+	public function draw_segments_tree($segments,$lvl,$parentUrl="")
 	{
-				
+		if(substr($parentUrl,0,2)=='//')$parentUrl=substr($parentUrl,1);		
 		$html='<ul>';
 
 		 $row=0;
@@ -246,11 +257,18 @@ Class WafReport{
 			.(($r['vars_approved1'])?' vars_approved1 ':'')
 			.(($vars_count)?' have_vars':' no_vars')
 			.' segment segment'.$r['id'];
-
+		if(empty($parentUrl)&&empty($r['value']))$link="/";
+		elseif($parentUrl=='/')$link="/".$r['value'];
+		else $link=$parentUrl."/".$r['value'];
+	
 		if(isset($r['invisible']))$css_classes.=' invisible';
-		$html.='<span class="'.$css_classes.'" segment_id="'.$r['id'].'" segment_parent="'.$r['parent'].'" title="Segment ID:'.$r['id'].'">'.$item_name.'</span>';
-
-		if($r['childs'])$html.=$this->draw_segments_tree($r['childs'],($lvl+1));
+		$html.='<span class="'.$css_classes.'" segment_id="'.$r['id'].'" segment_parent="'.$r['parent'].'" title="Segment ID:'.$r['id'].'">'.$item_name
+		  .'<div class="segment_tools"><a href="logs.php?sid='.$r['id'].'" target="_blank">logs</a>'
+		  .'&nbsp;<a href="'.$link.'" target="_blank">link</a>'
+		  .'</div>'
+		  .'</span>';
+		
+		if($r['childs'])$html.=$this->draw_segments_tree($r['childs'],($lvl+1),$parentUrl.'/'.$r['value']);
 		$html.='</li>';
 		$row++;
 		}
@@ -265,8 +283,33 @@ Class WafReport{
 			$result=Array();
 			if($vars)
 			 foreach($vars as $v)
+			{
+				$v['name']=  htmlspecialchars($v['name']);
+				$v['value']=htmlspecialchars($v['value']);
 				$result[$v['method']][]=$v;
+				
+			}	
 			return $result;	
+	}
+	/* 
+	 * Prepare all variables for import 
+	 * get array $get - filter arguments
+	 * return array $vars
+	 */
+	public function get_vars_all($get)
+	{
+		if($get['vars']!=0)
+		{
+		$sql="SELECT * FROM waf_vars WHERE 1=1";
+			if($get['vars']==10)
+				$sql.=" AND status=0";
+			elseif($get['vars']==11)
+				$sql.=" AND status=1";
+			
+		$vars=$this->db->LIST_Q($sql);
+			
+		return $vars;	
+		}else return array();	
 	}
 	/*
 	 * Get Segment for given array segment ids
@@ -378,6 +421,7 @@ Class WafReport{
 				 if(!empty($id))
 				 {
 					$var=$this->get_var($id);
+					$var['name']=  htmlspecialchars($var['name']);
 					$var['value']=base64_encode($var['value']);
 					$var['code_contains']=base64_encode($var['code_contains']);
 					if($var)$vars[]=$var;
@@ -432,11 +476,19 @@ Class WafReport{
 		}
 	}
 	/*Remove all data*/
-	public function truncate()
+	public function truncate($get)
 	{
 			
-			$this->db->QUERY("TRUNCATE waf_vars");
-			$this->db->QUERY("TRUNCATE waf_segments");
+			$count=0;
+			$segments=$this->get_segments_tree($get);
+			foreach($segments as $s)
+			{
+				$this->delete_code($s['id']);
+				$count++;
+			}
+			return $count;
+			#$this->db->QUERY("TRUNCATE waf_vars");
+			#$this->db->QUERY("TRUNCATE waf_segments");
 	}
         
   
@@ -670,6 +722,7 @@ Class WafReport{
 	/*
 	 * Get Bad Requests Log
 	 * @param array $_GET
+	 * @param bool $limit - set pagination for query or not
 	 * return array $logs
 	 */
 	public function get_logs($get)
@@ -693,7 +746,7 @@ Class WafReport{
 		}
 		if(!empty($get['ip']))
 		{
-			$sql.=" AND ip='".$this->db->Q($get['ip'],1)."'";
+			$sql.=" AND ip like '".$this->db->Q($get['ip'],1)."%'";
 		}
 		if(!empty($get['url']))
 		{
@@ -708,12 +761,66 @@ Class WafReport{
 
 
 		$sql.=" ORDER BY created DESC";
+	
 		$sql.=" LIMIT ".$this->log_per_page." OFFSET ".($this->log_per_page*($get['wafpage']-1));
 	
 		$logs=$this->db->LIST_Q($sql);
 		return $logs;
 	}
+	/*
+	 * Get Bad Requests Log for export
+	 * @param array $_GET
+	 * @param bool $limit - set pagination for query or not
+	 * return array $logs
+	 */
+	public function export_logs($get)
+	{
+		
+
+		$sql="SELECT * FROM waf_logs  WHERE 1=1";
+		if(!empty($get['type'])&&($get['type']))
+		{
+			$sql.=" AND type='".$this->db->Q($get['type'],1)."'";
+		}	
+		if(!empty($get['from_date']))
+		{
+			$sql.=" AND created>='".date('Y-m-d 00:00:00',strtotime($get['from_date']))."'";
+		}
+		if(!empty($get['to_date']))
+		{
+			$sql.=" AND created<='".date('Y-m-d 23:59:59',strtotime($get['to_date']))."'";
+		}
+		if(!empty($get['ip']))
+		{
+			$sql.=" AND ip like '".$this->db->Q($get['ip'],1)."%'";
+		}
+		if(!empty($get['url']))
+		{
+			$sql.=" AND url LIKE '".$this->db->Q($get['url'],1)."%'";
+		}
+		if(!empty($get['sid']))
+		{
+			$sql.=" AND sid=".$this->db->Q($get['sid']);
+		}
+		if(!isset($get['wafpage']))
+			$get['wafpage']=1;
+
+
+		$sql.=" ORDER BY id DESC";
+		#if($limit)
+		#$sql.=" LIMIT ".$this->log_per_page." OFFSET ".($this->log_per_page*($get['wafpage']-1));
 	
+		$logs=$this->db->LIST_Q($sql);
+		return $logs;
+		/*
+		$result=Array();
+		foreach($logs as $l)
+		{
+		$l['reason']=  base64_encode($l['reason']);	
+		$result[]=$l;	
+		}
+		return $result;*/
+	}
 	public function get_blacklist($get){
 		$this->logs_count=$this->get_blacklist_count($get);
 		$this->total_pages=ceil($this->logs_count/$this->log_per_page);
@@ -744,8 +851,43 @@ Class WafReport{
 		$logs=$this->db->LIST_Q($sql);
 		return $logs;
 	}
-	public function truncate_logs(){
-	 	$sql="DELETE FROM waf_logs  WHERE 1=1";
+	public function truncate_logs($get){
+		$sql="DELETE FROM waf_logs  WHERE 1=1";
+		if(!empty($get['type'])&&($get['type']))
+		{
+			$sql.=" AND type='".$this->db->Q($get['type'],1)."'";
+		}	
+		if(!empty($get['from_date']))
+		{
+			$sql.=" AND created>='".date('Y-m-d 00:00:00',strtotime($get['from_date']))."'";
+		}
+		if(!empty($get['to_date']))
+		{
+			$sql.=" AND created<='".date('Y-m-d 23:59:59',strtotime($get['to_date']))."'";
+		}
+		if(!empty($get['ip']))
+		{
+			$sql.=" AND ip like '".$this->db->Q($get['ip'],1)."%'";
+		}
+		if(!empty($get['url']))
+		{
+			$sql.=" AND url LIKE '".$this->db->Q($get['url'],1)."%'";
+		}
+		if(!empty($get['sid']))
+		{
+			$sql.=" AND sid=".$this->db->Q($get['sid']);
+		}
+		
+		$this->db->QUERY($sql);
+	}
+	
+	/*
+	 * Delete one log, action from Logs system
+	 * @param array $ids  - LogIds
+	 * @return void;
+	 */
+	public function delete_logs($ids){
+		$sql="DELETE FROM waf_logs  WHERE id in (".$this->db->Q(implode(",",$ids),1).")";
 		$this->db->QUERY($sql);
 	}
 	
@@ -942,5 +1084,97 @@ Class WafReport{
 	 return $data;
 	}
 	
+	/*
+	 * Organize import process
+	 */
+	public function import_access_map($map)
+	{
+		#pre($map['segments']);
+		if(isset($map['segments']))$this->import_segments($map['segments']);
+		if(isset($map['vars']))$this->import_vars($map['vars']);
+	}
+	
+	private function import_vars($vars)
+	{
+		foreach($vars as $v)
+		{
+			$od=$this->db->ROW_Q("SELECT id FROM waf_vars WHERE id=".$this->db->Q($v['id']));
+			$sid=($v['sid']==0)?0:$this->imported[$v['sid']];
+			if($od)
+			{	
+			$sql="INSERT INTO waf_vars (name,method,value,updated,sid,approved,use_type,code_contains,code_size)"
+			  . " VALUES ('".$this->db->Q($v['name'],1)."','".$this->db->Q($v['method'],1)."','".$this->db->Q($v['value'],1)."','".$this->db->Q($v['updated'],1)."',"
+			  . "".$this->db->Q($sid).",".$this->db->Q($v['approved']).",".$this->db->Q($v['use_type']).",'".$this->db->Q($v['code_contains'],1)."',".$this->db->Q($v['code_size']).")";
+			}else{
+			$sql="INSERT INTO waf_vars (id,name,method,value,updated,sid,approved,use_type,code_contains,code_size)"
+			  . " VALUES (".$this->db->Q($v['id']).",'".$this->db->Q($v['name'],1)."','".$this->db->Q($v['method'],1)."','".$this->db->Q($v['value'],1)."','".$this->db->Q($v['updated'],1)."',"
+			  . "".$this->db->Q($sid).",".$this->db->Q($v['approved']).",".$this->db->Q($v['use_type']).",'".$this->db->Q($v['code_contains'],1)."',".$this->db->Q($v['code_size']).")";	
+			}
+			$this->db->INSERT($sql);
+			
+		}
+	}  
+	
+	/*
+	 * Recursive saving of segments
+	 * @param array $maps - segments
+	 */
+	private function import_segments($maps)
+	{
+		
+		foreach($maps as $m)
+		{
+			$this->import_segment($m);
+			if(isset($m['childs'])&&count($m['childs']))$this->import_segments ($m['childs']);
+		}
+	}
+	 /* 
+     * import Segment to DB 
+     * @param array $m - Segment Record
+     * @return int new $segment_id;
+     */
+    private function import_segment($m)
+    {
+        $parent=($m['parent']==0)?0:$this->imported[$m['parent']]; 
+		
+		$od=$this->db->ROW_Q("SELECT id FROM waf_segments WHERE id=".$this->db->Q($m['id']));
+		if($od)
+		{
+		//id busy
+		$sql1="INSERT INTO waf_segments(parent,updated,lvl,value,approved,use_type,bf,code_contains,code_size,code_before,code_after)"
+			  . " VALUES (".$this->db->Q($parent).",'".$this->db->Q($m['updated'],1)."',".$this->db->Q($m['lvl']).",'".$this->db->Q($m['value'],1)."',"
+			  . "".$this->db->Q($m['approved']).",".$this->db->Q($m['use_type']).",".$this->db->Q($m['bf']).",'".$this->db->Q($m['code_contains'],1)."',"
+			  . "".$this->db->Q($m['code_size']).",'".$this->db->Q($m['code_before'],1)."','".$this->db->Q($m['code_after'],1)."')";	
+		}else{
+		//id free
+			$sql1="INSERT INTO waf_segments(id,parent,updated,lvl,value,approved,use_type,bf,code_contains,code_size,code_before,code_after)"
+			  . " VALUES (".$this->db->Q($m['id']).",".$this->db->Q($parent).",'".$this->db->Q($m['updated'],1)."',".$this->db->Q($m['lvl']).",'".$this->db->Q($m['value'],1)."',"
+			  . "".$this->db->Q($m['approved']).",".$this->db->Q($m['use_type']).",".$this->db->Q($m['bf']).",'".$this->db->Q($m['code_contains'],1)."',"
+			  . "".$this->db->Q($m['code_size']).",'".$this->db->Q($m['code_before'],1)."','".$this->db->Q($m['code_after'],1)."')";
+		}
+			
+			#echo $sql1."<hr>";
+			$new_id=$this->db->INSERT($sql1);
+			$this->imported[$m['id']]=$new_id;
+        
+    }
+	
+	public function import_logs($logs) {
+		
+		foreach($logs as $l)
+		{
+			$od=$this->db->ROW_Q("SELECT id FROM waf_logs WHERE id=".$this->db->Q($l['id']));
+			if($od)
+			{
+				$sql="INSERT INTO waf_logs (content,type,created,ip,url,reason,sid) VALUES ('".$this->db->Q($l['content'],1)."','".$this->db->Q($l['type'],1)."','".$this->db->Q($l['created'],1)."','".$this->db->Q($l['ip'],1)."','".$this->db->Q($l['url'],1)."','".$this->db->Q($l['reason'],1)."',".$this->db->Q($l['sid']).")";
+			}else{
+				$sql="INSERT INTO waf_logs (id,content,type,created,ip,url,reason,sid) VALUES (".$this->db->Q($l['id']).",'".$this->db->Q($l['content'],1)."','".$this->db->Q($l['type'],1)."','".$this->db->Q($l['created'],1)."','".$this->db->Q($l['ip'],1)."','".$this->db->Q($l['url'],1)."','".$this->db->Q($l['reason'],1)."',".$this->db->Q($l['sid']).")";
+			}
+			
+			$log_id=$this->db->INSERT($sql);
+			$this->imported[]=$log_id;
+		}
+		
+	}
 }
 ?>

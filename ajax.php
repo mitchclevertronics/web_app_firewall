@@ -91,9 +91,10 @@ Class WafAjax{
  }
  
  private function get_truncate(){
-	if($this->WR->isEditor())
-		 $reqs=$this->WR->truncate();
-		 $this->draw_json_result($reqs);
+	if($this->WR->isEditor()){
+		 $count=$this->WR->truncate($_GET);
+		 $this->draw_json_result(array('result'=>true,'count'=>$count));
+	}
  }
  
  private function get_delete_segments(){
@@ -110,6 +111,7 @@ Class WafAjax{
  
  private function get_show_segment(){
 	$reqs=$this->WR->get_segment($_GET['id']);
+	#pre($reqs);
 	$this->draw_json_result($reqs);
  }
  
@@ -137,11 +139,79 @@ Class WafAjax{
 	 #$reqs=array('key'=>$this->WR->generateSecurityKey());
 	 $this->draw_json_result($reqs);
  }
- private function get_save_segment_position(){
+ /*private function get_save_segment_position(){
 	$reqs=$this->WR->save_segment_position($_POST);
 	 $this->draw_json_result(array('result'=>true));
 	
+ }*/
+ private function get_delete_logs(){
+	  if($this->WR->isEditor())
+	  {
+	 $ids=explode(",",$_GET['ids']);
+	 $reqs=$this->WR->delete_logs($ids);
+	 $this->draw_json_result(array('result'=>true));
+	  }
  }
+ private function get_truncate_logs(){
+	 if($this->WR->isEditor())
+		$this->WR->truncate_logs($_GET);
+	 $this->draw_json_result(array('result'=>true));
+ }
+ private function get_export_map(){
+	 $get=$_GET;
+	if(!isset($get['sid']))$get['sid']='';
+	if(!isset($get['approved']))$get['approved']=-1;
+	if(!isset($get['bf']))$get['bf']=-1;
+	if(!isset($get['use_type']))$get['use_type']=-1;
+	if(!isset($get['vars']))$get['vars']=-1;
+	if(!isset($get['vars_approved']))$get['vars_approved']=-1;
+	header('Content-Type: application/json');
+	$result=array();
+	$result['segments']=$this->WR->get_segments_tree2($get);
+	$result['vars']=$this->WR->get_vars_all($get);
+	 $this->draw_json_result(array('result'=>$result));
+	
+ }
+ private function get_import_map(){
+	  if($this->WR->isEditor())
+	  {
+	$data = json_decode(file_get_contents('php://input'), true);
+	if(isset($data['result']))
+	{
+	$this->WR->import_access_map($data['result']);
+	
+	$this->draw_json_result(array('result'=>true,'count'=>count($this->WR->imported)));
+	}else{
+	$this->draw_json_result(array('result'=>false));	
+	}
+	  }
+ }
+ 
+ 
+ public function get_export_logs(){
+	  header('Content-Type: application/json');
+	  $logs=$this->WR->export_logs($_GET,false);
+	  $this->draw_json_result(array('result'=>$logs));
+ }
+ 
+ public function get_import_logs(){
+	 if($this->WR->isEditor())
+	 {	 
+	 $content=file_get_contents('php://input');
+
+	 $data = json_decode($content, true);
+	if(isset($data['result']))
+	{
+
+	$this->WR->import_logs($data['result']);
+	
+	$this->draw_json_result(array('result'=>true,'count'=>count($this->WR->imported)));
+	}else{
+	$this->draw_json_result(array('result'=>false));	
+	}
+	}
+ }
+ 
 }
 $WA=new WafAjax($_GET['act']);
 

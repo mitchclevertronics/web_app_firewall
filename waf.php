@@ -135,7 +135,9 @@ Class WAF extends WAFHelper{
 	}
 	
 	private function check_ip_blacklist($ip){
-		$bl=$this->db->ROW_Q("SELECT * FROM waf_blacklist WHERE ip='".$this->db->Q($ip,1)."' AND created>'".date('Y-m-d H:i:s',strtotime("-".$this->waf_bf_bantime." days"))."'");
+		$sql="SELECT * FROM waf_blacklist WHERE ip='".$this->db->Q($ip,1)."'";
+		if($this->waf_bf_bantime!=0)$sql.=" AND created>'".date('Y-m-d H:i:s',strtotime("-".$this->waf_bf_bantime." days"))."'";
+		$bl=$this->db->ROW_Q($sql);
 		return $bl;
 	}
 
@@ -715,9 +717,10 @@ Class WAF extends WAFHelper{
 		 * @param int $sid - SegmentID
 		 * @return array $http_request - [url,vars,method] - changed to 404 page
 		 */
-		private function log_bad_request($http_request, $type, $reason, $sid)
+		private function log_bad_request($http_request, $type, $reason, $sid=0)
 		{
-				$data=Array();
+		if(empty($sid))	$sid=0;	
+		$data=Array();
         $data['request']=$http_request;
         
         $data['server']=Array('REQUEST_URI'=>$_SERVER['REQUEST_URI'],
@@ -729,7 +732,8 @@ Class WAF extends WAFHelper{
         
         
         $content= base64_encode(json_encode($data));
-                
+        $reason=base64_encode($reason);      
+
         $this->db->INSERT("INSERT INTO waf_logs (content,type,created,ip,url,reason,sid) VALUES ('".$this->db->Q($content,1)."','".$this->db->Q($type,1)."',NOW(),'".$this->db->Q($_SERVER['REMOTE_ADDR'],1)."','".$this->db->Q($http_request['url'],1)."','".$this->db->Q($reason,1)."',".$this->db->Q($sid).")");
 			$http_request['url']=$this->error_url;
 			$http_request['vars']=Array();

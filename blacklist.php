@@ -84,8 +84,7 @@ function validate_ip(){
 					 
 					
 					<input type="hidden" name="page" value="1" class="inset">
-					<input type="submit"	id="search_logs" value="Search">	
-					<a href="blacklist.php" class="add_user">Renew</a>		
+					<input type="submit"	id="search_logs" value="Search">		
 				</form>
 		</div>
 <div class="box_logs">

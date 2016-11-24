@@ -56,7 +56,8 @@ Class WafReport{
 	public function reload_settings(){
 	 $this->waf_learn_status=$this->get_setting('waf_learn_status','1');
 	 $this->waf_guard_status=$this->get_setting('waf_guard_status','0');
-	 $this->url404=$this->get_setting('url404',$this->config['web_root'].'404.html');
+	 $this->url404=$this->get_setting('url404',$this->config['web_root'].'404.php');
+	 $this->webmaster_email=$this->get_setting('webmaster_email','');
 	 $this->waf_security_key=$this->get_setting('waf_security_key',$this->generateSecurityKey());
 	 $this->waf_security_key2=$this->get_setting('waf_security_key2',$this->generateSecurityKey());
 	 $this->waf_bf=$this->get_setting('waf_bf','0.3');

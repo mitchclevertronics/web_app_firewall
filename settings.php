@@ -15,11 +15,13 @@ if(isset($_POST['save_settings'])&&($WR->isEditor()))
  $WR->save_settings('waf_learn_status',isset($_POST['waf_learn_status'])?true:false);
  $WR->save_settings('waf_guard_status',isset($_POST['waf_guard_status'])?true:false);
  $WR->save_settings('url404',$_POST['url404']);
+ $WR->save_settings('webmaster_email',$_POST['webmaster_email']);
  $WR->save_settings('waf_security_key',$_POST['waf_security_key']);
  $WR->save_settings('waf_security_key2',$_POST['waf_security_key2']);
  $WR->save_settings('waf_bf',$_POST['bf']);
  $WR->save_settings('waf_bf_attempt',$_POST['bf_attempt']);
  $WR->save_settings('waf_bf_bantime',$_POST['bf_bantime']);
+ 
  $WR->reload_settings();
 }
 
@@ -57,6 +59,10 @@ if(isset($_POST['save_settings'])&&($WR->isEditor()))
 						<tr>
 								<td><label>404 Page URL</label></td>
 								<td><input type="text" name="url404" id="url404" value="<?php echo $WR->url404;?>" class="inset"></td>
+						</tr>
+						<tr>
+							<td><label>Webmaster Email</label><br><small>(showed on 404 Page)</small></td>
+								<td><input type="text" name="webmaster_email" id="webmaster_email" value="<?php echo $WR->webmaster_email;?>" class="inset" placeholder="test@test.com"></td>
 						</tr>
 						<tr>
 								<td><label>Brute Force Frequency</label></td>

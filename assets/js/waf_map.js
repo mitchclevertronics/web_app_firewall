@@ -16,6 +16,7 @@ WaF.filter_on=false;
 WaF.current_tool='hand';
 WaF.tools=['hand','pencil','eraser'];
 WaF.opened_segment=0;
+WaF.segment_id=0;
 WaF.init=function (){
 	
         WaF.init_truncate();
@@ -177,9 +178,6 @@ WaF.init_tooltip=function()
 			if((id!=WaF.opened_segment)&&(WaF.opened_segment==0))
 			{	
 			WaF.opened_segment=id;	
-			//$(e.target).append($('<a>').html('logs').addClass('log_link').attr('href','logs.php?sid='+id));
-			//$(e.target).find('.segment_tools').show();
-			//WaF.redraw_connect_lines();
 			$.get('ajax.php?act=segment_info&id='+id, {}, function(data) {
 			var popup=$('<div>');
 				popup.html(data).attr('id','popup');	
@@ -205,12 +203,8 @@ WaF.autoClose=function (element){
 	
 		if(result==false)
 		{
-
 			$('#popup').remove();
 			WaF.opened_segment=0;
-			//element.find('.segment_tools').hide();
-			//WaF.redraw_connect_lines();
-			//element.find('.log_link').remove(); 
 		}else{
 			setTimeout(function (){WaF.autoClose(element);},100);
 		}
@@ -218,8 +212,6 @@ WaF.autoClose=function (element){
 };
 //return true if mouse coordinates in given rect
 WaF.cursor_on_item=function (rect){
-	//console.log(WaF.clientY+':'+rect.top+':'+rect.bottom);
-	//console.log(WaF.clientX+':'+rect.left+':'+rect.right);
 	var result=(((WaF.clientY>=rect.top)&&(WaF.clientY<=rect.bottom))&&((WaF.clientX>=rect.left)&&(WaF.clientX<=rect.right)))?true:false;
 	return result;
 };
@@ -229,11 +221,11 @@ WaF.init_delete_segment_form=function (){
      $('#delete_segments').click(function (){
        if(confirm("Sure delete Segments?"))
        {
-        var ids=$('#segment_menu_ids').val();
-	$.get( "ajax.php?act=delete_segments&ids="+ids, function( json ) {
-           $('#segment_menu').hide();
-	   window.location.reload();
-	});
+			var ids=$('#segment_menu_ids').val();
+		$.get( "ajax.php?act=delete_segments&ids="+ids, function( json ) {
+			   $('#segment_menu').hide();
+		   window.location.reload();
+		});
         }
             
     });
@@ -247,8 +239,8 @@ WaF.init_delete_vars_form=function (){
         var ids=$('#vars_menu_ids').val();
            
 	$.get( "ajax.php?act=delete_vars&ids="+ids, function( json ) {
-           var segment_id=$('.opened_segment').parent().attr('id');
-           WaF.open_vars_menu(segment_id);
+           //var segment_id=$('.opened_segment').parent().attr('id');
+           WaF.open_vars_menu(WaF.segment_id);
             $('.vars_form').hide();
 	});
        }
@@ -322,14 +314,15 @@ WaF.init_open_vars_form=function (){
 /* Reg event select\unselect Segment via Selected before Tool */
 WaF.init_li_over=function (){
     $('#seg_tree .segment').mouseenter(function (event){
-        
+		var obj=$(event.target).hasClass('segment')?$(event.target):($(event.target).parent().hasClass('segment')?$(event.target).parent():$(event.target).parent().parent());
+
         switch(WaF.current_tool)
         {
             case 'pencil':
-            $(event.target).addClass('selected');    
+            obj.addClass('selected');    
             break;
             case 'eraser':
-            $(event.target).removeClass('selected');    
+            obj.removeClass('selected');    
             break;
         }
        
@@ -355,19 +348,7 @@ WaF.init_li_over_var=function (){
 
 /*Events for MouseOver on Tools Elements - segments and variables both*/
 WaF.init_tools=function (){
-    $('#pencil').mouseover(function (){  
-        WaF.switch_tool('pencil');
-    });  
-    $('#eraser').mouseover(function (){
-        WaF.switch_tool('eraser');
-    });  
-    
-    $('#pencil_var').mouseover(function (){  
-        WaF.switch_tool('pencil');
-    });  
-    $('#eraser_var').mouseover(function (){
-        WaF.switch_tool('eraser');
-    });  
+ 
     //right menu event
     document.oncontextmenu = function() {return false;};
   $(document).mousedown(function(e){ 
@@ -396,32 +377,6 @@ WaF.switch2next_tool=function(){
     return next_tool;
 };
 WaF.switch_tool=function (next_tool){
-
-    switch(next_tool)
-    {
-        case 'pencil':
-            $('#pencil').addClass('the_action');
-            $('#eraser').removeClass('the_action');
-            
-            $('#pencil_var').addClass('the_action_var');
-            $('#eraser_var').removeClass('the_action_var');
-        break;
-        case 'eraser':
-           
-            $('#pencil').removeClass('the_action');
-            $('#eraser').addClass('the_action');
-            
-            $('#eraser_var').addClass('the_action_var');
-            $('#pencil_var').removeClass('the_action_var');
-            
-        break;
-        case 'hand':
-            $('#pencil').removeClass('the_action');
-            $('#eraser').removeClass('the_action');
-            $('#eraser_var').removeClass('the_action_var');
-            $('#pencil_var').removeClass('the_action_var');
-        break;
-    }
 	$('html').removeClass().addClass('body_'+next_tool);
     WaF.current_tool=next_tool;
 };
@@ -459,11 +414,14 @@ WaF.init_open_vars_menu=function (){
       $('.opened_segment').removeClass('opened_segment');
       $(event.target).addClass('opened_segment');
 		var seg_id=$(event.target).parent().attr('id');
+		WaF.segment_id=seg_id;
 		WaF.open_vars_menu(seg_id);
 		return false;
 	  });
+	  //global vars
 	  $('#edit_global_vars').click(function (){
 		  $('#edit_global_vars').addClass('the_action');
+		  WaF.segment_id=0;
 		  WaF.open_vars_menu(0);
 	  });
 };
@@ -740,9 +698,9 @@ WaF.vars_save=function (){
     
 	$.post( "ajax.php?act=vars_save",data, function( json ) {
             //var segment_id=$('.opened_segment').parent().attr('id');
-			var segment_id=$('#requests').attr('segment_id');
+			//var segment_id=WaF.segment_id;
 			$('#vars_global').prop("checked",false);
-           WaF.open_vars_menu(segment_id);
+			WaF.open_vars_menu(WaF.segment_id);
             $('.vars_form').hide();
 			
 	});

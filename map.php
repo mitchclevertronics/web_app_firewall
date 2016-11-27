@@ -31,10 +31,11 @@ $segments=$WR->get_segments_tree2($get);
 <script src="assets/js/waf_map.js"></script>
 <style>
 .body_pencil{
-    cursor: url("assets/imgs/pencil_cursor.png"), cell;
+    //cursor: url("assets/imgs/pencil_cursor.png"), cell;
+	cursor: url("assets/imgs/green.png"), cell;
 }
 .body_eraser{
-    cursor: url("assets/imgs/eraser_cursor.png"), crosshair;
+    cursor: url("assets/imgs/red.png"), crosshair;
 }
 .body_hand{
     cursor:pointer;
@@ -49,14 +50,14 @@ $segments=$WR->get_segments_tree2($get);
     <div id="seg_tree">    
      <?php echo $WR->draw_segments_tree($segments,1); ?>
     </div>
-    <div id="tools_panel">
-            <img src="assets/imgs/pencil.png" width="40" id="pencil">
-            <img src="assets/imgs/eraser.png" width="40" id="eraser">
+    <!--div id="tools_panel">
+            <img src="assets/imgs/green.png" width="40" id="pencil">
+            <img src="assets/imgs/red.png" width="40" id="eraser">
             <img src="assets/imgs/edit.png" width="40" id="edit_form" title="Click For Edit Selected">
 			<img src="assets/imgs/vars.png" width="40" title="Click For Edit Global Variables" id="edit_global_vars" >
 			  
               
-    </div>    
+    </div-->    
 </div>    
 <?php endif;?>  
 	<div class='filter_box'>
@@ -101,15 +102,11 @@ $segments=$WR->get_segments_tree2($get);
 		</form>
 		<img src='assets/imgs/question.png' width="20" id="filter_help" title="Help">
 		<div class="bottom_tools">
+			<a href="javascript://" id="edit_global_vars" class="green_btn" title="Click For Edit Global Variables">Global Vars</a><a id="export_helper"></a>&nbsp;
 			<a href="javascript://" id="export" class="green_btn">Export Map</a><a id="export_helper"></a>&nbsp;	
-			<a href="javascript://" id="import" class="green_btn">Import Map</a>
-			<!--form enctype="multipart/form-data" action="ajax.php?act=import_map" method="post" id="import_form" style="display:none"-->
-			<input id="import-file" type="file"  style="display:none"/>
-			<!--/form-->&nbsp;
+			<a href="javascript://" id="import" class="green_btn">Import Map</a><input id="import-file" type="file"  style="display:none"/>&nbsp;
 			<a href="javascript://" id="truncate" title="Click Truncate ALL segment and variables - Be carefull" class="red_btn">Erase Map</a>
-            
 		</div>
-			
 	</div>	
 
 <!--Legends BOF-->    
@@ -122,11 +119,11 @@ $segments=$WR->get_segments_tree2($get);
 								<font color="red">Item Uknown</font><br>
 								<font color="lime">Selected Item for Edit</font><br>
 								<h5>Segments view:</h5>	
-									static_segment{<font color="lime">5</font>,<font color="red">BF</font>}
+									<br>static_segment{<font color="lime">5</font>,<font color="red">BF</font>}
 								-
 								{<font color="lime">Number nea segments</font>} - show count of variables connected to the segment.
 								&nbsp;<font color="red">BF</font> - BruteForce mode enabled
-								<br>Auto Rule: (<font color="lime">l</font><font color="red">d</font><font color="blue">-_</font>)[<font color="maroon">20</font>]<font color="lightblue">.php</font>	
+								<br><br>Auto Rule: (<font color="lime">l</font><font color="red">d</font><font color="blue">-_</font>)[<font color="maroon">20</font>]<font color="lightblue">.php</font>	
 									(<font color="lime">l</font> - is contains letters "a-z",
 									<font color="red">d</font>  - contains numbers "0-9",
 									<font color="blue">-_</font> - contains characters that not numbers and not letters
@@ -136,29 +133,26 @@ $segments=$WR->get_segments_tree2($get);
 						</td>
 						<td>
 								<h5>Usage:</h5>
-								
-                 Point cursor on Tools in right part of the screen:<br>
+				 Mouse Right-Click for rootate tool:<br>
 										<table width="100%" style="color:dimgray">
-												<tr><td><img  width="20" src="assets/imgs/pencil.png"></td>
-														<td>Pensil Tool</td><td>allows select elements by mouseover</td></tr>
-												<tr><td><img  width="20" src="assets/imgs/eraser.png"></td>
-														<td>Eraser Tool</td>
-														<td>allows unselect elements by mouseover</td></tr>
-												<tr><td><img  width="20" src="assets/imgs/edit.png"></td>
-														<td>Edit Tool</td>
-														<td>open Segment form for selected elements</td></tr>
-												<tr><td><img  width="20" src="assets/imgs/vars.png"></td>
-														<td>Global Variables</td>
-														<td>open form with Global Variables, global variables have highest priority.</td></tr>		
+											<tr>
+												<td><img  width="20" src="assets/imgs/green.png"></td>
+												<td>Select</td><td>allows select elements by mouseover</td>
+											</tr>
+											<tr>
+												<td><img  width="20" src="assets/imgs/red.png"></td>
+												<td>Unselect</td>
+												<td>allows unselect elements by mouseover</td>
+											</tr>
 										</table>	 
 						</td>
 						<td><h5>Mouse Events:</h5>
-								Mouseover - show segment info<br>
-                DoubleClick on segment - if contains variables  - Open Variables List, another open Segments Menu<br>
-								Drag'n'Drop segment - possible change position of element<br>		
-								RightClick switch tools circulary.<br>
-								DoubleClick on empty space - open Segments Form with selected items.
-										</td>
+								<b>Mouseover</b> - show segment info. If Select\Unselect tools enabled - also mark items for edit.<br>
+								<b>DoubleClick</b> on segment - if contains variables  - Open Variables List, another open Segments Menu<br>
+								<b>DoubleClick</b> on empty space - open Segments\Variables Form with selected items.<br>	
+								<b>Drag'n'Drop</b> segment - possible change position of element<br>		
+								<b>RightClick</b> switch tools circulary.
+						</td>
 						<td><img src="assets/imgs/x.png" class="x" id="close_legends"></td>
 				</tr>
 		</table>
@@ -212,16 +206,11 @@ $segments=$WR->get_segments_tree2($get);
 <div id="vars_menu"> 
 	<h5>Select variable for edit rule<img src="assets/imgs/x.png" id="vars_menu_close" class="x" style="float:right;"></h5>
     <div class="var_request_box"><ul id="requests"></ul></div>    
-    <div class="vars_tools">
-        <img src="assets/imgs/pencil.png" width="25" id="pencil_var">
-        <img src="assets/imgs/eraser.png" width="25" id="eraser_var">
+    <!--div class="vars_tools">
+        <img src="assets/imgs/green.png" width="25" id="pencil_var">
+        <img src="assets/imgs/red.png" width="25" id="eraser_var">
         <img src="assets/imgs/edit.png" width="25" id="edit_form_var" title="Click For Edit Selected">
-        <img src="assets/imgs/question.png" width="20" title="Point cursor on Tools in right part of the window:
-            Pensil Tool - allows select variables by mouseover
-            Eraser Tool - allows unselect variables by mouseover
-            Edit Tool - open Variable form for selected variables
-            " class="tooltip">   
-    </div>
+    </div-->
      
     <div class="vars_form">
 		<h5>Edit rule for selected variables<img id="vars_close_form" src="assets/imgs/x.png" class="x" style="float:right"></h5>

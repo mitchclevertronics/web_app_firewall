@@ -44,6 +44,7 @@ if(!isset($_GET['wafpage']))$_GET['wafpage']=1;
 					URL: <input type="text" name="url" size="37"  class="inset" value="<?php echo isset($_GET['url'])?$_GET['url']:"";?>">		
 					<input type="hidden" name="page" value="1" class="inset">
 					<input type="submit" id="search_logs" value="Search">		
+					<img src='assets/imgs/question.png' width="20" id="filter_help" title="Help">	
 				</form>
 		</div>
 <div class="box_logs">
@@ -202,10 +203,23 @@ if(!isset($_GET['wafpage']))$_GET['wafpage']=1;
 					}
 				});
 			});	
+			//help
+			  $('#filter_help').click(function (){
+					$('.legend_box').show();
+				});
+				$('#close_legends').click(function (){
+					$('.legend_box').hide();
+				});
   });
 
 </script>
 <!--VARS SINGLE MENU EOF-->  
 <div id="loader"><img src="assets/imgs/loader.gif"></div>
+<div class='legend_box'><img src="assets/imgs/x.png" class="x" id="close_legends" style="float:right;">
+	Point cursor to URL field - for read full Request info<br>
+	Point cursor to IP field - for read full Server info<br>	
+		Point cursor to Reason fields - for read full Reason information<br>
+	Click on Segment ID number for view segment in Access Map 
+</div>
 </body>
 </html>

@@ -46,7 +46,7 @@ if(isset($_POST['id']))
 				<input type='checkbox' name='status' id='status' <?php if($user['status']):?> checked='checked'<?php endif;?>><br>				
 				<input type='password' id='pass' name='pass' placeholder='Password' class="inset"><br>
 				<input type='password' id='pass1' name='pass1' placeholder='Confirm Password' class="inset"><br>
-				<input type='submit' value='Save' id="save_user">				
+				<input type='submit' value='Save' id="save_user" class="green_btn">				
 				</form>
 				</center>		
 		</div>		

@@ -26,7 +26,7 @@ $users=$WU->get_users();
 							<th>Email</th>
 							<th>Editor</th>
 							<th>Active</th>
-							<th>&nbsp;<?php if($WU->isEditor()):?><a href='edituser.php?id=0' class='add_user'>Add User</a><?php endif;?></th></tr>		
+							<th>&nbsp;<?php if($WU->isEditor()):?><a href='edituser.php?id=0' class='green_btn'>Add User</a><?php endif;?></th></tr>		
 			<?php foreach($users as $u):?>
 					<tr>
 							<td><?php echo $u['email']?></td>
@@ -34,7 +34,7 @@ $users=$WU->get_users();
 							<td><?php echo ($u['status'])?'Yes':'No';?></td>
 							<td>
 									<?php if($WU->isEditor()):?>
-									<a href='edituser.php?id=<?php echo $u['id'];?>' class='add_user'>Edit</a>
+									<a href='edituser.php?id=<?php echo $u['id'];?>' class='green_btn'>Edit</a>
 									<?php endif;?>&nbsp;
 							</td>
 					</tr>		

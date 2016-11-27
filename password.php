@@ -31,7 +31,7 @@ $WU->run_chg_pass_if();
 				<input type='password' name='old_pass' placeholder='Old Password' value='<?php if(isset($_POST['old_pass']))echo $_POST['old_pass'];?>' class='inset'><br>
 								<input type='password' name='pass' placeholder='New Password' class='inset'><br>
 								<input type='password' name='pass1' placeholder='Confirm Password' class='inset'><br>
-				<input type='submit' value='change' id="change_button">
+				<input type='submit' value='change' id="change_button" class="green_btn">
 				</form>	
 				</center>		
 		</div>

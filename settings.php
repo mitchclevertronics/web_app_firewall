@@ -77,7 +77,7 @@ if(isset($_POST['save_settings'])&&($WR->isEditor()))
 								<td><input type='text' name="bf_bantime" id="bf_bantime" value="<?php echo $WR->waf_bf_bantime;?>" size="4" class="inset"> days <font style="color:dimgray;font-size:12px;">(0 days - block always)</font></td>
 						</tr>
 						<tr>
-								<td colspan="2"><input type="submit" value="Save" id="save_settings" name="save_settings"></td>
+								<td colspan="2"><input type="submit" value="Save" id="save_settings" name="save_settings" class="green_btn"></td>
 						</tr>
 				</table>		
 				</form>		

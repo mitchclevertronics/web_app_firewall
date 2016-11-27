@@ -121,14 +121,29 @@ Class WafInstaller{
 	{
 	 if((!empty($post['email']))&&(!empty($post['password'])))
 	 {
-	 //install user and open session
-	 $sql="INSERT INTO waf_users(email,pass,status,editor) VALUES ('".mysql_real_escape_string($post['email'])."','".md5($post['password'])."',1,1)";
-	 mysql_query($sql,$this->connection);
-	 $sql1="SELECT * FROM waf_users WHERE email='".mysql_real_escape_string($post['email'])."'";
-	 $user=  mysql_fetch_array(mysql_query($sql1,$this->connection));
-	 $_SESSION['waf_user']=$user;
-	 }
+		 $user=$this->getUserByEmail($post['email']);
+		 if($user)
+		 {
+			 //update user
+			 $sql="UPDATE waf_users SET pass='".md5($post['password'])."',status=1,editor=1 WHERE id=".mysql_real_escape_string($user['id']);
+		 }else{
+			  //install user
+			 $sql="INSERT INTO waf_users(email,pass,status,editor) VALUES ('".mysql_real_escape_string($post['email'])."','".md5($post['password'])."',1,1)";		
+		 }
+		 mysql_query($sql,$this->connection);
+		 //open session
+		 $user=$this->getUserByEmail($post['email']);
+		 $_SESSION['waf_user']=$user;
 	 return true;
+	 }
+	 
+	}
+	private function getUserByEmail($email){
+		 $sql1="SELECT * FROM waf_users WHERE email='".mysql_real_escape_string($email)."'";
+		 $result=mysql_query($sql1,$this->connection);
+		 if($result)return mysql_fetch_array($result);
+		 else return false;
+		 
 	}
 	private function create_config_file($post)
 	{

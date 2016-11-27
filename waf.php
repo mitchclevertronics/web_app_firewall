@@ -116,7 +116,9 @@ Class WAF extends WAFHelper{
 
     #### CHECK First Security Key for auth request from htaccess ####
 	private function check_security_key($http_request){
-	 if((!isset($_SERVER['HTTP_WAF_KEY']))||($this->waf_security_key!=$_SERVER['HTTP_WAF_KEY']))
+	
+	 if(((!isset($_SERVER['REDIRECT_HTTP_WAF_KEY']))||($this->waf_security_key!=$_SERVER['REDIRECT_HTTP_WAF_KEY']))
+		|| (strstr(substr($_SERVER['REQUEST_URI'],strrpos($_SERVER['REQUEST_URI'],"/")),"waf.php"))) 
 	 {
 		 $text="Request to Layer withour KEY";
 		 $http_request=$this->log_bad_request($http_request,"sec_key",$text,0);
@@ -146,12 +148,12 @@ Class WAF extends WAFHelper{
            $u=explode('?',$_SERVER['REQUEST_URI']);
 					 
            $url=$u[0];
-					 if($_SERVER['REQUEST_METHOD']=='POST'){
-						if(isset($u[1]))
-						{
-						 $url.="?".$u[1];
-						}
-					 }
+			if($_SERVER['REQUEST_METHOD']=='POST'){
+			   if(isset($u[1]))
+			   {
+				$url.="?".$u[1];
+			   }
+			}
 					 
             $http_request=array('url'=>$url,
                                 'vars'=>($_SERVER['REQUEST_METHOD']=='POST')?$_POST:$_GET,
@@ -159,9 +161,9 @@ Class WAF extends WAFHelper{
 				
             if(!$this->web_root)return $http_request;
 						
-						$hr=$this->check_security_key($http_request);
-						
-						if($hr)return $hr;
+			$hr=$this->check_security_key($http_request);
+
+			if($hr)return $hr;
 						
             $data=$this->analize_request($http_request);
             $data['url']='http://'.$_SERVER['SERVER_NAME'].$data['url'];

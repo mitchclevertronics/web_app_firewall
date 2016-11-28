@@ -40,5 +40,3 @@ Now program start collect request-map from every request to site, leave it for o
 Write me for help RomanShneer@gmail.com<br>
 Please donate:
 <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ECZBTKBD7T6A8"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif"></a>
-<script data-gratipay-username="shaman33"
-        src="//grtp.co/v1.js"></script>

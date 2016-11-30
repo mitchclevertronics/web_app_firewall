@@ -49,16 +49,17 @@ font-weight:bold;
 }
 #segment_menu{
 	top:10%;
-	left:40%;
+	left:10%;
+	width:80%;
 	position:fixed;
-	min-width:400px;
+	
 	background:white;
 	box-shadow:3px 3px 9px 2px dimgray;
 	display:none;
 	border-radius: 5px;
 	padding: 3px;
 	z-index:1000;
-	max-height: 500px;
+	
 	cursor: default;        
 }
 .value_options{
@@ -67,16 +68,17 @@ font-weight:bold;
 }
 #vars_menu{
     position:fixed;
-    width:96%;
-    height:80%;
+    width:94%;
+    height:94%;
+	overflow-y: scroll;
     background:white;
     box-shadow:3px 3px 9px 2px dimgray;
     display:none;
     border-radius: 3px;
-    padding: 5px;
-    z-index:900;
-       
-    top:5%;
+   
+    z-index:10000;
+    padding:1%;   
+    top:2%;
     left:2%;
     background:beige;
 }
@@ -128,9 +130,8 @@ font-weight:bold;
     background:#fff;
     border-radius: 5px;
     box-shadow: 0 4px 4px 3px #ccc;
-    height: 440px;
-    overflow-y: auto;
-	margin-top:4px;
+	margin-top:0%;
+	height: 94%;
 }
 .var_request_box ul{
     padding:0;
@@ -146,13 +147,16 @@ font-weight:bold;
 }
 .vars_of_GET li,.vars_of_POST li{
 	border-bottom: dashed 1px #ccc;
+	list-style: none;
+	display: list-item;
 }
 .var_li{
-    float:left
+   // float:left;
+	
     
 }
 .var_li_val{
-    float:right
+    float:right;
     
 }
 #tools_panel{
@@ -160,7 +164,7 @@ font-weight:bold;
     display: inline-block;
     vertical-align: top;
     width: 3%;
-    top:40px;
+    top:60px;
     padding:5px;
     background:#fff;
  
@@ -168,21 +172,9 @@ font-weight:bold;
     right:0;
     border-radius: 5px;
     box-shadow: 0 4px 4px 3px #ccc;
-     width: 3%;
-    padding:5px;
-    background:#fff;
 	cursor: default!important;
 }
-.vars_tools{
-    display: inline-block;
-    vertical-align: top;
-    float:right;
-    background:#fff;
-    padding:0px;
-    box-shadow: 0 4px 4px 3px #ccc;
-    border-radius: 5px;
-	margin-top:4px;
-}
+
 #tools_panel img,.vars_tools img{
     display:block;
     margin-bottom:50px;
@@ -199,17 +191,18 @@ font-weight:bold;
  background: #fff none repeat scroll 0 0;
  box-shadow: 3px 3px 3px 3px dimgray;
  border-radius: 3px;
- left: 20%;
+ left: 2%;
  position: fixed;
- top: 10%;
+ top: 2%;
  display:none;
- width: 60%;
- z-index: 10000;
- height: auto;
+ width: 96%;
+ height: 96%;
  overflow: auto;
  padding:3px;
  cursor:default;
+ z-index:1000000;
 }
+
 .opened_segment{
 	color:lime!important;
 }
@@ -395,9 +388,10 @@ border-radius: 3px;
     box-shadow: 0 4px 4px 3px #ccc;
     padding: 10px;
     width:98%;
-    margin:10px auto 0px auto;
+	height:80px;
+    margin:0px auto 0px auto;
     position: fixed;
-    bottom:0;
+    bottom:0px;
     z-index: 1000;
     cursor: default!important;
 }
@@ -426,9 +420,10 @@ margin: 0;
 }
 .vars_value_options{
     display: block;
-    height: 190px;
+    height: auto;
     overflow-y: auto;
      width: 98%;
+	 height:85%;
      margin: 2px auto;
 } 
 .vars_value_options .var{
@@ -519,15 +514,15 @@ inner {
 }
 .x{
 	cursor: pointer!important;
-	background:url('../imgs/x.png') #fff;
-	width:20px;
-	height:20px;
-	background-repeat: no-repeat;
+	background:#fff;
+	width:50px;
+	height:50px;
 	float:right;
+	background:url('../imgs/x.png') #fff;
+	background-repeat: no-repeat;
 	background-size: 100%;
-}
-#vars_menu_close{
-	cursor: pointer!important;
+	width:46px;
+	height:46px;
 }
 #segment_menu h5,#vars_menu h5,.vars_form h5{
 	background:#000;
@@ -536,7 +531,7 @@ inner {
 	color:#fff;
 	font-size:13px;
 	font-style: italic;
-	line-height: 20px;
+	line-height: 50px;
 }
 .ccc{
 	color:#777620;
@@ -548,6 +543,7 @@ inner {
 	cursor: pointer;
 	color:#fff;
 	font-weight: bold;
+	font-size: 26px;
 	text-decoration: none;
 	padding: 0px 2px 2px 2px;
 }
@@ -580,31 +576,15 @@ inner {
 	min-height: 25px;
 }
 .segment_tools{
-	text-align:right;
-	height:10px;
-	line-height:7px;
-//	display:none;
-//	position: absolute;
+	display:none;
 }
-.segment_tools a{
-	font-size:12px;
-	text-decoration: none;
-}
-.segment_tools a:hover{
-	font-weight: bold;
-}
-.segment_tools a:first-child{
-	color:dimgray;
-}
-.segment_tools a:last-child{
-	color:gray;
-}
+
 .bottom_tools{
 	text-align:right;
-	width:390px;
-	height:20px;
-	float:right;
-	margin:0 10px;
+	float:left;
+	display:block;
+	margin:0;
+	padding:7px;
 	word-wrap: nowrap;
 	word-break: keep-all;
 }

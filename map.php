@@ -21,14 +21,19 @@ if(!isset($get['vars']))$get['vars']=-1;
 if(!isset($get['vars_approved']))$get['vars_approved']=-1;
 
 $segments=$WR->get_segments_tree2($get);
-
+$is_mobile=$WR->ismobile();
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"  xml:lang="en" lang="en">
 <head>
 <?php require_once "include/head.php"; ?>
-<script src="assets/js/musclesoft-jquery-connections/jquery.connections.js"></script>		
+<script src="assets/js/musclesoft-jquery-connections/jquery.connections.js"></script>
+<?php if($is_mobile):?>
+<script src="assets/js/waf_map_mobile.js"></script>
+<?php else: ?>
 <script src="assets/js/waf_map.js"></script>
+<?php endif;?>
+
 <style>
 .body_pencil{
     //cursor: url("assets/imgs/pencil_cursor.png"), cell;
@@ -50,14 +55,6 @@ $segments=$WR->get_segments_tree2($get);
     <div id="seg_tree">    
      <?php echo $WR->draw_segments_tree($segments,1); ?>
     </div>
-    <!--div id="tools_panel">
-            <img src="assets/imgs/green.png" width="40" id="pencil">
-            <img src="assets/imgs/red.png" width="40" id="eraser">
-            <img src="assets/imgs/edit.png" width="40" id="edit_form" title="Click For Edit Selected">
-			<img src="assets/imgs/vars.png" width="40" title="Click For Edit Global Variables" id="edit_global_vars" >
-			  
-              
-    </div-->    
 </div>    
 <?php endif;?>  
 	<div class='filter_box'>
@@ -153,7 +150,7 @@ $segments=$WR->get_segments_tree2($get);
 								<b>Drag'n'Drop</b> segment - possible change position of element<br>		
 								<b>RightClick</b> switch tools circulary.
 						</td>
-						<td><img src="assets/imgs/x.png" class="x" id="close_legends"></td>
+						<td><a href="javascript://"  class="x" id="close_legends"></a><!--img src="assets/imgs/x.png" class="x" id="close_legends"--></td>
 				</tr>
 		</table>
     
@@ -162,7 +159,7 @@ $segments=$WR->get_segments_tree2($get);
     
 <!--SEGMENT MULTY MENU BOF--> 
 <div id="segment_menu">
-	<h5>Edit rule for selected segments<img src="assets/imgs/x.png" id="close_segment_form" class="x" style="float:right;"></h5>
+	<h5>Edit rule for selected segments<a href="javascript://"  id="close_segment_form" class="x"></a></h5>
 	<div>
         <label class="ccc">Use:</label>&nbsp;
         <label for="use0">Original Path</label>
@@ -204,16 +201,12 @@ $segments=$WR->get_segments_tree2($get);
    
 <!--VARS SINGLE MENU BOF-->    
 <div id="vars_menu"> 
-	<h5>Select variable for edit rule<img src="assets/imgs/x.png" id="vars_menu_close" class="x" style="float:right;"></h5>
+	<h5>Select variable for edit rule<a href="javascript://"  id="vars_menu_close" class="x"></a></h5>
     <div class="var_request_box"><ul id="requests"></ul></div>    
-    <!--div class="vars_tools">
-        <img src="assets/imgs/green.png" width="25" id="pencil_var">
-        <img src="assets/imgs/red.png" width="25" id="eraser_var">
-        <img src="assets/imgs/edit.png" width="25" id="edit_form_var" title="Click For Edit Selected">
-    </div-->
-     
-    <div class="vars_form">
-		<h5>Edit rule for selected variables<img id="vars_close_form" src="assets/imgs/x.png" class="x" style="float:right"></h5>
+    
+</div>  
+<div class="vars_form">
+	<h5>Edit rule for selected variables<a href="javascript://" id="vars_close_form" class="x"></a></h5>
         <input type="hidden" id="vars_menu_ids">
 		<div class="vars_value_options"></div>		
        
@@ -252,7 +245,6 @@ $segments=$WR->get_segments_tree2($get);
 		</div>
      </div>
     </div>
-</div>  
 <div id="loader"><img src="assets/imgs/loader.gif"></div>
 <!--VARS SINGLE MENU EOF-->   
 <script>

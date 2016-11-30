@@ -64,7 +64,7 @@ Class WAF extends WAFHelper{
 			$cookie_file= self::get_cookie_file(session_id());
 			#pr($cookie_file."::".filemtime($cookie_file));
 			
-			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_HEADER, true);
 			curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
 			curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
 			curl_setopt($ch, CURLOPT_VERBOSE, true);	
@@ -92,16 +92,33 @@ Class WAF extends WAFHelper{
 				curl_setopt($ch,CURLOPT_POST, count($vars));
 				curl_setopt($ch,CURLOPT_POSTFIELDS, $vars);
             }
-          
-			$contents= curl_exec($ch);
+			
+			$response= curl_exec($ch);
+			// Then, after your curl_exec call:
+			$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+			$header = substr($response, 0, $header_size);
+			$contents = substr($response, $header_size);
+			
             $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			
            if($httpcode=='302')
             {
-			$redirect_url = curl_getinfo($ch, CURLINFO_REDIRECT_URL);			 
-            header("Location:".$redirect_url);
-            exit();
-            }    
+				$redirect_url = curl_getinfo($ch, CURLINFO_REDIRECT_URL);			 
+				header("Location:".$redirect_url);
+				exit();
+            }elseif($httpcode!='200')
+			{
+				$headers=explode("\n",$header);	
+				foreach($headers as $h)
+				{
+				$h=trim($h);	
+					if(!empty($h))
+					{
+						header($h);
+					}
+				}
+				exit();		
+			}
 			$content_type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 			
 			$error=curl_error($ch);
@@ -688,18 +705,15 @@ Class WAF extends WAFHelper{
 		
 		if(strlen($special_conteins)>0)
 		{
-			$h_persent=false;
-			if(strstr($special_conteins,'%'))
+			$special_unknow=false;
+			for($i=0;$i<strlen($special_conteins);$i++)$SP[$special_conteins[$i]]=1;
+			for($l=0;$l<strlen($leaved);$l++)
 			{
-				$h_persent=true;
-				$special_conteins=str_replace('%','',$special_conteins);
-				$leaved=str_replace('%','',$special_conteins);
+				if(!isset($SP[$leaved[$l]]))
+					$special_unknow=true;
 			}
 			
-			
-			$lv=  preg_replace('/['.$special_conteins.']/', '', $leaved);
-			//stell have not allowed chars
-			if(strlen($lv)>0)return false;
+			if($special_unknow)return false;
 		}elseif(strlen($leaved)) return false;
 		
 		

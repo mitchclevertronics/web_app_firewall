@@ -23,10 +23,9 @@ if(isset($_POST['op'])&&isset($_POST['content']))
 }
 
 $opts=array('file_e'=>file_exists($filename)?true:false,
-				   'file_w'=>is_writable($filename)?true:false,
-				   'mod_rewrite'=>in_array('mod_rewrite', apache_get_modules())
-				   );
-
+			'file_w'=>is_writable($filename)?true:false,
+			'mod_rewrite'=>function_exists('apache_get_modules')?(in_array('mod_rewrite', apache_get_modules())?1:0):(-1) //old servers haven't the function
+			);
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"  xml:lang="en" lang="en">
@@ -50,10 +49,24 @@ $opts=array('file_e'=>file_exists($filename)?true:false,
 					</tr>
 					<tr>
 						<td>Mod_Rewrite enabled:</td>
-						<td><?php echo ($opts['mod_rewrite'])?'<font style="color:green;">Yes</font>':'<font style="color:red;font-weight:bold;">No</font>';?></td>
+						<td><?php 
+							switch ($opts['mod_rewrite'])
+							{
+								
+								case -1:
+									echo '<font style="color:yellowgreen;">Unknown</font><div style="color:yellowgreen;">(function apache_get_modules not enabled in your server, so try it for your risk.)</div>';
+								break;
+								case 1:
+									echo '<font style="color:green;">Yes</font>';
+								break;
+								case 0:
+									echo '<font style="color:red;font-weight:bold;">No</font>';
+								break;
+							}
+						?></td>
 					</tr>
 				</table>
-				<?php if(($opts['file_w'])&&($opts['mod_rewrite'])):?>
+				<?php if(($opts['file_w'])&&($opts['mod_rewrite'])&&($opts['mod_rewrite']!=0)):?>
 						<div class='description'>	
 								<ol>
 										<li>Backup origin .htaccess file</li>

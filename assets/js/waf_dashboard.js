@@ -4,13 +4,8 @@
  * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
 var WD={};
-WD.init=function (){
-  WD.init_dates();  
+WD.init=function (){ 
   WD.load_data();
-};
-WD.init_dates=function (){
-      $("#from_date" ).datepicker({'dateFormat':'dd-mm-yy',maxDate:0});
-      $("#to_date" ).datepicker({'dateFormat':'dd-mm-yy',maxDate:0});
 };
 WD.load_data=function (){
   $.get( "ajax.php?act=dashboard_info&from_date="+$("#from_date" ).val()+"&to_date="+$("#to_date" ).val(), function( json ) {

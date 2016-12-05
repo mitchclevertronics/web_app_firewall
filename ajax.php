@@ -128,10 +128,7 @@ Class WafAjax{
 		$reqs=$this->WR->get_var($_GET['id']);
 		$this->draw_json_result($reqs);
  }
- private function get_dashboard_info(){
-	$reqs=$this->WR->get_dashboard_info($_GET['from_date'],$_GET['to_date']);
-	$this->draw_json_result($reqs);
- }
+ 
  private function get_generate_key(){
 	$key1=$this->WR->generateSecurityKey();
 	$key2=$this->WR->generateSecurityKey();
@@ -139,6 +136,7 @@ Class WafAjax{
 	 #$reqs=array('key'=>$this->WR->generateSecurityKey());
 	 $this->draw_json_result($reqs);
  }
+ 
  /*private function get_save_segment_position(){
 	$reqs=$this->WR->save_segment_position($_POST);
 	 $this->draw_json_result(array('result'=>true));

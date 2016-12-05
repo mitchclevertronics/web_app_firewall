@@ -87,7 +87,7 @@ RewriteRule ^(.*)$ <?php echo $folder;?>/waf.php [N,L]</textarea></div>
 				<b>Content of your .htaccess file</b>	
 								<form action="" method="POST">
 									<textarea name='content' rows='40' class="inset textarea"><?php echo file_exists($filename)?file_get_contents($filename):"";?></textarea>
-						<input type="submit" name="op" value="Save" class="green_btn">
+						            <input type="submit" name="op" value="Save" class="green_btn">
 								</form>		
 				<?php else:?>
 					<center style="color:red">Impossible inject to .htaccess code, because one of the reasons above.</center>

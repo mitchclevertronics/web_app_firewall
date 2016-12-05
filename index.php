@@ -70,8 +70,8 @@ function drawChart() {
 				</td>
 		</tr>
 		<tr>
-				<td colspan="2">
-					<div id="logs" style="width: 850px; height: 200px;"><?php if($is_mobile):?><img src="//chart.googleapis.com/chart?chs=830x200&cht=ls&chco=0077CC&chd=t:<?php echo implode(',',$reqs['logs'])?>&chtt=<?php echo array_sum($reqs['logs']);?> Attacks Blocked in last <?php echo count($reqs['logs']);?> days:&chxt=x,y&chxr=0,0,<?php echo count($reqs['logs']);?>,1|1,0,<?php echo max($reqs['logs']);?>,10"><?php endif;?></div>
+				<td colspan="2">					<?php $m_logs=max($reqs['logs']); $step_logs=pow(10,(strlen((string)$m_logs)-1)); ?>
+					<div id="logs" style="width: 850px; height: 200px;"><?php if($is_mobile):?><img src="//chart.googleapis.com/chart?chs=830x200&cht=ls&chco=0077CC&chd=t:<?php echo implode(',',$reqs['logs'])?>&chtt=<?php echo array_sum($reqs['logs']);?> Attacks Blocked in last <?php echo count($reqs['logs']);?> days:&chxt=x,y&chxr=0,0,<?php echo count($reqs['logs']);?>,1|1,0,<?php echo $m_logs.",".$step_logs;?>"><?php endif;?></div>
 				</td>
 		</tr>
 	    <tr>
@@ -84,9 +84,9 @@ function drawChart() {
                             $types[]=$lu['type']."   (".$lu['num'].")";
                             $type_nums[]=$lu['num'];
                         }
-                        
+                        						$m=min($type_nums);						for($z=0;$z<count($type_nums);$z++)$type_nums[$z]=ceil($type_nums[$z]/$m);						
                         ?>
-						<div id="logs_type_pie"><?php if($is_mobile):?><img src="//chart.googleapis.com/chart?cht=p&chd=s:Uf9a&chs=800x220&chd=t:<?php echo implode(',',$type_nums)?>&chl=<?php echo implode('|',$types);?>&chdl=<?php echo implode('|',$types);?>&chco=fb0000,00fb1d,f9fb00,9300fb,00fbdb,1500fb&chtt=Attacks by type"><?php endif;?></div>
+						<div id="logs_type_pie"><?php if($is_mobile):?><img src="//chart.googleapis.com/chart?cht=p&chs=800x220&chd=t:<?php echo implode(',',$type_nums)?>&chl=<?php echo implode('|',$types);?>&chdl=<?php echo implode('|',$types);?>&chco=fb0000,00fb1d,f9fb00,9300fb,00fbdb,1500fb&chtt=Attacks by type"><?php endif;?></div>
 				</td>		
 		</tr>
 		<tr>
@@ -97,7 +97,7 @@ function drawChart() {
                         {
                             $urls[]=$lu['url']."   (".$lu['num'].")";;
                             $nums[]=$lu['num'];
-                        }
+                        }						$m=min($nums);						for($z=0;$z<count($nums);$z++)$nums[$z]=ceil($nums[$z]/$m);
                         
                         ?>
 						<div id="logs_url_pie"><?php if($is_mobile):?><img src="//chart.googleapis.com/chart?cht=p&chd=s:Uf9a&chs=800x220&chd=t:<?php echo implode(',',$nums)?>&chdl=<?php echo implode('|',$urls)?>&chco=fb0000,00fb1d,f9fb00,9300fb,00fbdb,1500fb&chtt=Top 15 attacked scripts in last 30 days"><?php endif;?></div>
@@ -164,9 +164,9 @@ function load_logs_type(json_str){
       $("#from_date" ).datepicker({'dateFormat':'dd-mm-yy',maxDate:0});
       $("#to_date" ).datepicker({'dateFormat':'dd-mm-yy',maxDate:0});
       google.charts.setOnLoadCallback(function (){
-          load_logs('<?php echo json_encode($reqs['logs']);?>');  
+          load_logs('<?php echo json_encode($reqs['logs']);?>');  		  load_logs_type('<?php echo json_encode($reqs['logs_type']);?>');		
           load_logs_url('<?php echo json_encode($reqs['logs_url']);?>');
-          load_logs_type('<?php echo json_encode($reqs['logs_type']);?>');
+          
       });
 	 });
 </script>		

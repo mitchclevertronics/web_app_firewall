@@ -12,7 +12,7 @@ require_once "libs/waf_report.class.php";
 $WR=new WafReport;
 $segments=$WR->get_segments_statistics();
 $vars=$WR->get_vars_statistics();
-
+$is_mobile=$WR->ismobile();
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -58,10 +58,10 @@ function drawChart() {
 <table border="0" cellpadding="10" cellspacing="10" id="dashboard_tbl">
 		<tr>
 				<td align="left">
-						 <div id="segments" style="width: 400px; height: 200px;"></div>
+					<div id="segments" style="width: 400px; height: 200px;"><?php if($is_mobile):?><img src="//chart.googleapis.com/chart?cht=p3&chd=t:<?php echo $segments[1];?>,<?php echo $segments[0];?>&chs=400x150&chl=Approved|Unknown&chco=0000FF,FF0000&chtt=<?php echo array_sum($segments).' Segments recorded for all time:';?>"><?php endif;?></div>
 				</td>
 				<td align="right">
-						<div id="vars" style="width: 400px; height: 200px;"></div>
+						<div id="vars" style="width: 400px; height: 200px;"><?php if($is_mobile):?><img src="//chart.googleapis.com/chart?cht=p3&chd=t:<?php echo $vars[1];?>,<?php echo $vars[0];?>&chs=400x150&chl=Approved|Unknown&chco=0000FF,FF0000&chtt=<?php echo array_sum($vars).' Variables recorded for all time:';?>"><?php endif;?></div>
 				</td>
 		</tr>
 		<tr>

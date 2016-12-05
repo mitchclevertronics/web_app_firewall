@@ -1,5 +1,5 @@
 /*
- * script for WAF report JS UI backend
+ * script for WAF report JS UI backend, mobile version
  * License: GNU
  * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
@@ -18,11 +18,11 @@ WaF.tools=['hand','pencil','eraser'];
 WaF.opened_segment=0;
 WaF.segment_id=0;
 WaF.init=function (){
-	
+		WaF.init_mobile_transform();
         WaF.init_truncate();
-        WaF.init_tools();
+        //WaF.init_tools();
         WaF.init_li_over();
-        WaF.init_tooltip();
+       // WaF.init_tooltip();
         WaF.init_segment_menu();
        
         WaF.init_segments_form();
@@ -107,7 +107,12 @@ $('#import').click(function (){
 	});
 });	
 };
-
+WaF.init_mobile_transform=function (){
+	$('.segment_tools').remove();	
+	$('.segment').disableSelection();
+	$('.var_li').disableSelection();
+	$('.x').disableSelection();
+};
 WaF.prepareUpload=function (event){
 	  var files = event.target.files;
 };
@@ -138,20 +143,7 @@ WaF.redraw_connect_lines=function (){
  $('#popup').remove();
 };
 
-/* Event for show\hide help text buttons */
-/*
-WaF.init_text_btns=function (){
-  $('.usage_text_btn').click(function (){
-      if($('#usage_text').is(':hidden'))$('#usage_text').show();
-      else $('#usage_text').hide();    
-  });
-  
-  $('.legends_text').click(function (){
-      if($('#legends_text').is(':hidden'))$('#legends_text').show();
-      else $('#legends_text').hide();    
-  });
-};
-*/
+
 /* Event for closing VariableMenu*/
 WaF.init_vars_menu_close=function (){
     $('#vars_menu_close').click(function(){
@@ -163,6 +155,7 @@ WaF.init_vars_menu_close=function (){
 };
 
 /* Event for mouseover action on segment - show segment info*/
+/*
 WaF.init_tooltip=function()
 {
 	$('html').mousemove(function (e){
@@ -210,13 +203,14 @@ WaF.autoClose=function (element){
 			setTimeout(function (){WaF.autoClose(element);},100);
 		}
 	}
-};
+};*/
 //return true if mouse coordinates in given rect
+/*
 WaF.cursor_on_item=function (rect){
 	var result=(((WaF.clientY>=rect.top)&&(WaF.clientY<=rect.bottom))&&((WaF.clientX>=rect.left)&&(WaF.clientX<=rect.right)))?true:false;
 	return result;
 };
-
+*/
 /* Event for Tools button delete selected segments */
 WaF.init_delete_segment_form=function (){
      $('#delete_segments').click(function (){
@@ -239,11 +233,11 @@ WaF.init_delete_vars_form=function (){
        {
         var ids=$('#vars_menu_ids').val();
            
-	$.get( "ajax.php?act=delete_vars&ids="+ids, function( json ) {
-           //var segment_id=$('.opened_segment').parent().attr('id');
-           WaF.open_vars_menu(WaF.segment_id);
-            $('.vars_form').hide();
-	});
+			$.get( "ajax.php?act=delete_vars&ids="+ids, function( json ) {
+				   //var segment_id=$('.opened_segment').parent().attr('id');
+				   WaF.open_vars_menu(WaF.segment_id);
+					$('.vars_form').hide();
+			});
        }
             
     });
@@ -272,17 +266,17 @@ WaF.open_segments_form=function(){
 
 /* Init SegmentForm Opening */
 WaF.init_segments_form=function (){
-    //$('#edit_form').click(WaF.open_segments_form);
 
-	$('.tree_house').dblclick(WaF.open_segments_form);
 	$('.tree_house').click(function (){
+		
 		if($('#segment_menu').is(":visible"))
 		{
 			$('#segment_menu').hide();
+		}else{
+			WaF.open_segments_form();
 		}
 	});
 };
-
 
 
 WaF.init_open_filter_form=function (){
@@ -296,91 +290,72 @@ WaF.init_open_filter_form=function (){
 
 WaF.open_vars_form=function (){
     var ids=[];
-        $('#requests .selected_var').each(function (elid,el){            
-            ids.push($(el).parent().attr('rel'));
-        });
-        $.get( "ajax.php?act=show_vars&ids="+ids.join(','), function( json ) {
-            
-         WaF.load_vars_form(json);
-		
-	},'json');
+	$('#requests .selected_var').each(function (elid,el){            
+		ids.push($(el).parent().attr('rel'));
+	});
+	if(ids.length)
+	{
+		$.get( "ajax.php?act=show_vars&ids="+ids.join(','), function( json ) {WaF.load_vars_form(json);},'json');
+	}
+        
 };
 /* Event for opening VariablesForm for selected variables */
 WaF.init_open_vars_form=function (){
     //$('#edit_form_var').click(WaF.open_vars_form);
-    $('#vars_menu').dblclick(WaF.open_vars_form);
-	$('.var_request_box').click(function (){if($('.vars_form').is(':visible'))$('.vars_form').hide();});
+	/*
+  $('#vars_menu').click(function (){
+		// WaF.open_vars_form();
+		if($('.vars_form').is(':visible'))$('.vars_form').hide();
+		else WaF.open_vars_form();
+		
+	});*/
+	$('.var_request_box').click(function (){if($('.vars_form').is(':visible'))$('.vars_form').hide();else WaF.open_vars_form();});
 };
 
 /* Reg event select\unselect Segment via Selected before Tool */
 WaF.init_li_over=function (){
-    $('#seg_tree .segment').mouseenter(function (event){
+	
+	$('.segment').bind('click touchend', function(event) {
+		 event.preventDefault();
 		var obj=$(event.target).hasClass('segment')?$(event.target):($(event.target).parent().hasClass('segment')?$(event.target).parent():$(event.target).parent().parent());
-
-        switch(WaF.current_tool)
-        {
-            case 'pencil':
-            obj.addClass('selected');    
-            break;
-            case 'eraser':
-            obj.removeClass('selected');    
-            break;
-        }
-       
+		if(obj.hasClass('have_vars'))
+		{
+			if(obj.hasClass('target-dblclick'))
+			{
+				obj.removeClass('target-dblclick');
+				 $('.opened_segment').removeClass('opened_segment');
+					$(event.target).addClass('opened_segment');
+					var seg_id=$(event.target).parent().attr('id');
+					WaF.segment_id=seg_id;
+					WaF.open_vars_menu(seg_id);
+					return false;
+			}else{
+				$('.target-dblclick').removeClass('target-dblclick');
+				obj.addClass('target-dblclick');
+			}
+			
+			
+		}	
+			
+		if(obj.hasClass('selected'))obj.removeClass('selected');
+        else $(this).addClass('selected');
     });
-    
+	
 };
 /* Reg event select\unselect Segment via variable before VarTool */
 WaF.init_li_over_var=function (){
-     $('.var_li').mouseenter(function (event){
-         var obj=$(event.target).hasClass('var_li')?$(event.target):$(event.target).parent();
-         switch(WaF.current_tool)
-        {
-            case 'pencil':
-            obj.addClass('selected_var');    
-            break;
-            case 'eraser':
-            obj.removeClass('selected_var');    
-            break;
-        }
-       
+	
+	$('.var_li').bind('click touchend', function(event) {
+		 event.preventDefault();
+		var obj=$(event.target).hasClass('var_li')?$(event.target):($(event.target).parent().hasClass('var_li')?$(event.target).parent():$(event.target).parent().parent());
+		//var obj=$(event.target).find('.var_li');
+			
+		if(obj.hasClass('selected_var'))obj.removeClass('selected_var');
+        else $(this).addClass('selected_var');
     });
+	
 };
 
-/*Events for MouseOver on Tools Elements - segments and variables both*/
-WaF.init_tools=function (){
- 
-    //right menu event
-    document.oncontextmenu = function() {return false;};
-  $(document).mousedown(function(e){ 
-    if( e.button == 2 ) { 
-   
-     WaF.switch_tool(WaF.switch2next_tool());
-      return false; 
-    } 
-    return true; 
-  }); 
-};
-WaF.switch2next_tool=function(){
-     var next_tool;
-    switch(WaF.current_tool)
-    {
-        case 'hand':
-            next_tool='pencil';
-        break;
-        case 'pencil':
-            next_tool='eraser';
-        break;
-        case 'eraser':
-            next_tool='hand';
-        break;
-    }
-    return next_tool;
-};
-WaF.switch_tool=function (next_tool){
-	$('html').removeClass().addClass('body_'+next_tool);
-    WaF.current_tool=next_tool;
-};
 /* Truncate Btn Event */
 WaF.init_truncate=function (){
     $('#truncate').click(function (){
@@ -410,15 +385,7 @@ WaF.init_segment_menu=function (){
 };
 /*Event for dblclick on segment - open Variables Menu */
 WaF.init_open_vars_menu=function (){
-  $('.have_vars').dblclick(function (event){
-      //unset other opened_li
-      $('.opened_segment').removeClass('opened_segment');
-      $(event.target).addClass('opened_segment');
-		var seg_id=$(event.target).parent().attr('id');
-		WaF.segment_id=seg_id;
-		WaF.open_vars_menu(seg_id);
-		return false;
-	  });
+
 	  //global vars
 	  $('#edit_global_vars').click(function (){
 		  $('#edit_global_vars').addClass('the_action');
@@ -545,7 +512,7 @@ else item.part_before=false;
  {
      item.contains={'l':false,'d':false};
      if(p[1].indexOf('l')>-1)item.contains.l=true;
-     //if(p[1].indexOf('s')>-1)item.contains.s=true;
+     
      if(p[1].indexOf('d')>-1)item.contains.d=true;
      var s=p[1].replace('l','').replace('d','');
      item.contains.s=s;
@@ -569,7 +536,7 @@ WaF.arrayUnique = function(a) {
 WaF.load_vars_form=function (json){
     
     var ids=[];
-    var codes=[];
+   
     var approved=0;
     var contains=[];
     var max_size=0;
@@ -765,21 +732,16 @@ WaF.vars_update_code=function(){
     {
     code+=WaF.code1number;	
 
-        if($('.vars_number_type:checked').attr('id')=='vars_number_type_i')
-        {
-                code+=':'+WaF.code2int;
-        }else{
-                code+=':'+WaF.code2float;
-        }
+        if($('.vars_number_type:checked').attr('id')=='vars_number_type_i')code+=':'+WaF.code2int;
+        else code+=':'+WaF.code2float;
+                
+      
     }else{
     code+=WaF.code1string;	
     var contains='';
-    if($('#vars_contains_l').prop('checked')==true)contains+=(WaF.code2letter);
-    if($('#vars_contains_d').prop('checked')==true)contains+=(WaF.code2digital);
-    if($('#vars_contains_s').val().length>0)
-    {
-        contains+=$('#vars_contains_s').val().replace(':','p');
-    }
+    if($('#vars_contains_l').prop('checked'))contains+=(WaF.code2letter);
+    if($('#vars_contains_d').prop('checked'))contains+=(WaF.code2digital);
+    if($('#vars_contains_s').val().length)contains+=$('#vars_contains_s').val().replace(':','p');
     code+=':'+contains;	
     }
 
@@ -796,29 +758,22 @@ WaF.update_codes=function (){
     {
     code+=WaF.code1number;	
 
-            if($('#segment_menu .number_type:checked').attr('id')=='number_type_i')
-            {
-                    code+=':'+WaF.code2int;
-            }else{
-                    code+=':'+WaF.code2float;
-            }
+            if($('#segment_menu .number_type:checked').attr('id')=='number_type_i')code+=':'+WaF.code2int;
+            else  code+=':'+WaF.code2float;
     }else{
     code+=WaF.code1string;	
     var contains='';
-    if($('#segment_menu #contains_l').prop('checked')==true)contains+=(WaF.code2letter);
-    if($('#segment_menu #contains_d').prop('checked')==true)contains+=(WaF.code2digital);
+    if($('#segment_menu #contains_l').prop('checked'))contains+=(WaF.code2letter);
+    if($('#segment_menu #contains_d').prop('checked'))contains+=(WaF.code2digital);
     
-    if($('#segment_menu #contains_s').val().length>0)
-    {
-       contains+=$('#segment_menu #contains_s').val().replace(':','p');
-    }
+    if($('#segment_menu #contains_s').val().length)contains+=$('#segment_menu #contains_s').val().replace(':','p');
     code+=':'+contains;	
     }
 
     code+=':'+$('.size').val();
     code='['+code+']';
-    if($('#segment_menu #static_part_before').val().length>0)code=$('#segment_menu #static_part_before').val()+code;
-    if($('#segment_menu #static_part_after').val().length>0)code=code+$('#segment_menu #static_part_after').val();
+    if($('#segment_menu #static_part_before').val().length)code=$('#segment_menu #static_part_before').val()+code;
+    if($('#segment_menu #static_part_after').val().length)code=code+$('#segment_menu #static_part_after').val();
     $('#segment_menu #code').val(code);
 };	
 

@@ -25,17 +25,11 @@ if(isset($_POST['id']))
 <html xmlns="http://www.w3.org/1999/xhtml"  xml:lang="en" lang="en">
 <head>
 <?php require_once "include/head.php"; ?>
-<?php /*		
-<script src="assets/jquery-1.11.3.min.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="assets/style.css">
-*/?>
 </head>
 <body>
 <?php include_once 'include/header.php';?>    
 		<h1 class='title'>Edit User</h1>
-		<div class='box'>
+		<div class='box edituser_page'>
 				<center>
 				<form action="" method="POST">
 				<input type='hidden' id='id' name='id' value='<?php echo $user['id'];?>'>

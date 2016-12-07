@@ -26,7 +26,7 @@ if(isset($_POST['email']))
 		<div class='header'></div> 
 		<h1 class='title'>Remind Password</h1>
 		
-				<div class='box'>	
+				<div class='box login_page'>	
 						<center>	
 						<?php if(isset($_GET['sended'])):?>
 								<div>We sent Email with instructions for remind password. </div>		

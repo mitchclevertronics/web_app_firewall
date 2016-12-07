@@ -20,7 +20,7 @@ $users=$WU->get_users();
 <body>
 <?php include_once 'include/header.php';?>    
 		<h1 class='title'>Users Management</h1>
-		<div class='box'>
+		<div class='box users_page'>
 				<table width='100%' class="tbl">
 					<tr>
 							<th>Email</th>

@@ -5,10 +5,7 @@
  * Copyright 2016 WebAppFirewall RomanShneer <romanshneer@gmail.com>
  */
 session_start();
-#require_once "libs/config.inc.php";
-
 require_once "libs/db.inc.php";
-
 require_once "libs/waf_report.class.php";
 
 $WR=new WafReport;
@@ -67,7 +64,7 @@ function validate_ip(){
 <body>
 <?php include_once 'include/header.php';?>
 <?php if(isset($_GET['act'])&&($_GET['act']=='ipform')):?>	
-<div class="box_logs"  style="text-align: center;width:300px;">
+<div class="box_logs blacklist_page"  style="text-align: center;width:300px;">
 	<form action="blacklist.php?act=addip" method='POST' id="ipform">
 	<label for='ip'>IP:</label><input type='text' name='ip' id='ip'>
 		<input type='button' value='save' id='save_ip' class="green_btn" onclick="validate_ip();">	

@@ -21,7 +21,6 @@ if(!isset($get['vars']))$get['vars']=-1;
 if(!isset($get['vars_approved']))$get['vars_approved']=-1;
 
 $segments=$WR->get_segments_tree2($get);
-$is_mobile=$WR->ismobile();
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"  xml:lang="en" lang="en">

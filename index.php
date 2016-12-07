@@ -12,7 +12,6 @@ require_once "libs/waf_report.class.php";
 $WR=new WafReport;
 $segments=$WR->get_segments_statistics();
 $vars=$WR->get_vars_statistics();
-$is_mobile=$WR->ismobile();
 $from_date=isset($_GET['from_date'])?$_GET['from_date']:date('d-m-Y',strtotime("-30 days"));
 $to_date=isset($_GET['to_date'])?$_GET['to_date']:date("d-m-Y",strtotime("-1 day"));
 $reqs=$WR->get_dashboard_info($from_date,$to_date);

@@ -212,7 +212,7 @@ font-weight:bold;
     border-radius: 10px;
     box-shadow: 0 4px 4px 3px #ccc;
     padding: 15px;
-    width:50%;
+    width:80%;
     margin:10px auto;
 }
 .box_logs{
@@ -286,13 +286,18 @@ font-weight: bold;
 }
 .status_window{
     margin:50px auto;
-    width:400px;
+    width:80%;
+	font-size:30px;
     border:solid dimgray 1px;
     background:#fff;
     padding:15px;
     border-radius: 10px;
     box-shadow: 0 4px 4px 3px #ccc;
 }
+.status_window input{
+	font-size:40px;
+}
+
 .tree_house{
   
     padding-bottom: 40px;
@@ -305,7 +310,7 @@ font-weight: bold;
     margin:0px auto;
     background: #fff;   
     width:100%;
-	font-size: 14px;
+	font-size: 30px;
 }
 .logs_report tr th{
 	text-align: left;
@@ -358,7 +363,7 @@ font-weight: bold;
  width:145px;	
 }
 #login_button,#filter_close{
-    width:100px;
+    width:100%;
     background: #000;
     color:#fff;
     border:solid #fff 1px;
@@ -599,4 +604,38 @@ inner {
 }
 #loader img{
 	margin:40px auto;
+}
+.login_page input,.edituser_page input[type=text],.edituser_page input[type=password],.edituser_page input[type=submit],.password_page input{	
+display:block;
+font-size:35px;
+margin-bottom:5px;
+}
+.edituser_page #save_user,.password_page #change_button{
+	width:100%;
+}
+.add_user{
+	font-size:30px;
+}
+#new_waf_security_key, #save_settings{width:100%!important;}
+.htaccess_page{
+	width:90%;
+}
+.htaccess_page h3{
+white-space:pre-wrap;
+}
+.htaccess_page .green_btn{
+	width:100%;
+}
+.users_page{font-size:30px;}
+#save_ip{
+	display:block;
+	width:100%;
+}
+.blacklist_page{
+	width:80%!important;
+	text-align:center;
+}
+.blacklist_page input[type=text]{
+	width:90%;
+	font-size:30px;
 }

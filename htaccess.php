@@ -35,7 +35,7 @@ $opts=array('file_e'=>file_exists($filename)?true:false,
 <body>
 <?php include_once 'include/header.php';?>   
 		<h1 class='title'>Edit .htaccess for redirect code injection</h1>		
-		<div class='box'>
+		<div class='box htaccess_page'>
 				<h3 style="text-align:center"><?php echo $filename;?></h3>
 				<table style="margin:5px auto;">
 					

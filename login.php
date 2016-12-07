@@ -28,7 +28,7 @@ if(isset($_POST['email'])&&isset($_POST['pass']))
 		
 				<div class='box'>	
 						<center>	
-						<form action="" method='POST'>
+						<form action="" method='POST' class='login_page'>
 				<?php if(!empty($WU->error))echo '<div style="color:red">'.$WU->error.'</div>';
 					?>		
 					<input type='text' name='email' placeholder='Enter email' class='inset'>

@@ -24,7 +24,7 @@ $WU->run_chg_pass_if();
 <body>
 <?php include_once 'include/header.php';?>    
 		<h1 class='title'>Change Your Password</h1>
-		<div class='box'>
+		<div class='box password_page'>
 				<center>
 				<?php if(!empty($WU->error))echo '<div style="color:red">'.$WU->error.'</div>';?>
 				<form action="" method='POST'>

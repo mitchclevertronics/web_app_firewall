@@ -84,7 +84,7 @@ if(isset($_POST['save_settings'])&&($WR->isEditor()))
                         </td>
                         <td>  
                             <div class="waf_learn_ip_approve_div" <?php if(!$WR->waf_learn_ip_only):?> style="display:none"<?php endif;?>>
-                            <label for="waf_learn_ip_approve">Approve Immidiatly</label>  
+                            <label for="waf_learn_ip_approve">Approve Immediately</label>  
                             <input type="checkbox" name="waf_learn_ip_approve" id="waf_learn_ip_approve" <?php if($WR->waf_learn_ip_approve):?> checked="checked"<?php endif;?> <?php if($WR->isEditor()):?> readonly<?php endif;?>/> 
                             </div>
                         </td>

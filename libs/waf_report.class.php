@@ -55,6 +55,9 @@ Class WafReport{
 	}   
 	public function reload_settings(){
 	 $this->waf_learn_status=$this->get_setting('waf_learn_status','1');
+     $this->waf_learn_ip_only=$this->get_setting('waf_learn_ip_only','0');
+     $this->waf_learn_ip=$this->get_setting('waf_learn_ip','');
+     $this->waf_learn_ip_approve=$this->get_setting('waf_learn_ip_approve','0');
 	 $this->waf_guard_status=$this->get_setting('waf_guard_status','0');
 	 $this->url404=$this->get_setting('url404',$this->config['web_root'].'404.php');
 	 $this->webmaster_email=$this->get_setting('webmaster_email','');

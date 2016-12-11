@@ -25,6 +25,23 @@ Class WAF extends WAFHelper{
 				$this->db=new DB($config['db_host'], $config['db_name'], $config['db_user'], $config['db_pass']);
 				//need make something if no db
 				$this->waf_learn_status=$this->get_setting('waf_learn_status',0);
+                $this->waf_learn_ip_only=$this->get_setting('waf_learn_ip_only',0);
+                $this->waf_learn_ip=$this->get_setting('waf_learn_ip',0);
+                $this->waf_learn_ip_approve=$this->get_setting('waf_learn_ip_approve',0);
+                if(!$this->waf_learn_status)
+                {
+                    $this->waf_learn_ip_only=0;
+                    $this->waf_learn_ip_approve=0;
+                }elseif(!$this->waf_learn_ip_only)
+                {
+                     $this->waf_learn_ip_approve=0;
+                }elseif(empty($this->waf_learn_ip))
+                {
+                    $this->waf_learn_ip_only=0;
+                    $this->waf_learn_ip_approve=0;
+                    
+                }
+                
 				$this->waf_guard_status=$this->get_setting('waf_guard_status',0);
 				$this->waf_security_key=$this->get_setting('waf_security_key',0);
 				$this->waf_security_key2=$this->get_setting('waf_security_key2',0);
@@ -219,7 +236,7 @@ Class WAF extends WAFHelper{
             //load known segments
 						
             $tree=$this->load_segments_from_db($uaa);
-						
+				
 						
             //learn new segments
             $tree=$this->learn2segments($uaa,$tree);
@@ -241,6 +258,20 @@ Class WAF extends WAFHelper{
             return $http_request;
 
     }
+    
+    private function chk_learn_mode(){
+        if(!$this->waf_learn_status)return false;
+        if(($this->waf_learn_ip_only)&&(!empty($this->waf_learn_ip)))
+        {
+            $allowed_ips=explode(",",$this->waf_learn_ip);
+            for($i=0;$i<count($allowed_ips);$i++)$allowed_ips[$i]=trim($allowed_ips[$i]);
+            if(!in_array($_SERVER['REMOTE_ADDR'],$allowed_ips))return false;
+        }
+        
+      
+        return true;
+    }
+    
     /*
      * Compare Real and Known segments tree
      * Change URL if bad
@@ -250,9 +281,9 @@ Class WAF extends WAFHelper{
      */
     private function learn2segments($uaa,$tree){
     
-        if($this->waf_learn_status)
+        if($this->chk_learn_mode())
             { 
-            #$max=max(array_keys($tree))+1;
+            
             $max=count($uaa);
 						
             if(count($tree)!=$max)
@@ -292,7 +323,7 @@ Class WAF extends WAFHelper{
     private function learn2vars($request){
 		 $nvars=$request['vars'];
 		 
-         if($this->waf_learn_status)
+         if($this->chk_learn_mode())
             { 
              #$nvars=$this->prepare_vars(array(),$vars,array());
                 foreach($nvars as $var_name=>$var_val)
@@ -525,8 +556,9 @@ Class WAF extends WAFHelper{
      */
     private function insert_segment($code,$parent,$lvl,$value)
     {
-        if(empty($code)&&($parent==0))$sql1="INSERT INTO waf_segments(parent,updated,lvl,value) VALUES (".$this->db->Q($parent).",NOW(),".$this->db->Q($lvl).",'".$this->db->Q($value,1)."')";
-		else $sql1="INSERT INTO waf_segments(parent,updated,lvl,value) VALUES (".$this->db->Q($parent).",NOW(),".$this->db->Q($lvl).",'".$this->db->Q($value,1)."')";
+        
+        $approved=($this->waf_learn_ip_approve)?1:0;
+        $sql1="INSERT INTO waf_segments(parent,updated,lvl,value,approved) VALUES (".$this->db->Q($parent).",NOW(),".$this->db->Q($lvl).",'".$this->db->Q($value,1)."',".$approved.")";
          $segment_id=$this->db->INSERT($sql1);
          return $segment_id;
         
@@ -631,21 +663,83 @@ Class WAF extends WAFHelper{
 		if(!$v)$v=$this->load_var($sid,$method,$var_name);//after that load regular var
 		
 		$var_length=strlen($var_val);		
-        if($v)
+        
+        if($this->waf_learn_ip_approve)
         {
-			if(($v['approved']==0)&&($v['code_size']<$var_length))$update_length=$var_length;
-			else $update_length=$v['code_size'];
-				
-			$sql="UPDATE waf_vars SET updated=NOW(),code_size=".$this->db->Q($update_length)." WHERE id=".$this->db->Q($v['id']);
-			$this->db->QUERY($sql);
-        }else{
-					
-		if(is_array($var_val))$var_val=json_encode($var_val);
-		$sql="INSERT INTO waf_vars (name,updated,value,method,sid,code_size) VALUES ('".$this->db->Q($var_name,1)."',NOW(),'".$this->db->Q($var_val,1)."','".$this->db->Q($method,1)."',".$this->db->Q($sid).",".$this->db->Q($var_length).")";
+            
+            $var_code=$this->value2code($var_val);
+            if($v)
+            {
+                if($v['code_size']<$var_length)$update_length=$var_length;
+                else $update_length=$v['code_size'];
+                
+                
+                
+                $update_code=$this->merge_codes($var_code,$v['code_contains']);
+                    
+                $sql="UPDATE waf_vars 
+                        SET updated=NOW(),
+                        code_size=".$this->db->Q($update_length).",
+                        approved=1,
+                        use_type=1,
+                        code_contains='".$this->db->Q($update_code,1)."'
+                        WHERE id=".$this->db->Q($v['id']);
+                $this->db->QUERY($sql);
+            }else{
+                        
+            if(is_array($var_val))$var_val=json_encode($var_val);
+            $update_code=$var_code;
+            $sql="INSERT INTO waf_vars (name,updated,value,method,sid,code_size,code_contains,approved,use_type) VALUES ('".$this->db->Q($var_name,1)."',NOW(),'".$this->db->Q($var_val,1)."','".$this->db->Q($method,1)."',".$this->db->Q($sid).",".$this->db->Q($var_length).",'".$this->db->Q($update_code)."',1,1)";
 
-		$this->db->INSERT($sql);
-        }
-		
+            $this->db->INSERT($sql);
+            }
+        }else{
+            if($v)
+            {
+			    if(($v['approved']==0)&&($v['code_size']<$var_length))$update_length=$var_length;
+			    else $update_length=$v['code_size'];
+				    
+			    $sql="UPDATE waf_vars SET updated=NOW(),code_size=".$this->db->Q($update_length)." WHERE id=".$this->db->Q($v['id']);
+			    $this->db->QUERY($sql);
+            }else{
+					    
+		    if(is_array($var_val))$var_val=json_encode($var_val);
+		    $sql="INSERT INTO waf_vars (name,updated,value,method,sid,code_size) VALUES ('".$this->db->Q($var_name,1)."',NOW(),'".$this->db->Q($var_val,1)."','".$this->db->Q($method,1)."',".$this->db->Q($sid).",".$this->db->Q($var_length).")";
+
+		    $this->db->INSERT($sql);
+            }
+		}
+        
+    }
+    private function merge_codes($code1,$code2)
+    {
+        $code='';
+        $scode=$code1.$code2;
+        if(strstr($scode,"l"))$code.='l';
+        if(strstr($scode,"d"))$code.='d';
+        if(strstr($scode,"e"))$code.='e';
+        $scode=str_replace("e","",str_replace("d","",str_replace("l","", $scode)));
+        $acode=array();
+        for($s=0;$s<strlen($scode);$s++)$acode[]=$scode[$s];
+        $acode=array_unique($acode);
+        $code.=implode("",$acode);
+        return $code;
+    }
+    private function value2code($value){
+        
+         $contains='';
+         
+          $containsLetter  = preg_match('/[a-zA-Z]/',    $value);    
+            if($containsLetter)
+             $contains.='l';
+             $containsDigit   = preg_match('/\d/',         $value);
+             if($containsDigit)
+                $contains.='d';
+             $leaved=  implode(array_unique(str_split(preg_replace('/[0-9]/', '', preg_replace('/[a-zA-Z]/', '', $value)))));
+             
+             $contains.=$leaved;
+             
+         return $contains;
     }
     /*
      * Help func. for save queries from layer (waf.php) part to file

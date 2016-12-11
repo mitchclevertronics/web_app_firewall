@@ -17,6 +17,7 @@ if(isset($_POST['save_settings'])&&($WR->isEditor()))
  $WR->save_settings('waf_learn_ip',$_POST['waf_learn_ip']);
  $WR->save_settings('waf_learn_ip_approve',isset($_POST['waf_learn_ip_approve'])?true:false);
  $WR->save_settings('waf_guard_status',isset($_POST['waf_guard_status'])?true:false);
+ $WR->save_settings('waf_skip_ip',$_POST['waf_skip_ip']);
  $WR->save_settings('url404',$_POST['url404']);
  $WR->save_settings('webmaster_email',$_POST['webmaster_email']);
  $WR->save_settings('waf_security_key',$_POST['waf_security_key']);
@@ -96,6 +97,10 @@ if(isset($_POST['save_settings'])&&($WR->isEditor()))
                         <td>   
                             <textarea id="waf_learn_ip" name="waf_learn_ip"  class="inset"/><?php echo $WR->waf_learn_ip;?></textarea> 
                         </td>
+                    </tr>
+                    <tr>
+                        <td><label for="waf_skip_ip">IPs WhiteList:<br /><small>Skips Learn\Guard Mode.</small></label></td>
+                        <td><textarea id="waf_skip_ip" name="waf_skip_ip" class="inset"><?php echo $WR->waf_skip_ip;?></textarea></td>
                     </tr>
                     <tr><th colspan="2"><h2>Security Keys</h2><span><hr /></span></th></tr>    
 					<tr>

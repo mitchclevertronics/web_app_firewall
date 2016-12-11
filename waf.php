@@ -26,8 +26,9 @@ Class WAF extends WAFHelper{
 				//need make something if no db
 				$this->waf_learn_status=$this->get_setting('waf_learn_status',0);
                 $this->waf_learn_ip_only=$this->get_setting('waf_learn_ip_only',0);
-                $this->waf_learn_ip=$this->get_setting('waf_learn_ip',0);
+                $this->waf_learn_ip=$this->get_setting('waf_learn_ip','');
                 $this->waf_learn_ip_approve=$this->get_setting('waf_learn_ip_approve',0);
+                $this->waf_skip_ip=$this->get_setting('waf_skip_ip','');
                 if(!$this->waf_learn_status)
                 {
                     $this->waf_learn_ip_only=0;
@@ -117,13 +118,13 @@ Class WAF extends WAFHelper{
 			$contents = substr($response, $header_size);
 			
             $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-			
+			#echo $contents."<hr>";
            if($httpcode=='302')
             {
 				$redirect_url = curl_getinfo($ch, CURLINFO_REDIRECT_URL);			 
 				header("Location:".$redirect_url);
 				exit();
-            }elseif($httpcode!='200')
+            }elseif(($httpcode!='200')&&($httpcode!='500'))
 			{
 				$headers=explode("\n",$header);	
 				foreach($headers as $h)
@@ -198,11 +199,25 @@ Class WAF extends WAFHelper{
 			$hr=$this->check_security_key($http_request);
 
 			if($hr)return $hr;
-						
+			
+            if($this->chk_skip_ip())
+                return $http_request;
+            else{            			
             $data=$this->analize_request($http_request);
             $data['url']='http://'.$_SERVER['SERVER_NAME'].$data['url'];
-            
             return $data;
+            }
+    }
+    
+    /* Checks if remote IP in whitelist*/
+    private function chk_skip_ip(){
+        if(!empty($this->waf_skip_ip))
+        {
+            $ips=explode(",",$this->waf_skip_ip);
+            for($p=0;$p<count($ips);$p++)$ips[$p]=trim($ips[$p]);
+            if(in_array($_SERVER['REMOTE_ADDR'],$ips))return true;
+            else return false;
+        }else return false;
     }
     
     /*

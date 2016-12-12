@@ -151,8 +151,9 @@ Class WAF extends WAFHelper{
 
     #### CHECK First Security Key for auth request from htaccess ####
 	private function check_security_key($http_request){
-	
-	 if(((!isset($_SERVER['REDIRECT_HTTP_WAF_KEY']))||($this->waf_security_key!=$_SERVER['REDIRECT_HTTP_WAF_KEY']))
+	    $WafKey=isset($_SERVER['REDIRECT_HTTP_WAF_KEY'])?$_SERVER['REDIRECT_HTTP_WAF_KEY']:(isset($_SERVER['HTTP_WAF_KEY'])?$_SERVER['HTTP_WAF_KEY']:false);
+      
+	 if(($this->waf_security_key!=$WafKey)
 		|| (strstr(substr($_SERVER['REQUEST_URI'],strrpos($_SERVER['REQUEST_URI'],"/")),"waf.php"))) 
 	 {
 		 $text="Request to Layer withour KEY";

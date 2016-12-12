@@ -70,11 +70,12 @@ $opts=array('file_e'=>file_exists($filename)?true:false,
 						<div class='description'>	
 								<ol>
 										<li>Backup origin .htaccess file</li>
-										<li>Copy the code from upper window to lower window to be first</li>
-										<li>Save</li>
+										<li>Copy the code from upper window to lower window to be <b>last record</b></li>
+										<li><b>Save</b></li>
 								</ol>		
 							<b>Code for injection</b>	
 						 <textarea class="inset textarea" rows='5'>
+##### WAF INJECTION BOF #####                         
 RewriteEngine On
 SetEnvIf WAF_KEY "(.*)" HTTP_WAF_KEY=<?php echo $WR->waf_security_key;?>
 
@@ -83,7 +84,8 @@ RewriteCond %{HTTP:WAF_KEY2} !<?php echo $WR->waf_security_key2;?>
 
 RewriteCond %{REQUEST_URI} !<?php echo $folder;?>
 
-RewriteRule ^(.*)$ <?php echo $folder;?>/waf.php [N,L]</textarea></div>
+RewriteRule ^(.*)$ <?php echo $folder;?>/waf.php? [N,L]
+##### WAF INJECTION EOF #####</textarea></div>
 				<b>Content of your .htaccess file</b>	
 								<form action="" method="POST">
 									<textarea name='content' rows='40' class="inset textarea"><?php echo file_exists($filename)?file_get_contents($filename):"";?></textarea>

@@ -73,10 +73,11 @@ Class WAF extends WAFHelper{
 			if(($request_data['method']=='GET')&&count($vars))
 				$url.="?".http_build_query($vars);
 			
-			
+			#pre($vars);
             $ch=curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
 			curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
 			
 			$cookie_file= self::get_cookie_file(session_id());
@@ -118,7 +119,7 @@ Class WAF extends WAFHelper{
 			$contents = substr($response, $header_size);
 			
             $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-			#echo $contents."<hr>";
+         
            if($httpcode=='302')
             {
 				$redirect_url = curl_getinfo($ch, CURLINFO_REDIRECT_URL);			 
@@ -181,16 +182,17 @@ Class WAF extends WAFHelper{
 
     /* Prepare paths and variables from request via AnalizeURL */
     public function prepare_request(){
-           $u=explode('?',$_SERVER['REQUEST_URI']);
+           #$u=explode('?',$_SERVER['REQUEST_URI']);
 					 
-           $url=$u[0];
+           #$url=$u[0];
+           $url=$_SERVER['REQUEST_URI'];
 			if($_SERVER['REQUEST_METHOD']=='POST'){
 			   if(isset($u[1]))
 			   {
 				$url.="?".$u[1];
 			   }
 			}
-					 
+			
             $http_request=array('url'=>$url,
                                 'vars'=>($_SERVER['REQUEST_METHOD']=='POST')?$_POST:$_GET,
                                 'method'=>$_SERVER['REQUEST_METHOD']);

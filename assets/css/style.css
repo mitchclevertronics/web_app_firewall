@@ -583,8 +583,6 @@ inner {
 	text-align:right;
 	height:10px;
 	line-height:7px;
-//	display:none;
-//	position: absolute;
 }
 .segment_tools a{
 	font-size:12px;
@@ -619,4 +617,7 @@ inner {
 }
 #loader img{
 	margin:40px auto;
-}.blacklist_page{	width:300px;	text-align:center;}
+}
+.blacklist_page{	width:300px;	text-align:center;}
+.settings_tbl #waf_security_key,.settings_tbl #waf_security_key2,.settings_tbl #url404,.settings_tbl #webmaster_email,.settings_tbl #waf_learn_ip,.settings_tbl #waf_skip_ip{width:100%;}
+.settings_tbl #bf,.settings_tbl #bf_attempt,.settings_tbl #bf_bantime{width:50px;}

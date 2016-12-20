@@ -1,0 +1,2 @@
+RewriteEngine On
+SetEnvIf WAF_TEST "(.*)" HTTP_WAF_TEST=SUCCESS

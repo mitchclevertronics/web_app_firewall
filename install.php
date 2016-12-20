@@ -26,6 +26,16 @@ if(isset($_POST['op'])&&($_POST['op']=='Save'))
 	$err=$WI->try_install_waf($_POST);
 	$post=$_POST;
 }
+$errors=Array();
+$warnings=Array();
+if(!isset($_SERVER['HTTP_WAF_TEST'])||($_SERVER['HTTP_WAF_TEST']!='SUCCESS'))
+	$errors[]='SetEntIf blocked or not available.';
+if(function_exists('apache_get_modules'))
+{
+	if(!in_array('mod_rewrite', apache_get_modules()))$errors[]='Mod_Rewrite disabled.';
+}else{
+	$warnings[]='unknown if mod_rewrite enabled on your server, try use for your risk.';
+}
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"  xml:lang="en" lang="en">
@@ -38,10 +48,11 @@ if(isset($_POST['op'])&&($_POST['op']=='Save'))
 		
 				<div class='box'>	
 						<center>	
+						<?php if(count($errors)==0):?>	
 								<h5>Install Easy</h5>		
 						<form action="" method='POST'>
-				<?php if(!empty($err))echo '<div style="color:red">'.$err.'</div>';
-					?>		
+				<?php foreach($warnings as $warning) echo "<p style='color:#ccc'>".$warning."</p>"; ?>		
+				<?php if(!empty($err))echo '<div style="color:red">'.$err.'</div>';?>		
 								<table>
 										<tr><th colspan="2">Database parameters</th></tr>
 										<tr>
@@ -71,10 +82,7 @@ if(isset($_POST['op'])&&($_POST['op']=='Save'))
 																<option value="keep<?php if(isset($_POST['keep_db'])&&($_POST['keep_db']=='keep')):?> selected<?php endif;?>">Keep old data</option>
 														</select>
 										</tr>
-										<?php /* <tr>
-												<td>Use old db:</td>
-												<td><input type="checkbox" name="use_db" <?php if(isset($_POST['use_db'])):?> checked="checked"<?php endif;?>></td>
-										</tr>*/?>
+										
 										<tr><th colspan="2">First User</th></tr>
 										<tr>
 												<td>Email:</td>
@@ -91,6 +99,12 @@ if(isset($_POST['op'])&&($_POST['op']=='Save'))
 										<tr><th><input type="submit" class="add_user" value="Save" name="op"></th></tr>
 								</table>
 						</form>
+						<?php else:?>
+						<h1>Sorry, cannot work on your webserver configurations</h1>
+						<?php foreach($errors as $error) echo "<p style='color:Red'>".$error."</p>"; ?>
+						<?php foreach($warnings as $warning) echo "<p style='color:#ccc'>".$warning."</p>"; ?>
+						<br><br><p>Contact you web-provider about changing configuration</p>
+						<?php endif;?>
 						</center>		
 				</div>			
 		

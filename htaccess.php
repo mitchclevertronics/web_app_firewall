@@ -61,8 +61,9 @@ $code_injected=(strstr($htaccess_code,$injection_code)?true:false);
 					</tr>
 					
 				</table>
-					<?php if($opts['file_w']):?>
-					
+					<?php if(($opts['file_e'])&&(!$opts['file_w'])):?>
+					<center style="color:red">Impossible inject to .htaccess code, because one of the reasons above.</center>
+					<?php else:?>
 					<div class='description'>	
 						<ol>
 							<li>Backup origin .htaccess file</li>
@@ -73,14 +74,11 @@ $code_injected=(strstr($htaccess_code,$injection_code)?true:false);
 						<textarea class="inset textarea" rows='5'><?php echo $injection_code;?></textarea>
 					</div>
 					<b>Content of your .htaccess file</b>	
-						
-					<?php else:?>
-						<center style="color:red">Impossible inject to .htaccess code, because one of the reasons above.</center>
 					<?php endif;?>
 				<?php endif;?>
 				<form action="" method="POST">
 					<textarea name='content' rows='40' class="inset textarea"><?php echo $htaccess_code;?></textarea>
-					<?php if($opts['file_w']):?><input type="submit" name="op" value="Save" class="green_btn"><?php endif;?>
+					<?php if(!(($opts['file_e'])&&(!$opts['file_w']))):?><input type="submit" name="op" value="Save" class="green_btn"><?php endif;?>
 				</form>					
 		</div>
 </body>

@@ -83,7 +83,8 @@ function drawChart() {
                             $types[]=$lu['type']."   (".$lu['num'].")";
                             $type_nums[]=$lu['num'];
                         }
-                        						$m=min($type_nums);						for($z=0;$z<count($type_nums);$z++)$type_nums[$z]=ceil($type_nums[$z]/$m);						
+                        $m=count($type_nums)?min($type_nums):0;						
+						if($m)for($z=0;$z<count($type_nums);$z++)$type_nums[$z]=ceil($type_nums[$z]/$m);						
                         ?>
 						<div id="logs_type_pie"><?php if($is_mobile):?><img src="//chart.googleapis.com/chart?cht=p&chs=800x220&chd=t:<?php echo implode(',',$type_nums)?>&chl=<?php echo implode('|',$types);?>&chdl=<?php echo implode('|',$types);?>&chco=fb0000,00fb1d,f9fb00,9300fb,00fbdb,1500fb&chtt=Attacks by type"><?php endif;?></div>
 				</td>		
@@ -92,11 +93,14 @@ function drawChart() {
 				<td colspan="2">
                         <?php
                         $urls=Array();$nums=Array();
+						if($reqs['logs_url'])
                         foreach($reqs['logs_url'] as $lu)
                         {
                             $urls[]=$lu['url']."   (".$lu['num'].")";;
                             $nums[]=$lu['num'];
-                        }						$m=min($nums);						for($z=0;$z<count($nums);$z++)$nums[$z]=ceil($nums[$z]/$m);
+                        }
+						$m=count($nums)?min($nums):0;
+						if($m)for($z=0;$z<count($nums);$z++)$nums[$z]=ceil($nums[$z]/$m);
                         
                         ?>
 						<div id="logs_url_pie"><?php if($is_mobile):?><img src="//chart.googleapis.com/chart?cht=p&chd=s:Uf9a&chs=800x220&chd=t:<?php echo implode(',',$nums)?>&chdl=<?php echo implode('|',$urls)?>&chco=fb0000,00fb1d,f9fb00,9300fb,00fbdb,1500fb&chtt=Top 15 attacked scripts in last 30 days"><?php endif;?></div>

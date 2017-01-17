@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `waf_segments` (
   `parent` int(11) NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `lvl` tinyint(2) NOT NULL,
-  `value` varchar(50) NOT NULL,
+  `value` varchar(256) NOT NULL,
   `approved` int(1) NOT NULL DEFAULT '0',
   `use_type` int(1) NOT NULL DEFAULT '0',
   `bf` double NOT NULL DEFAULT '0',

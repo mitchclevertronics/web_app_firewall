@@ -125,7 +125,7 @@ Class WAF extends WAFHelper{
 				$redirect_url = curl_getinfo($ch, CURLINFO_REDIRECT_URL);			 
 				header("Location:".$redirect_url);
 				exit();
-            }elseif(($httpcode!='200')&&($httpcode!='500'))
+            }elseif(!in_array($httpcode,array('200','500','404')))
 			{
 				$headers=explode("\n",$header);	
 				foreach($headers as $h)

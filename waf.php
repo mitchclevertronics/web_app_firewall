@@ -182,21 +182,33 @@ Class WAF extends WAFHelper{
 
     /* Prepare paths and variables from request via AnalizeURL */
     public function prepare_request(){
-           #$u=explode('?',$_SERVER['REQUEST_URI']);
-					 
-           #$url=$u[0];
-           $url=$_SERVER['REQUEST_URI'];
+           $u=explode('?',$_SERVER['REQUEST_URI']); 
+           $url=$u[0];
+         
+		   
 			if($_SERVER['REQUEST_METHOD']=='POST'){
 			   if(isset($u[1]))
 			   {
 				$url.="?".$u[1];
 			   }
+			   $vars=$_POST;
+			}else{
+				$vars=$_GET;
+				$vv=explode("&",$u[1]);
+				foreach($vv as $v)
+					if(!empty($v))
+					{
+						$hp=explode("=",$v);
+						$vars[$hp[0]]=$hp[1];
+					}
+				
+
 			}
 			
             $http_request=array('url'=>$url,
-                                'vars'=>($_SERVER['REQUEST_METHOD']=='POST')?$_POST:$_GET,
+                                'vars'=>$vars,
                                 'method'=>$_SERVER['REQUEST_METHOD']);
-				
+			
             if(!$this->web_root)return $http_request;
 						
 			$hr=$this->check_security_key($http_request);
@@ -260,7 +272,7 @@ Class WAF extends WAFHelper{
             $tree=$this->learn2segments($uaa,$tree);
 			
 			$last_segment_id=$tree[count($tree)-1]['id'];
-         
+		
             //learn new vars
             if(count($http_request['vars']))$this->learn2vars($http_request);
 						

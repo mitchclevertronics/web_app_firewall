@@ -70,10 +70,13 @@ Class WAF extends WAFHelper{
 			   $url=$_SERVER['SERVER_NAME'].$url;
 		 
 			$vars=$request_data['vars'];
-			if(($request_data['method']=='GET')&&count($vars))
-				$url.="?".http_build_query($vars);
 			
-			#pre($vars);
+			if(($request_data['method']=='GET')&&count($vars))
+			{	
+				
+				$url.="?".http_build_query($vars);
+			}
+			
             $ch=curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -119,7 +122,7 @@ Class WAF extends WAFHelper{
 			$contents = substr($response, $header_size);
 			
             $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-         
+		
            if($httpcode=='302')
             {
 				$redirect_url = curl_getinfo($ch, CURLINFO_REDIRECT_URL);			 
@@ -194,13 +197,16 @@ Class WAF extends WAFHelper{
 			   $vars=$_POST;
 			}else{
 				$vars=$_GET;
+				
 				$vv=explode("&",$u[1]);
+				
 				foreach($vv as $v)
 					if(!empty($v))
 					{
+						
 						$hp=explode("=",$v);
-						$vars[$hp[0]]=$hp[1];
-					}
+						$vars[$hp[0]]=isset($hp[1])?$hp[1]:'';
+					} 
 				
 
 			}

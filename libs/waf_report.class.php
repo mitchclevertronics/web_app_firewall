@@ -101,34 +101,35 @@ Class WafReport{
 	*/
     public function get_segments_tree($get)	
 	{
-		$sql="SELECT s.*,count(v1.id) as vars_approved1,count(v2.id) as vars_approved0  FROM waf_segments s "
-		  ." LEFT JOIN waf_vars v1 ON v1.sid=s.id AND v1.approved=1"
-		  ." LEFT JOIN waf_vars v2 ON v2.sid=s.id AND v2.approved=0 "
-		  . "WHERE 1=1";
+		$sql="SELECT s.*, SUM(CASE WHEN v1.approved=1 THEN 1 ELSE 0 END) as vars_approved1,SUM(CASE WHEN v1.approved=0 THEN 1 ELSE 0 END) as vars_approved0
+			FROM waf_segments s 
+			LEFT JOIN waf_vars v1 ON v1.sid=s.id
+			WHERE 1=1";
+		
 		if($get['approved']>-1)$sql.=" AND s.approved=".$this->db->Q($get['approved']);
 		if($get['bf']>-1)$sql.=" AND s.bf=".$this->db->Q($get['bf']);
 		if($get['use_type']>-1)$sql.=" AND s.use_type=".$this->db->Q($get['use_type']);
 		if(!empty($get['sid']))$sql.=" AND s.id=".$this->db->Q($get['sid']);
-		$sql.= " GROUP BY s.id ";
+		
 		if($get['vars']>-1)
 		{
 			switch($get['vars'])
 			{
 				case 1:
-					$sql.=" HAVING ((count(v1.id)+count(v2.id))>0)";
+					$sql.=" AND v1.id IS NOT NULL";
 				break;
 				case 0:
-					$sql.=" HAVING ((count(v1.id)+count(v2.id))=0)";
+					$sql.=" AND v1.id IS NULL";
 				break;
 				case 10:
-					$sql.=" HAVING (count(v2.id)>0)";
+					$sql.=" AND v1.approved=0";
 				break;
 				case 11:
-					$sql.=" HAVING (count(v1.id)>0)";
+					$sql.=" AND v1.approved=1";
 				break;
 			}
 		}
-			
+		$sql.= " GROUP BY s.id ";	
 		$sql.="ORDER BY s.id";
 		
 		$segments=$this->db->LIST_Q($sql);

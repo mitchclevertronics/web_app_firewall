@@ -197,7 +197,8 @@ Class WAF extends WAFHelper{
 			   $vars=$_POST;
 			}else{
 				$vars=$_GET;
-				
+				if(isset($u[1]))
+				{	
 				$vv=explode("&",$u[1]);
 				
 				foreach($vv as $v)
@@ -207,7 +208,7 @@ Class WAF extends WAFHelper{
 						$hp=explode("=",$v);
 						$vars[$hp[0]]=isset($hp[1])?$hp[1]:'';
 					} 
-				
+				}
 
 			}
 			
@@ -361,9 +362,11 @@ Class WAF extends WAFHelper{
 		 
          if($this->chk_learn_mode())
             { 
+			
              #$nvars=$this->prepare_vars(array(),$vars,array());
                 foreach($nvars as $var_name=>$var_val)
                 {
+					if(strlen($var_val)>0)
                     $this->save_var2db($request['method'],$this->segment_id,$var_name,$var_val);
                 } 
             }
@@ -477,28 +480,31 @@ Class WAF extends WAFHelper{
                 $stoped_vars=Array();
                 foreach($http_request['vars'] as $vname=>$vval)
                 {
-					$var=$this->load_var(0,$http_request['method'],$vname);//load default first
-                    if(!$var)$var=$this->load_var($segment_id,$http_request['method'],$vname); //load regular
-									
-                    if($var['approved']==1)
-                    {
-									
-                        if(($var['use_type']==0)&&($var['value']!=$vval))
-                        {
-							$stoped_vars[$vname]=' static value not equal';
-                            $trust=false;
-                        }elseif($var['use_type']==1){
-                           
-                            if(!$this->compare($vval,$var))
-                            {
-							$stoped_vars[$vname]=' auto value not equal '.$vval."!=".print_r($var,1); 
-                            $trust=false;
-                            }
-                        }
-                    }else{
-						$stoped_vars[$vname]=' value not approved'; 
-                        $trust=false;
-                    }
+					if(!empty($vval))
+					{	
+						$var=$this->load_var(0,$http_request['method'],$vname);//load default first
+						if(!$var)$var=$this->load_var($segment_id,$http_request['method'],$vname); //load regular
+										
+						if($var['approved']==1)
+						{
+										
+							if(($var['use_type']==0)&&($var['value']!=$vval))
+							{
+								$stoped_vars[$vname]=' static value not equal';
+								$trust=false;
+							}elseif($var['use_type']==1){
+							   
+								if(!$this->compare($vval,$var))
+								{
+								$stoped_vars[$vname]=' auto value not equal '.$vval."!=".print_r($var,1); 
+								$trust=false;
+								}
+							}
+						}else{
+							$stoped_vars[$vname]=' value not approved'; 
+							$trust=false;
+						}
+					}	
                 }
            
             if($trust==false)
@@ -510,7 +516,7 @@ Class WAF extends WAFHelper{
 
             return $http_request;
     }
-   
+	
     /*
      * Load Segments and filters into URL Array
      * @param array $uaa

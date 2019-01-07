@@ -164,7 +164,7 @@ $"."config=Array('db_host'=>'".$post['dbhost']."',
 	 if($r)return true;
 	 else return false;
 	}
-	private function redirect2success($post)
+	private function redirect2success()
 	{
 	 header("Location:installed.php");
 	 exit();
